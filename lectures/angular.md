@@ -1,0 +1,7 @@
+# Angular JS
+
+if we move all view stuff to the client that we are just sending data to and from the server. that's good. however, is the server ever anything more than just converting SQL query results to JSON?  I'm sure that there's plenty of business logic to go around of course, but for simple projects in my correct in assuming that the server does very little?
+
+> Yeah the server is mainly a keeper of the model.  Personally I try to keep as much business logic as possible on the server.  I tend to put UI related logic on the client side and business logic in the backend.  So instead of doing a business calc on the client, the calc is done on the server and the result is passed to the client. Usually this is in the context of a bigger piece of functionality and not just one simple calc.  But yes, the server should be doing very little from a ui point of view.
+
+> There would be a navigation menu across the top.  In an SPA I would have to render the nav menu client side.  I would have to include things like login name, the collection of sections, and maybe some other dynamic things.  There is nothing wrong with it in an SPA, but as an alternative, you can have the server render the navigation menu.  Then as you switch pages, you load up a different SPA (or maybe the same one with different data/state).  This lessens the amount of logic you have to send to the client and possibly makes it easier for something like SEO.
