@@ -1,0 +1,20 @@
+http://www.eclipse.org/jetty/documentation/current/embedding-jetty.html
+
+mv /Volumes/SSD2/Users/parrt/tmp/jetty-distribution-9.1.4.v20140401/lib  /usr/local/lib/jetty-9.1.4
+
+JAX-RS Java API for RESTful Web Services is a Java programming language API that provides support in creating web services according to the Representational State Transfer (REST) architectural pattern. From version 1.1 on, JAX-RS is an official part of Java EE 6.
+
+https://jersey.java.net/download.html
+mv /Volumes/SSD2/Users/parrt/tmp/jaxrs-ri/lib /usr/local/lib/jersey-jaxrs
+mv /Volumes/SSD2/Users/parrt/tmp/jaxrs-ri/api/javax.ws.rs-api-2.0.jar /usr/local/lib/jersey-jaxrs
+
+jetty and xml/json and jersey
+
+http://jlunaquiroga.blogspot.com/2014/01/restful-web-services-with-jetty-and.html
+doc: https://jersey.java.net/documentation/latest/index.html
+
+
+ugh: all examples seem to be 1.x not 2.0. fixed with this info:
+
+https://java.net/projects/jersey/lists/users/archive/2013-06/message/91
+http://stackoverflow.com/questions/18086218/java-lang-classnotfoundexception-com-sun-jersey-spi-container-servlet-servletco
