@@ -51,7 +51,7 @@ cs601.cs.usfca.edu.     1D IN MX        20 cs601.cs.usfca.edu.
 implying that it handles the mail rather than nexus or stargate.
 
 ## SMTP and sending mail
-Reference: SMTP
+Reference: [SMTP](http://www.ietf.org/rfc/rfc0821.txt)
 
 SMTP (Simple Mail Transfer Protocol) takes an envelope (header) and some data, an email message text, and routes it to a recipient's SMTP mail server for local delivery. SMTP is both a relay, such as smtp.cs.usfca.edu, and a local delivery system.
 
