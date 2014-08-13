@@ -4,7 +4,7 @@
 
 This project tests your programming ability, your ability to code in Java, your knowledge of simple data structures, and how well you can read and follow instructions. This project is a typical undergraduate project, but with a shorter deadline. If this project is not easy for you, this course may overwhelm you. This project is a good way for us to get to know each other. :)
 
-Your  task is to produce a simple Java implementation of a dictionary interface similar to Java's built-in ```Map<Key,Value>``` interface. The interface is called ```DoubleKeyMap<Key1,Key2,Value>``` (attached below) and the implementation is called ```DoubleKeyHashMap<Key1,Key2,Value>```.
+Your  task is to produce a simple Java implementation of a dictionary interface similar to Java's built-in ```Map<Key,Value>``` interface. The interface is called ```DoubleKeyMap<Key1,Key2,Value>``` ([download](resources/DoubleKeyMap.java)) and your implementation must be called ```DoubleKeyHashMap<Key1,Key2,Value>```.
 
 You should test your your code well including all boundary conditions as you will not see the test harness I will use to check out your project.
 
