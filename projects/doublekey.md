@@ -56,41 +56,21 @@ You should test your library extensively (using junit if you know it)
 
 ## Submission
 
-You will create a jar file called map.jar containing *.class files and place in a directory called map/dist under your cs680 dir:
+You will clone your student repository to your local disk and develop in that directory, committing files and changes as necessary.
 
-https://www/svn/userid/cs680/map/dist/map.jar
-Pur your source Java code in map/src:
-
-https://www/svn/userid/cs680/map/src/DoubleKeyHashMap.java
 When testing, i'll use my own DoubleKeyMap.
 
-To jar your stuff up, you will "cd" to the directory containing your source code (perhaps map/src) and create the jar in the map dir:
-
-```
-cd ~/cs680/map/src
-jar cvf ~/cs680/map/dist/map.jar *.class
-cd ~/cs680/map/dist
-svn add map.jar
-svn commit
-```
-
-To learn more about submitting your project with svn, see Resources.
-
-You will see something like this:
-
-adding: DoubleKeyHashMap$Entry.class(in = 1045) (out= 569)(deflated 45%) 
-adding: DoubleKeyHashMap.class(in = 2532) (out= 1140)(deflated 54%)
-adding: DoubleKeyMap.class(in = 651) (out= 297)(deflated 54%)
-You should test your project by running as I will run it per the Grading section below.
-
-You are creating a library, NOT a main program.  Your code should not generate any output.  You must submit your source code for credit.
+You are creating a library, NOT a main program.  Your code should not generate any output.  You must submit all your source code for credit.
 
 ## Grading
 
-I will run your program by pulling your map.jar file from the repository and running like this:
+A continuous integration build server will run your program by cloning your repo, building it, and running some unit tests like this:
 
+```
 java -cp .:map.jar TerencesTestRig
-It will launch my TerencesTestRig.main() method and I will check the results.
+```
+
+It will launch my ```TerencesTestRig.main()`` method and I will check the results.
 
 Here's an example of how to use the new map interface:
 
@@ -104,6 +84,6 @@ System.out.println(m.containsKey("hi",32)); // should be true
 System.out.println(m.containsKey("hy",3));  // should be false
 ```
 
-You may discuss this project in its generality with anybody you want and may look at any code on the internet except for a classmate's code. You should physically code this project completely yourself but can use all the help you find other than cutting-n-pasting or looking at code from a classmate or other Human being.
+You may discuss this project in its generality with anybody you want and may look at any code on the internet except for a classmate's code. You should physically code this project completely yourself but can use all the help you find other than cutting-n-pasting or looking at code from a classmate, the web, or other Human being.
 
-I will deduct 10% if your program is not executable exactly in the fashion mentioned in the project; that is, class name, methods, lack-of-package, and jar must be exactly right. For you PC folks, note that case is significant for class names and file names on unix! All projects must run properly under linux.  That means it's a good idea to test it there yourself.
+I will deduct 10% if your program is not executable exactly in the fashion mentioned in the project; that is, class name, methods, lack-of-package, and jar must be exactly right. For you PC folks, note that case is significant for class names and file names on UNIX! All projects must run properly under UNIX.  That means it's a good idea to test it there yourself.
