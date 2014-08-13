@@ -52,13 +52,13 @@ All of your classes must be in the default package. Do not move DoubleKeyMap int
 
 Do not generate any output from your library. Only test harnesses should generate output. In other words, do not leave any debugging println statements around. Do not print error messages upon invalid keys and so on.
 
-You should test your library extensively (using junit if you know it)
+You should test your library extensively. I have provided an initial unit test for you in [TestMapSimple.java](resource/TestMapSimple.java).  You will need [``junit-4.10.jar``](http://sourceforge.net/projects/junit/files/junit/4.10/junit-4.10.jar/download). I will test with a rigorous set of my own tests.
 
 ## Submission
 
 You will clone your student repository to your local disk and develop in that directory, committing files and changes as necessary.  You can use ```git``` from the command-line, from within your IDE (such as [Intellij](http://www.jetbrains.com/idea/download/)), or using the free [SourceTree](http://www.sourcetreeapp.com/) app.
 
-When testing, i'll use the ```DoubleKeyMap``` from the repo.
+When testing, i'll use my version of ``DoubleKeyMap`` so do not modify the interface at all!
 
 You are creating a library, NOT a main program.  Your code should not generate any output.  You must submit all your source code for credit.
 
