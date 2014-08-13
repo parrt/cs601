@@ -4,7 +4,7 @@
 
 This project tests your programming ability, your ability to code in Java, your knowledge of simple data structures, and how well you can read and follow instructions. This project is a typical undergraduate project, but with a shorter deadline. If this project is not easy for you, this course may overwhelm you. This project is a good way for us to get to know each other. :)
 
-Your  task is to produce a simple Java implementation of a dictionary interface similar to Java's built-in ```Map<Key,Value>``` interface. The interface is called ```DoubleKeyMap<Key1,Key2,Value>``` ([download](resources/DoubleKeyMap.java)) and your implementation must be called ```DoubleKeyHashMap<Key1,Key2,Value>```.
+Your  task is to produce a simple Java implementation of a dictionary interface similar to Java's built-in ```Map<Key,Value>``` interface. The interface is called ```DoubleKeyMap<Key1,Key2,Value>``` ([download](resources/DoubleKeyMap.java)) and is in a package called ```cs601.collections```. Your implementation must be called ```DoubleKeyHashMap<Key1,Key2,Value>``` and must also be in package ```cs601.collections```.
 
 You should test your your code well including all boundary conditions as you will not see the test harness I will use to check out your project.
 
@@ -23,13 +23,11 @@ This project is primarily meant to test your basic Java skills:
 * generics
 * compilation and jar'ing
 
-*IMPORTANT*: You are to actually implement a hashtable using an array of ```LinkedList<T>``` containing wrapper objects that wrap the 2 keys and the value using a technique called [separate chaining](http://en.wikipedia.org/wiki/Hash_table#Separate_chaining_with_linked_lists). Do not simply wrap Java's existing ```Map``` interface.  For example, my solution uses a helper class like this:
+*IMPORTANT*: You are to actually implement a hashtable using an array of ```LinkedList<T>``` containing wrapper objects that wrap the 2 keys and the value using a technique called [separate chaining](http://en.wikipedia.org/wiki/Hash_table#Separate_chaining_with_linked_lists). Do not simply wrap Java's existing ```Map``` interface.  For example, your solution will need a helper class like ```Entry```:
 
 ```
-/** An implementation of DoubleKeyMap that uses a hash table. It works
- * just like HashMap in that the keys are used to pick a bucket of
- * elements.
- */
+package cs601.collections;
+
 public class DoubleKeyHashMap<K1,K2,V>
     implements DoubleKeyMap<K1,K2,V>
 {

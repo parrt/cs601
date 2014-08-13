@@ -1,3 +1,5 @@
+package cs601.collections;
+
 import java.util.List;
 
 /** A Map (Dictionary) just like Java's Map<K,V> interface except that
