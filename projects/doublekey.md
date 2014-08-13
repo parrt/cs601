@@ -64,13 +64,13 @@ You are creating a library, NOT a main program.  Your code should not generate a
 
 ## Grading
 
-A continuous integration build server will run your program by cloning your repo, building it, and running some unit tests like this:
+A continuous integration build server will run your program by cloning your repo, building it, and running some unit tests using a method that is equivalent to the following:
 
 ```
 $ java -cp .:yourcode TerencesTestRig
 ```
 
-Where ``yourcode`` is a jar or directory that I build from your source. That invocation will launch my ``TerencesTestRig.main()`` method and I will check the results.
+Where ``yourcode`` is a jar or directory that the server builds from your source. That invocation will launch my ``TerencesTestRig.main()`` method and I will check the results.
 
 Here's an example of how to use the new map interface:
 
