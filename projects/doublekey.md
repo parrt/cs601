@@ -38,7 +38,7 @@ public class DoubleKeyHashMap<K1,K2,V>
 ## Requirements
 
 The exact external behavior of your classes should follow the javadoc comments in the interface definition.
-Your hash table should be a fixed size array of "buckets" that stores all key/value pairs with the same hash value.
+Your hash table should be a fixed size array of "buckets" that stores all key/value pairs with the same hash value. There is no need to enlarge the number of buckets for this project.
 Order matters for the keys. key1,key2 is different than key2,key1.
 For your hash function, you can use:
 
@@ -56,9 +56,9 @@ You should test your library extensively (using junit if you know it)
 
 ## Submission
 
-You will clone your student repository to your local disk and develop in that directory, committing files and changes as necessary.
+You will clone your student repository to your local disk and develop in that directory, committing files and changes as necessary.  You can use ```git``` from the command-line, from within your IDE (such as [Intellij](http://www.jetbrains.com/idea/download/)), or using the free [SourceTree](http://www.sourcetreeapp.com/) app.
 
-When testing, i'll use my own DoubleKeyMap.
+When testing, i'll use the ```DoubleKeyMap``` from the repo.
 
 You are creating a library, NOT a main program.  Your code should not generate any output.  You must submit all your source code for credit.
 
@@ -67,14 +67,16 @@ You are creating a library, NOT a main program.  Your code should not generate a
 A continuous integration build server will run your program by cloning your repo, building it, and running some unit tests like this:
 
 ```
-java -cp .:map.jar TerencesTestRig
+$ java -cp .:yourcode TerencesTestRig
 ```
 
-It will launch my ```TerencesTestRig.main()`` method and I will check the results.
+Where ``yourcode`` is a jar or directory that I build from your source. That invocation will launch my ``TerencesTestRig.main()`` method and I will check the results.
 
 Here's an example of how to use the new map interface:
 
 ```
+import cs601.collections.*;
+...
 DoubleKeyMap<String,Integer,Double> m =
     new DoubleKeyHashMap<String, Integer, Double>();
 m.put("hi",32,99.2);
@@ -86,4 +88,4 @@ System.out.println(m.containsKey("hy",3));  // should be false
 
 You may discuss this project in its generality with anybody you want and may look at any code on the internet except for a classmate's code. You should physically code this project completely yourself but can use all the help you find other than cutting-n-pasting or looking at code from a classmate, the web, or other Human being.
 
-I will deduct 10% if your program is not executable exactly in the fashion mentioned in the project; that is, class name, methods, lack-of-package, and jar must be exactly right. For you PC folks, note that case is significant for class names and file names on UNIX! All projects must run properly under UNIX.  That means it's a good idea to test it there yourself.
+*I will deduct 10% if your program is not executable exactly in the fashion mentioned in the project*; that is, class name, methods, lack-of-package, and jar must be exactly right. For you PC folks, note that case is significant for class names and file names on UNIX! All projects must run properly under UNIX.  That means it's a good idea to test it there yourself.
