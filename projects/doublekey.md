@@ -37,10 +37,7 @@ public class DoubleKeyHashMap<K1,K2,V>
 
 ## Requirements
 
-The exact external behavior of your classes should follow the javadoc comments in the interface definition.
-Your hash table should be a fixed size array of "buckets" that stores all key/value pairs with the same hash value. There is no need to enlarge the number of buckets for this project.
-Order matters for the keys. key1,key2 is different than key2,key1.
-For your hash function, you can use:
+The exact external behavior of your classes should follow the javadoc comments in the interface definition. Your hash table should be a fixed size array of "buckets" that stores all key/value pairs with the same hash value. There is no need to enlarge the number of buckets for this project. Order matters for the keys. key1,key2 is different than key2,key1. Order of ``put()`` does *not* matter. For your hash function, you can use:
 
 ```
 key1.hashCode() << 7 + key2.hashCode()
@@ -48,19 +45,56 @@ key1.hashCode() << 7 + key2.hashCode()
 
 Your implementation class must define a constructor with no arguments.
 
-All of your classes must be in the default package. Do not move DoubleKeyMap into a package.
+All of your classes must be in the ``cs601.collections`` package. When you clone your repo, it should look like to start:
 
-Do not generate any output from your library. Only test harnesses should generate output. In other words, do not leave any debugging println statements around. Do not print error messages upon invalid keys and so on.
+![map project hierarchy](figures/map-hier.png)
 
-You should test your library extensively. I have provided an initial unit test for you in [TestMapSimple.java](resource/TestMapSimple.java).  You will need [``junit-4.10.jar``](http://sourceforge.net/projects/junit/files/junit/4.10/junit-4.10.jar/download). I will test with a rigorous set of my own tests.
+Do not generate any output from your library. Only test rigs should generate output. In other words, do not leave any debugging println statements around. Do not print error messages upon invalid keys and so on.
+
+You should test your library extensively. I have provided an initial unit test for you in [TestMapSimple.java](resources/TestMapSimple.java).  You will need [``junit-4.10.jar``](http://sourceforge.net/projects/junit/files/junit/4.10/junit-4.10.jar/download). I will test with a rigorous set of my own tests.
+
+You are creating a library, NOT a main program.  Your code should not generate any output.  You must submit all your source code for credit.
 
 ## Submission
 
-You will clone your student repository to your local disk and develop in that directory, committing files and changes as necessary.  You can use ```git``` from the command-line, from within your IDE (such as [Intellij](http://www.jetbrains.com/idea/download/)), or using the free [SourceTree](http://www.sourcetreeapp.com/) app.
+You will clone your student repository to your local disk and develop in that directory, committing files and changes as necessary. Your repository will be something like:
 
-When testing, i'll use my version of ``DoubleKeyMap`` so do not modify the interface at all!
+https://github.com/USF-CS601-F14/student1
 
-You are creating a library, NOT a main program.  Your code should not generate any output.  You must submit all your source code for credit.
+You can use ```git``` from the command-line, from within your IDE (such as [Intellij](http://www.jetbrains.com/idea/download/)), or using the free [SourceTree](http://www.sourcetreeapp.com/) app.  Here is a sample session from the command line:
+
+```
+$ cd ~/cs601/projects # or whatever
+$ git clone git@github.com:USF-CS601-F14/student1.git
+Cloning into 'student1'...
+remote: Counting objects: 21, done.
+remote: Compressing objects: 100% (9/9), done.
+remote: Total 21 (delta 3), reused 17 (delta 2)
+Receiving objects: 100% (21/21), done.
+Resolving deltas: 100% (3/3), done.
+Checking connectivity... done.
+$ cd student1
+$ cd src/cs601/collections
+... create DoubleKeyHashMap.java ...
+$ cd ~/cs601/projects/test/cs601/collections
+... add unit tests to TestMapSimple.java ...
+$ git commit -a -m 'your comments'
+[master 21c0593] your comments
+ 2 files changed, 27 insertions(+), 6 deletions(-)
+ create mode 100644 projects/resources/TestMapSimple.java
+ ...
+$ git push origin master
+Counting objects: 10, done.
+Delta compression using up to 12 threads.
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (6/6), 1.08 KiB | 0 bytes/s, done.
+Total 6 (delta 2), reused 0 (delta 0)
+To git@github.com:parrt/cs601.git
+   65ed6db..21c0593  master -> master
+$
+```
+
+You can keep on changing and adding files as you wish. Just make sure to commit and push everything to github. The state of your repo at github will be what is graded at the due date/time.
 
 ## Grading
 
@@ -70,7 +104,7 @@ A continuous integration build server will run your program by cloning your repo
 $ java -cp .:yourcode TerencesTestRig
 ```
 
-Where ``yourcode`` is a jar or directory that the server builds from your source. That invocation will launch my ``TerencesTestRig.main()`` method and I will check the results.
+Where ``yourcode`` is a jar or directory that the server builds from your source. That invocation will launch my ``TerencesTestRig.main()`` method and I will check the results. When testing, I'll use my version of ``DoubleKeyMap`` so do not modify the interface at all!
 
 Here's an example of how to use the new map interface:
 
