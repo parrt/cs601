@@ -23,7 +23,7 @@ This project is primarily meant to test your basic Java skills:
 * generics
 * compilation and jar'ing
 
-*IMPORTANT*: You are to actually implement a hashtable using an array of ```LinkedList<T>``` containing wrapper objects that wrap the 2 keys and the value using a technique called [separate chaining](http://en.wikipedia.org/wiki/Hash_table#Separate_chaining_with_linked_lists). Do not simply wrap Java's existing ```Map``` interface.  For example, your solution will need a helper class like ```Entry```:
+*IMPORTANT*: You are to actually implement a hashtable using an array of ```LinkedList<T>``` containing wrapper objects that wrap the 2 keys and the value using a technique called [separate chaining](http://en.wikipedia.org/wiki/Hash_table#Separate_chaining_with_linked_lists). *Do not simply wrap Java's existing ```Map``` interface.  You can use ArrayList and LinkedList if you want.* For example, your solution will need a helper class like ```Entry```:
 
 ```
 package cs601.collections;
