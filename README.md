@@ -41,7 +41,11 @@ There is no formal book for this class, though you will be asked to read article
 
 Students can use any Java development environment they want, but I will be testing projects under OS X (or Linux) so make sure that your projects work on a UNIX box.  The community addition of Intellij is the best Java development environment in my opinion. Projects will be submitted through github.com.
 
-ABOUT ME. My name is Terence Parr and I’m a professor in the computer science department.  Please call me Terence (the use of “Terry” is a capital offense). For more information on me, see http://parrt.cs.usfca.edu.
+For help with git, I suggest you download [sourcetree](http://www.sourcetreeapp.com/). Intellij knows how to deal with git directly as well. You might also find the [Google Chrome extension Github Tree](https://chrome.google.com/webstore/detail/github-tree/ljoidanknjnfhcefkjbhjpmpccgmnobo) useful.
+
+### ABOUT ME
+
+My name is Terence Parr and I’m a professor in the computer science department.  Please call me Terence (the use of “Terry” is a capital offense). For more information on me, see http://parrt.cs.usfca.edu.
 
 ### TARDINESS
 
