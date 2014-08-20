@@ -6,12 +6,10 @@ This project tests your programming ability, your ability to code in Java, your 
 
 Your  task is to produce a simple Java implementation of a dictionary interface similar to Java's built-in ```Map<Key,Value>``` interface. The interface is called ```DoubleKeyMap<Key1,Key2,Value>``` ([download](resources/DoubleKeyMap.java)) and is in a package called ```cs601.collections```. Your implementation must be called ```DoubleKeyHashMap<Key1,Key2,Value>``` and must also be in package ```cs601.collections```.
 
-You should test your your code well including all boundary conditions as you will not see the test harness I will use to check out your project.
-
-You must implement this project successfully without knowing precisely how I will test it. There are many reasons:
+You should test your your code well including all boundary conditions as you will not see the test harness source code I will use to check out your project.  You must implement this project successfully without knowing precisely how I will test it. There are many reasons:
 
 * Part of writing software is thinking about and implementing tests for your own work.
-* You must get used to the idea that you do not know how other programmers will use your objects. Programmers communicate by examining the collection of objects and the list of messages they answer.
+* You must get used to the idea that you do not know how other programmers will use your objects. Programmers communicate by examining the collection of classes and the list of messages they answer.
 
 This project is primarily meant to test your basic Java skills:
 
@@ -23,7 +21,7 @@ This project is primarily meant to test your basic Java skills:
 * generics
 * compilation and jar'ing
 
-*IMPORTANT*: You are to actually implement a hashtable using an array of ```LinkedList<T>``` containing wrapper objects that wrap the 2 keys and the value using a technique called [separate chaining](http://en.wikipedia.org/wiki/Hash_table#Separate_chaining_with_linked_lists). *Do not simply wrap Java's existing ```Map``` interface.  You can use ArrayList and LinkedList if you want.* For example, your solution will need a helper class like ```Entry```:
+*IMPORTANT*: You are to actually implement a hashtable using an array of ```List<T>``` containing wrapper objects that wrap the 2 keys and the value using a technique called [separate chaining](http://en.wikipedia.org/wiki/Hash_table#Separate_chaining_with_linked_lists). *Do not simply wrap Java's existing ```Map``` interface.  You can use ArrayList and LinkedList if you want.* For example, your solution will need a helper class like ```Entry```:
 
 ```
 package cs601.collections;
@@ -37,43 +35,43 @@ public class DoubleKeyHashMap<K1,K2,V>
 
 ## Requirements
 
-The exact external behavior of your classes should follow the javadoc comments in the interface definition. Your hash table should be a fixed size array of "buckets" that stores all key/value pairs with the same hash value. There is no need to enlarge the number of buckets for this project. Order matters for the keys. key1,key2 is different than key2,key1. Order of ``put()`` does *not* matter. For your hash function, you can use:
+The exact external behavior of your classes should follow the javadoc comments in the interface definition. Your hash table should be a fixed size array of "buckets" that stores all key/value pairs with the same hash value. There is no need to enlarge the number of buckets for this project when the number of elements per bucket gets large. Order matters for the keys. key1,key2 is different than key2,key1. The order of ``put()`` does *not* matter. For your hash function, you can use:
 
 ```
-key1.hashCode() << 7 + key2.hashCode()
+Math.abs(key1.hashCode() * 37 + key2.hashCode())
 ```
 
-Your implementation class must define a constructor with no arguments.
+Your implementation class must define a constructor with no arguments and one with an argument specifying the (``int``) number of buckets.
 
 All of your classes must be in the ``cs601.collections`` package. When you clone your repo, it should look like to start:
 
 ![map project hierarchy](figures/map-hier.png)
 
-Do not generate any output from your library. Only test rigs should generate output. In other words, do not leave any debugging println statements around. Do not print error messages upon invalid keys and so on.
+You are creating a library, NOT a main program.
 
-You should test your library extensively. I have provided an initial unit test for you in [TestMapSimple.java](resources/TestMapSimple.java).  You will need [``junit-4.10.jar``](http://sourceforge.net/projects/junit/files/junit/4.10/junit-4.10.jar/download). I will test with a rigorous set of my own tests.
+Do not generate any output from your library. Only test rigs should generate output. In other words, do not leave any debugging println statements around. Do not print error messages upon invalid keys and so on. Upon error, you will be throwing exceptions per the interface.
 
-You are creating a library, NOT a main program.  Your code should not generate any output.  You must submit all your source code for credit.
+You should test your library extensively. I have provided an initial unit test for you in [TestMapSimple.java](resources/TestMapSimple.java).  You will need [``junit-4.10.jar``](http://sourceforge.net/projects/junit/files/junit/4.10/junit-4.10.jar/download).  Committing to your repository will trigger a test with a rigorous set of my own tests via the [continuous integration server](http://www.travis-ci.com).
 
 ## Submission
 
 You will clone your student repository to your local disk and develop in that directory, committing files and changes as necessary. Your repository will be something like:
 
-https://github.com/USF-CS601-F14/student1
+https://github.com/USF-CS601-F14/userid-doublekey
 
 You can use ```git``` from the command-line, from within your IDE (such as [Intellij](http://www.jetbrains.com/idea/download/)), or using the free [SourceTree](http://www.sourcetreeapp.com/) app.  Here is a sample session from the command line:
 
 ```
 $ cd ~/cs601/projects # or whatever
-$ git clone git@github.com:USF-CS601-F14/student1.git
-Cloning into 'student1'...
+$ git clone git@github.com:USF-CS601-F14/userid-doublekey.git
+Cloning into 'userid-doublekey'...
 remote: Counting objects: 21, done.
 remote: Compressing objects: 100% (9/9), done.
 remote: Total 21 (delta 3), reused 17 (delta 2)
 Receiving objects: 100% (21/21), done.
 Resolving deltas: 100% (3/3), done.
 Checking connectivity... done.
-$ cd student1
+$ cd userid-doublekey
 $ cd src/cs601/collections
 ... create DoubleKeyHashMap.java ...
 $ cd ~/cs601/projects/test/cs601/collections
@@ -96,15 +94,21 @@ $
 
 You can keep on changing and adding files as you wish. Just make sure to commit and push everything to github. The state of your repo at github will be what is graded at the due date/time.
 
+Until you create ``DoubleKeyHashMap.java``, the continuous integration server will show you a compilation error:
+
+```
+...
+/home/travis/build/USF-CS601-F14/parrt-doublekey/test/cs601/collections/TestMapSimple.java:11: error: cannot find symbol
+			new DoubleKeyHashMap<String, Integer, Double>();
+			    ^
+  symbol:   class DoubleKeyHashMap
+  location: class TestMapSimple
+...
+```
+
 ## Grading
 
-A continuous integration build server will run your program by cloning your repo, building it, and running some unit tests using a method that is equivalent to the following:
-
-```
-$ java -cp .:yourcode TerencesTestRig
-```
-
-Where ``yourcode`` is a jar or directory that the server builds from your source. That invocation will launch my ``TerencesTestRig.main()`` method and I will check the results. When testing, I'll use my version of ``DoubleKeyMap`` so do not modify the interface at all!
+A continuous integration build server will run your program by cloning your repo, building it, and running some unit tests.
 
 Here's an example of how to use the new map interface:
 
