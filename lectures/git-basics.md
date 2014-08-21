@@ -68,6 +68,8 @@ The ``-a`` means "all changes" and ``-m`` means message. From ``git help commit`
            actual commit;
 </blockquote>
 
+### Changing files
+
 If you want to make a change to one of the files, just do so and do another commit:
 
 ```
@@ -77,15 +79,35 @@ $ git commit -a -m 'tweak my hashtable'
  1 file changed, 2 insertions(+)
 ```
 
+### Deleting files
+
+To delete a file, just remove it with the operating system as usual and perform a commit.
+
 ```
-$
+$ rm Useless.java # assume Useless.java is already in the repository
+$ git commit -a -m 'get rid of a useless file'
+[master 20bddef] get rid of a useless file
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 src/cs601/collections/Useless.java
 $
 ```
 
+### Push your changes to github
+
+We have been working on a local copy of the repository stored at github. To send our changes from the local copy to github (assuming we used ``clone`` to make the local copy), we use ``push``:
+
 ```
-$
+$ git push origin master
+Counting objects: 8, done.
+Delta compression using up to 12 threads.
+Compressing objects: 100% (5/5), done.
+...
+   e5d5910..c764081  master -> master
+...
 $
 ```
+
+The ``origin`` refers to github in our case and ``master`` is the name of the branch in which we are working. More on branches next.
 
 ```
 $
