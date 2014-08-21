@@ -107,12 +107,25 @@ Compressing objects: 100% (5/5), done.
 $
 ```
 
-The ``origin`` refers to github in our case and ``master`` is the name of the branch in which we are working. More on branches next.
+The ``origin`` refers to github in our case and ``master`` is the name of the branch in which we are working. More on branches shortly.
+
+### Pulling changes from github
+
+If you move to a new computer, or your local copy gets wiped out for some reason, you need to pull from github any changes pushed to it that your local copy does not have. We use ``pull`` for this.
+
+If everything is up to date, you will see the followng:
 
 ```
-$
+$ git pull origin master
+From github.com:USF-CS601-F14/parrt-doublekey
+ * branch            master     -> FETCH_HEAD
+Already up-to-date.
 $
 ```
+
+Otherwise you will see a message saying that some changes will come down from github to your local copy.
+
+### Branching
 
 ```
 $
