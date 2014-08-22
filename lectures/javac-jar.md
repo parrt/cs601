@@ -271,3 +271,30 @@ foo: hello
 ```
 
 In essence, a jar file is simply mimicking file system directory structure.
+
+In recent versions of Java, you can also use the ``-jar`` option to directly run a predefined main program from within a jar.  The ``META-INF/MANIFEST.MF`` file within the jar must have ``Main-Class:`` property set. For example, here's one for my ANTLR jar:
+
+```
+$ cat META-INF/MANIFEST.MF
+Manifest-Version: 1.0
+Implementation-Title: ANTLR 4 Tool
+Implementation-Version: 4.4
+Built-By: parrt
+Build-Jdk: 1.6
+Created-By: http://www.bildtool.org
+Main-Class: org.antlr.v4.Tool
+Implementation-Vendor: ANTLR
+```
+Here is how to use the option that accesses that file:
+
+```
+$ java -jar /usr/local/lib/antlr-4.4-complete.jar
+ANTLR Parser Generator  Version 4.4
+ -o ___              specify output directory where all output is generated
+ -lib ___            specify location of grammars, tokens files
+ -atn                generate rule augmented transition network diagrams
+ -encoding ___       specify grammar file encoding; e.g., euc-jp
+...
+```
+
+
