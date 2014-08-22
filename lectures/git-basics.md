@@ -3,7 +3,7 @@
 
 Git is the assembly language of revision control systems and is very hard to use from the commandline so I restrict myself to a few memorized commands. Fortunately, development environments such as intellij know how to use it and you can focus on high-level operations such as: commit, diff, pull/push from/to remote repository. To truly understand what's going on however it's best to understand the individual commands from the commandline.
 
-## "Git on it"
+## "Git down on it"
 
 Let's start out by looking at how you will work on the first project by cloning from your github repository within the [CS601 organization](https://github.com/USF-CS601-F14).
 
