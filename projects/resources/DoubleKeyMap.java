@@ -26,7 +26,7 @@ public interface DoubleKeyMap<K1,K2,V> {
     V get(K1 key1, K2 key2);
 
     /** Remove a value if present. Return previous value if any.
-     *  Do nothing if not present.
+     *  Do nothing if not present and return null.
      */
     V remove(K1 key1, K2 key2);
 
