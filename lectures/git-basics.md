@@ -172,18 +172,75 @@ Because of http://github.com. Full-stop. Hg (Mercurial) is *way* simpler and wou
 
 http://github.com adds dramatically to the benefits because of its extra functionality. We will discuss this later but forking/pull requests are insanely awesome because it makes it easy for someone to contribute to your project or for you to contribute to another one. They also have good code review facilities and issue management.
 
+## Concepts
+
+A git repository instance is just a directory on your disk that also happens to have a ``.git`` directory, which is effectively a complete database of everything that's happened to the repository since it was created with ``git init`` (or you ``clone``'d it).
+
+If you want to throw out the repository, just remove the entire subtree. There is no central server to notify. Every repository instance is a complete copy so you could have, for example, 10 versions of the repository cloned from an original sitting on the same disk.
+
+After you create a repository, you can add all sorts of files but git ignores them until you ``add`` them. When you add files or modify files already known to git, they are in the so-called *staging area* (this used to be called the *index*).  You can have whatever other files you want laying around, such as development environment preference files. Git will simply ignore them unless you add them. This is different than other revision control systems that insist upon knowing about and managing everything under a particular subtree.
+
+### Commits
+
+In concept, a commit is a snapshot of your entire repository directory subtree on the disk. In reality, repository store only the difference of the current stuff from the previous stuff. For binaries that change, it copies the whole thing.  The most recent commit is called the ``HEAD``.
+
+Having a complete list of changes is extremely useful. For example, here is a chunk taken out of the middle of my commits on the ANTLR repository as shown by SourceTree:
+
+![commits](figures/commits.png)
+
+That should look very much like Time Machine on OS X to you. You can go back and look at changes made to the repository for any commit.
+
+ You will also notice that I have tagged a particular commit as ``4.4`` with the ``tag`` command. This makes it easy for me to flip the repository back to a specific commit with a name rather than one of those funky commit checksums. Here is what that particular commit consisted of per SourceTree:
+
+![tag diff](figures/tagdiff.png)
+
+You should commit only logical chunks like feature additions, bug fixes, or comment updates across the project, etc.
+
+Also, the commit message is important. Do not use meaningless messages, as I see students sometimes do:
+
+### Commit messages
+```
+Add MyFile.java
+Alter MyFile.java
+Alter MyFile.java
+Alter MyFile.java
+Alter MyFile.java
+Alter MyFile.java
+...
+```
+
+In rare cases, when I'm working alone, I sometimes use a private repository as a means of sharing files across multiple computers like dropbox. In this case, my commits are just to take a snapshot to pull it down on another machine. The commit message doesn't matter (though I might still look back through the changes at some point). When doing this for a real project, it's best to use ``stash`` per the next section.
+
+### Stash vs commit
+
+To save everything you've done in the working directory, even for files you have not added to the repository with ``add``, you can stash things:
+
+```
+$ git stash
+```
+
+Which will take a snapshot of your current working directory and reset the working directory to look like the most recent commit (HEAD). Then on another machine you can do
+
+```
+$ git stash pop
+```
+
+to get the most recent stashed working directory. These are not committed changes. It's a temporary stack of snapshots.
+
 ## "Git 'er done"
 
 ### Pure local use
 
-All you have to do is create a directory, and then run:
+**Create repo.** All you have to do is create a directory, and then run:
 
 ```
 $ cd test
 $ git init
 ```
 
-and you have a git repository. Then you just add files and do a commit
+and you have a git repository.
+
+**Adding to repo.** Then you just add files and do a commit
 
 ```
 $ cat > t.c
@@ -191,9 +248,9 @@ $ git add t.c
 $ git commit -a -m 'initial add'
 ```
 
-Then you can make changes and do another commit. Make sure use the ``-a`` command.  By the way, deleting a file is also considered a change but you can also use ``git rm file.c``.
+**Make changes.** Then you can make changes and do another commit. Make sure use the ``-a`` command.  By the way, deleting a file is also considered a change but you can also use ``git rm file.c``.
 
-If you make a change and want to know how it's different from the current repository version, just use diff:
+**Checking differences with repo.** If you make a change and want to know how it's different from the current repository version, just use diff:
 
 ```
 $ ... tweak t.c ...
@@ -201,7 +258,7 @@ $ git diff t.c
 ...
 ```
 
-If you screw up and want to toss out everything from the last commit, to a reset and make sure you use the hard option:
+**Reverting.** If you screw up and want to toss out everything from the last commit, to a reset and make sure you use the hard option:
 
 ```
 $ ... tweak whatever you want ...
@@ -216,21 +273,20 @@ $ git checkout -- filename
 
 I *think* they call that funny ``--`` thing "sparse mode." See? Git is the assembly code of revision systems.
 
-
-One of the other things I often have to do is to [fix the commit message](http://stackoverflow.com/questions/179123/edit-an-incorrect-commit-message-in-git) that I just wrote in a commit command.
+**Correcting commit message.** One of the other things I often have to do is to [fix the commit message](http://stackoverflow.com/questions/179123/edit-an-incorrect-commit-message-in-git) that I just wrote in a commit command.
 
 ```
 $ git commit --amend -m "I really wanted to say this instead"
 ```
 
-If you forgot to add one of the files and you wanted in a previous commit, you can also use amend. Just add the file and use amend:
+**Adding file you forgot to commit.** If you forgot to add one of the files and you wanted in a previous commit, you can also use amend. Just add the file and use amend:
 
 ```
 $ git add t2.py
 $ git commit --amend --no-edit
 ```
 
-Finally, if you want to figure out what changes you have made such as adding, deleting, or editing files, you can run:
+**Checking working dir and staging area vs repo.** Finally, if you want to figure out what changes you have made such as adding, deleting, or editing files, you can run:
 
 ```
 $ git status
