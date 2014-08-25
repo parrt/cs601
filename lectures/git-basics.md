@@ -3,7 +3,7 @@
 
 Git is the assembly language of revision control systems and is very hard to use from the commandline so I restrict myself to a few memorized commands. Fortunately, development environments such as intellij know how to use it and you can focus on high-level operations such as: commit, diff, pull/push from/to remote repository. To truly understand what's going on however it's best to understand the individual commands from the commandline.
 
-## "Git down on it"
+## "Gitting down to business in CS601, project #1"
 
 Let's start out by looking at how you will work on the first project by cloning from your github repository within the [CS601 organization](https://github.com/USF-CS601-F14).
 
@@ -128,7 +128,7 @@ Already up-to-date.
 $
 ```
 
-Otherwise you will see a message saying that some changes will come down from github to your local copy.
+Otherwise you will see a message saying that some changes have come down from github to your local copy.
 
 ## Why use revision control?
 
@@ -196,9 +196,10 @@ That should look very much like Time Machine on OS X to you. You can go back and
 
 You should commit only logical chunks like feature additions, bug fixes, or comment updates across the project, etc.
 
-Also, the commit message is important. Do not use meaningless messages, as I see students sometimes do:
-
 ### Commit messages
+
+Commit messages are important. Do not use meaningless messages, as I see students sometimes do:
+
 ```
 Add MyFile.java
 Alter MyFile.java
