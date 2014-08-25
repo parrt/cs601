@@ -1,7 +1,12 @@
 "Git on it"
 =====
 
+
 Git is the assembly language of revision control systems and is very hard to use from the commandline so I restrict myself to a few memorized commands. Fortunately, development environments such as intellij know how to use it and you can focus on high-level operations such as: commit, diff, pull/push from/to remote repository. To truly understand what's going on however it's best to understand the individual commands from the commandline.
+
+## Table of contents
+
+[TOC]
 
 ## "Gitting down to business in CS601, project #1"
 
@@ -48,7 +53,7 @@ Similarly, if you ever want to throw this copy of the repository out with all th
 To add a file, such as your hash table, just create the file and notify ``git``:
 
 ```
-$ ~/cs601/projects/parrt-doublekey/src/cs601/collections
+$ cd ~/cs601/projects/parrt-doublekey/src/cs601/collections
 $ ... created DoubleKeyHashMap.java ...
 $ git add DoubleKeyHashMap.java
 $
@@ -96,6 +101,8 @@ $ git commit -a -m 'get rid of a useless file'
  delete mode 100644 src/cs601/collections/Useless.java
 $
 ```
+
+You can also use ``git rm Useless.java``.
 
 ### Push your changes to github
 
