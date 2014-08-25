@@ -1,3 +1,32 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- ["Git on it"](#git-on-it)
+  - ["Gitting down to business in CS601, project #1"](#gitting-down-to-business-in-cs601-project-#1)
+    - [Cloning a repository](#cloning-a-repository)
+    - [Adding files](#adding-files)
+    - [Changing files](#changing-files)
+    - [Deleting files](#deleting-files)
+    - [Push your changes to github](#push-your-changes-to-github)
+    - [Pulling changes from github](#pulling-changes-from-github)
+  - [Why use revision control?](#why-use-revision-control)
+    - [Solo programmer, local disk use](#solo-programmer-local-disk-use)
+    - [Solo programmer, sharing across machines](#solo-programmer-sharing-across-machines)
+    - [Multiple programmers](#multiple-programmers)
+  - [Central versus distributed repositories](#central-versus-distributed-repositories)
+  - [Why git?](#why-git)
+  - [Concepts](#concepts)
+    - [Commits](#commits)
+    - [Commit messages](#commit-messages)
+    - [Stash vs commit](#stash-vs-commit)
+  - ["Git 'er done"](#git-er-done)
+    - [Pure local use](#pure-local-use)
+      - [With a remote server like github](#with-a-remote-server-like-github)
+  - [Common operations](#common-operations)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 "Git on it"
 =====
 
@@ -6,7 +35,6 @@ Git is the assembly language of revision control systems and is very hard to use
 
 ## Table of contents
 
-[TOC]
 
 ## "Gitting down to business in CS601, project #1"
 
