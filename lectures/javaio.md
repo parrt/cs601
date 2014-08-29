@@ -13,6 +13,7 @@ You can use File objects to obtain information about a file or directory. File o
 
 To determine the length of a file and print its full path:
 
+```java
 import java.io.File;
 import java.io.IOException;
 
@@ -25,10 +26,7 @@ public class DemoFile {
 		System.out.println("Path: " + f.getCanonicalPath());
 	}
 }
-
-<code>
-!INCLUDE code/io/DemoFile.java
-</code>
+```
 
 String fileName = "data";
 File f = new File(fileName);
