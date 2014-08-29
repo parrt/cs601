@@ -28,17 +28,23 @@ public class DemoFile {
 }
 ```
 
-String fileName = "data";
-File f = new File(fileName);
-System.out.println("file " + fileName + " is " +
-      f.length() + " bytes long");
-System.out.println("Path: " + f.getCanonicalPath());
-
 For another example, when the File object is associated with a file system directory, you can easily obtain the list of files in that directory:
 
-String fileName = "examples";
-File f = new File(fileName);
-String dirListing[] = f.list();
+```java
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+
+public class DemoDir {
+	public static void main(String[] args)  throws IOException {
+		String fileName = args[0];
+		File f = new File(fileName);
+		String dirListing[] = f.list();
+		System.out.println(Arrays.toString(dirListing));
+	}
+}
+```
+
 In addition to getting information about a file from a File object, you can use one to create an instance of FileInputStream, FileReader, FileOutputStream or FileWriter. The following example writes a single line to a file.
 
 String fileName = "/tmp/more-examples";
