@@ -13,9 +13,9 @@ You can use File objects to obtain information about a file or directory. File o
 
 To determine the length of a file and print its full path:
 
-<pre>
+<code>
 !INCLUDE code/DemoFile.java
-</pre>
+</code>
 
 String fileName = "data";
 File f = new File(fileName);
