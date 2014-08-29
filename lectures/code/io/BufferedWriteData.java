@@ -1,14 +1,14 @@
-import java.io.File;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class BufferedWriteData.java {
+public class BufferedWriteData {
 	public static void main(String[] args)  throws IOException {
-		String fileName = args[0];
-FileOutputStream f = new FileOutputStream("junk");
-BufferedOutputStream bf = new BufferedOutputStream(f);
-DataOutputStream dos = new DataOutputStream (bf);
-dos.writeInt(34);
-dos.close();
-
+		FileOutputStream f = new FileOutputStream("/tmp/junk.data");
+		BufferedOutputStream bf = new BufferedOutputStream(f);
+		DataOutputStream dos = new DataOutputStream(bf);
+		dos.writeInt(34);
+		dos.close();
 	}
 }
