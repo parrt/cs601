@@ -20,6 +20,7 @@ public class FileEncodingRead {
 		String line = r.readLine();
 		while (line != null) {
 			buf.append(line);
+			buf.append("\n");
 			line = r.readLine();
 		}
 		return buf.toString();
