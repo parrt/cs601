@@ -263,6 +263,36 @@ Regardless, the key here is that you read characters the same way they were writ
 
 Bottom line. If you are reading text from a file, you should be using the Reader I/O hierarchy, which will sense your "locale" and interpret a text file properly. Be careful that you do not get a file encoded and stored from another country and then try to open with a "native ASCII format" computer such as a computer in the USA. It will try to interpret the text as UTF-8 instead of the original encoding. Even if that encoding is only eight bits per character, it might have different mapping from characters to integer character values.
 
+```java
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
+public class FileEncodingRead {
+	public static void main(String[] args) throws IOException {
+		String encoding = args[0];
+		String fileName = args[1];
+		FileInputStream isr = new FileInputStream(fileName);
+		Reader r = new InputStreamReader(isr, encoding);
+		BufferedReader br = new BufferedReader(r);
+		String data = readFully(br);
+		System.out.println(data);
+	}
+
+	public static String readFully(BufferedReader r) throws IOException {
+		StringBuilder buf = new StringBuilder();
+		String line = r.readLine();
+		while (line != null) {
+			buf.append(line);
+			line = r.readLine();
+		}
+		return buf.toString();
+	}
+}
+```
+
 ## Random Access Files
 
 You often want to read or write data at random positions within a file, rather than sequentially as you would with a magnetic tape. The `RandomAccessFile` class behaves like a combined `DataOutputStream` and `DataInputStream`. RandomAccessFile implements both the DataOutput and DataInput interfaces. RandomAccessFile objects are created from a String filename or File object like other stream objects, but a mode constructor argument is also required. The mode is either String "r" (read only) or "rw" (read/write), just like fopen() in C or C++. For example:
