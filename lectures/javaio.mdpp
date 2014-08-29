@@ -178,7 +178,7 @@ The most common file encoding is [UTF-8](http://www.fileformat.info/info/unicode
 
 
 1st Byte |   2nd Byte  |  3rd Byte  |  4th Byte  |  Number of Free Bits | Maximum Expressible Unicode Value
----------|---------|---------|---------|---------|---------|---------
+---------|---------|---------|---------|---------|---------
 0xxxxxxx |  |||              7 |  007F |hex (127)
 110xxxxx |   10xxxxxx |     |     | (5+6)=11  |  07FF hex (2047)
 1110xxxx |   10xxxxxx  |  10xxxxxx   |     |(4+6+6)=16|  FFFF hex (65535)
