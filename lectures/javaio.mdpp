@@ -172,11 +172,21 @@ Java's text input and output classes translate the native characters to and from
 
 #### Stream character encoding of Unicode
 
-If we can assume that the native-Unicode just "works", the only issue you really need to worry about is how 16-bit characters are read or written. If you are storing a 16-bit Unicode character, you must somehow encode those as a sequence of bytes. The most common way is "UTF-8", "unicode to follow", which is much more efficient than just storing the 16 bit characters sequential. UTF-8 is a simple encoding of UNICODE characters and strings that is optimized for the ASCII characters. In each byte of the encoding, the high bit determines if more bytes follow. A high bit of zero means that the byte has enough information to fully represent a character; ASCII characters require only a single byte.
+If we can assume that the native-Unicode just "works", the only issue you really need to worry about is how 16-bit characters are read or written, whether it's to a file, the terminal, or a socket. If you are storing a 16-bit Unicode character, you must somehow encode it as a sequence of bytes.
+
+The most common file encoding is [UTF-8](http://www.fileformat.info/info/unicode/utf8.htm), "unicode to follow", which is much more efficient than just storing the 16 bit characters sequential. UTF-8 is a simple encoding of UNICODE characters and strings that is optimized for the ASCII characters. In each byte of the encoding, the high bit determines if more bytes follow. A high bit of zero means that the byte has enough information to fully represent a character; ASCII characters require only a single byte. From [UTF-8](http://www.fileformat.info/info/unicode/utf8.htm):
+
+
+|1st Byte |   2nd Byte  |  3rd Byte  |  4th Byte  |  Number of Free Bits | Maximum Expressible | Unicode Value|
+|-
+|0xxxxxxx |  |||              7 |  007F |hex (127)|
+|110xxxxx |   10xxxxxx |     |     | (5+6)=11  |  07FF hex (2047)||
+|1110xxxx |   10xxxxxx  |  10xxxxxx   |     |(4+6+6)=16|  FFFF hex (65535)|
+|11110xxx  |  10xxxxxx   | 10xxxxxx  |  10xxxxxx   | (3+6+6+6)=21 |   10FFFF hex (1,114,111)|
 
 Regardless, the key here is that you read characters the same way they were written. The encoding will become important when you start working with sockets between different computers. The locale on the client and server may be different.
 
-Bottom line. If you are reading text from a file, you should be using the Reader I/O hierarchy, which will sense your "locale" and interpret a text file properly. Be careful that you do not get a file stored in 2-byte unicode from another country and then try to open with a "native ASCII format" computer such as a computer in the USA. It will try to interpret the text as UTF-8 instead of a stream of 16-bit characters!
+Bottom line. If you are reading text from a file, you should be using the Reader I/O hierarchy, which will sense your "locale" and interpret a text file properly. Be careful that you do not get a file encoded and stored from another country and then try to open with a "native ASCII format" computer such as a computer in the USA. It will try to interpret the text as UTF-8 instead of the original encoding. Even if that encoding is only eight bits per character, it might have different mapping from characters to integer character values.
 
 ## Random Access Files
 
