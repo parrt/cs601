@@ -252,12 +252,12 @@ If we can assume that the native-Unicode just "works", the only issue you really
 The most common file encoding is [UTF-8](http://www.fileformat.info/info/unicode/utf8.htm), "unicode to follow", which is much more efficient than just storing the 16 bit characters sequential. UTF-8 is a simple encoding of UNICODE characters and strings that is optimized for the ASCII characters. In each byte of the encoding, the high bit determines if more bytes follow. A high bit of zero means that the byte has enough information to fully represent a character; ASCII characters require only a single byte. From [UTF-8](http://www.fileformat.info/info/unicode/utf8.htm):
 
 
-|1st Byte |   2nd Byte  |  3rd Byte  |  4th Byte  |  Number of Free Bits | Maximum Expressible | Unicode Value|
-|-
-|0xxxxxxx |  |||              7 |  007F |hex (127)|
-|110xxxxx |   10xxxxxx |     |     | (5+6)=11  |  07FF hex (2047)||
-|1110xxxx |   10xxxxxx  |  10xxxxxx   |     |(4+6+6)=16|  FFFF hex (65535)|
-|11110xxx  |  10xxxxxx   | 10xxxxxx  |  10xxxxxx   | (3+6+6+6)=21 |   10FFFF hex (1,114,111)|
+1st Byte |   2nd Byte  |  3rd Byte  |  4th Byte  |  Number of Free Bits | Maximum Expressible | Unicode Value
+---------|---------|---------|---------|---------|---------|---------
+0xxxxxxx |  |||              7 |  007F |hex (127)
+110xxxxx |   10xxxxxx |     |     | (5+6)=11  |  07FF hex (2047)
+1110xxxx |   10xxxxxx  |  10xxxxxx   |     |(4+6+6)=16|  FFFF hex (65535)
+11110xxx  |  10xxxxxx   | 10xxxxxx  |  10xxxxxx   | (3+6+6+6)=21 |   10FFFF hex (1,114,111)
 
 Regardless, the key here is that you read characters the same way they were written. The encoding will become important when you start working with sockets between different computers. The locale on the client and server may be different.
 
