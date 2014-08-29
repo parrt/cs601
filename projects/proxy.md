@@ -13,7 +13,7 @@ My solution works very well with complicated websites like nytimes.com and some 
 
 To test your proxy server, you can set your browser preferences to use a proxy. That way you can see if all the images come through and that the page looks right. Eventually that gets annoying, so it makes more sense to automate the process. The key to a successful test is that ``wget`` yields identical directories with and without the use of the proxy:
 
-```
+```bash
 $ export http_proxy=http://localhost:8080
 $ wget -nv -P withproxy --proxy=on -r --level 1 http://www.cs.usfca.edu
 2014-08-25 12:56:52 URL:http://www.cs.usfca.edu/ [43200/43200] -> "www.cs.usfca.edu/index.html" [1]
@@ -26,25 +26,63 @@ $ diff -r noproxy withproxy # should be the same
 $
 ```
 
-``ProxyServer`` and ``ClientHandler``
+Please create two classes: `ProxyServer` and `ClientHandler`. The `ProxyServer` has the `main` program and does nothing but launch `ClientHandler` objects, one per socket connection. The algorithm is essentially just:
+
+```
+Open a server socket
+looping forever:
+    wait for a socket connection
+	create a client handler, passing the Socket object
+	create and launch a Java thread attached to that client handler
+```
+
+You can allow `IOException`s associated with function calls in `main` to flow out of the main program, killing the server.
+
+It's a good idea to start out with a single threaded server so that is easier to debug. As you might have errors later, I use a flag to turn this on and off:
+
+```java
+public static final boolean SingleThreaded = false;
+```
+
+A single threaded server completes the job associated with each socket connection before accepting another.
+
+Your `ClientHandler` should be runnable so that you can launch a thread on it. You must also create a constructor that allows the `main` to pass it a Socket:
+
+```
+public class ClientHandler implements Runnable {
+	...
+	public ClientHandler(Socket clientSocket) {
+		this.clientSocket = clientSocket;
+	}
+```
+
+It's a good idea to have a debug flag in `ClientHandler` that, when true, prints out all sorts of interesting information. Here is what mine prints out:
+
+```
+SOCKET 63787
+BROWSER: GET http://www.cs.usfca.edu/index.html HTTP/1.1
+BROWSER HEADERS: {connection=Close, host=www.cs.usfca.edu, accept=*/*}
+SENT UPSTREAM: GET /index.html HTTP/1.0
+UPSTREAM REPLY: HTTP/1.1 200 OK
+UPSTREAM HEADERS:  {content-type=text/html; charset=UTF-8, connection=close, content-length=43200, accept-ranges=bytes, server=Apache/2.2.15 (CentOS), date=Wed, 27 Aug 2014 21:51:37 GMT}
+READING UPSTREAM DATA
+DONE WRITING BACK 43200 BYTES TO BROWSER
+FLUSH BROWSER SOCKET 63787
+CLOSE BROWSER SOCKET 63787
+```
 
 ## Requirements
 
-* Have your proxy listen at 8080.
+* Have your proxy listen at port specified from the command line as the first argument, defaulting to port 8080 if none is specified.
 * Follow the algorithm from the proxy lecture notes.
 * Launch new thread to handle each new incoming connection otherwise your proxy will make browsing super slow.
-		clientHeaders.remove("user-agent");
-		clientHeaders.remove("referer");
-		clientHeaders.remove("proxy-connection");
-		clientHeaders.remove("accept-encoding");
-
-
-* Strip ``User-Agent,Referer,proxy-connection,accept-encoding`` headers (to browse incognito):
+* Strip ``User-Agent,Referer`` browser headers (to browse incognito) before sending onto the upstream server to browse and incognito mode:
 ```
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) ...
 Referer: http://antlr.org/submit/challenge?type=grammar
 ```
-* Make sure that you trap "host not found" exceptions; I found one case where the New York Times website for sending me a ".comp" not ".com"-based hostname. In that case, send back a "HTTP/1.0 400 Bad Request" response to the browser.
+Also strip out `proxy-connection,accept-encoding` headers.
+* Make sure that you trap "host not found" exceptions; I found one case where the New York Times website sent my proxy a ".comp" not ".com"-based hostname.  In this case, the proxy must send back a "HTTP/1.0 400 Bad Request" response to the browser because the requested upstream server does not exist.
 * You must send appropriate responses from the remote host back to the browser. For example, if the incoming server sees
 ```
 GET http://antlr.org/bad HTTP/1.1
@@ -59,8 +97,8 @@ and usually some payload data
 HTTP/1.1 302 Moved Temporarily
 ```
 * Use buffered input and output connections to the browser and the remote hosts.  Warning: It's tricky figuring out when to flush these buffers.
-* You must not try to buffer the entire return payload in memory. In other words, once you establish connection with the upstream server, pull the data over in blocks that you can send back to the client browser.
-* You must use the raw Java socket library to create your proxy server. We are trying to build a proxy that must look at the HTTP protocol incoming on the sockets. We cannot do this if you're using a standard Web server that handles all of that stuff for us; such classes simply inform us that a ``GET`` or ``POST`` has occurred. we need something lower-level. You cannot use classes like ``URL`` and ``URLConnection``.
+* *You must not try to buffer the entire return payload in memory*. In other words, once you establish connection with the upstream server, pull the data over in blocks that you can send back to the client browser.
+* *You must use the raw Java socket library to create your proxy server*. We are trying to build a proxy that must look at the HTTP protocol incoming on the sockets. We cannot do this if you're using a standard Web server that handles all of that stuff for us; such classes simply inform us that a ``GET`` or ``POST`` has occurred. we need something lower-level. You cannot use classes like ``URL`` and ``URLConnection``.
 
 ## Submission
 
