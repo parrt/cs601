@@ -227,19 +227,13 @@ The following example writes an integer and a floating point number to a file, r
 !INCLUDE "code/io/RandomAccessData.java"
 ```
 
-RandomAccessFile f = new RandomAccessFile("junk", "rw");
-f.writeInt(34);
-f.writeDouble(3.14159);
-f.seek(0);
-int i = f.readInt();
-double d = f.readDouble();
-f.close();
-
 ## Object Serialization
 
-Similar to primitive value input and output, object values can be written to binary files as well. Writing an object value to an output stream is known as "serializing" that object. The Java core API defines interfaces ObjectInput and ObjectOutput. These interfaces define the readObject() and writeObject() methods, the core of Java object serialization. Two classes, ObjectInputStream and ObjectOutputStream implement these interfaces.
+Similar to primitive value input and output, object values can be written to binary files as well. Writing an object value to an output stream is known as "serializing" that object ("pickling" in Python terminology). The Java core API defines interfaces ObjectInput and ObjectOutput. These interfaces define the readObject() and writeObject() methods, the core of Java object serialization. Two classes, ObjectInputStream and ObjectOutputStream implement these interfaces.
 
 Another interface, Serializable, is used to "mark" a class as one that can be handled via writeObject() and readObject(). Note that Serializable defines no methods; it is simply a "tag" to indicate that a class may be serialized.
+
+Java serialization is known to be pretty slow but there are other libraries you can use that apparently go quite fast.
 
 ## Properly Closing Files
 
