@@ -28,14 +28,15 @@ For another example, when the File object is associated with a file system direc
 In addition to getting information about a file from a File object, you can use one to create an instance of FileInputStream, FileReader, FileOutputStream or FileWriter. The following example writes a single line to a file.
 
 ```java
-!INCLUDE "code/io/WriteText.java"
+File f = new File(fileName);
+FileWriter fw = new FileWriter(f);
 ```
 
 ### OS-independent directory naming
 
 The above example uses UNIX file names. We can create similar File objects for Windows files as follows:
 
-```
+```java
 File c = new File("c:\\windows\\system\\smurf.gif");
 File d = new File("system\\smurf.gif");
 ```
@@ -99,11 +100,13 @@ static PrintStream err;
 
 Methods `print()` and `println()` are used to print (only) ASCII text representations of their arguments. For example,
 
+```java
 System.out.println("Hello");
+```
 
 #### Text
 
-To write ASCII (8-bit non UNICODE) text to a file, use the OutputStream hierarchy:
+To write ASCII (8-bit not using an encoding) text to a file, use the OutputStream hierarchy:
 
 ```java
 FileOutputStream out = new FileOutputStream("somefile");
@@ -121,7 +124,7 @@ pw.println("some text");
 pw.close();
 ```
 
-FileWriter assumes the default character encoding for your Locale. Encodings are used when converting between raw 8-bit bytes and sixteen-bit Unicode characters. For example, the encoding for a US computer is "US-ASCII" also known as "ISO646-US". See below for more about Unicode.
+FileWriter assumes the default character encoding for your Locale. Encodings are used when converting between raw 8-bit bytes and 16-bit Unicode characters. For example, the encoding for a US computer is "US-ASCII" also known as "ISO646-US". See below for more about Unicode.
 
 ### Reading
 
@@ -130,16 +133,16 @@ FileWriter assumes the default character encoding for your Locale. Encodings are
 To read primitive data types from a file, you would combine DataInputStream and FileInputStream in the following manner:
 
 ```java
-!INCLUDE "code/io/WriteData.java"
+!INCLUDE "code/io/ReadData.java"
 ```
 
 
 #### Text
 
-To read text from stdin, things are a little weird due to Java I/O libraries being updated and having to maintain backward compatibility. From jGuru How do I read text from standard input?:
+To read text from stdin, things are a little weird due to Java I/O libraries being updated and having to maintain backward compatibility:
 
 ```java
-!INCLUDE "code/io/WriteText.java"
+!INCLUDE "code/io/ReadText.java"
 ```
 
 If you are reading ASCII characters like the digits 0..9 and only want to read character by character, then you can directly use System.in.read().

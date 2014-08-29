@@ -50,32 +50,15 @@ public class DemoDir {
 In addition to getting information about a file from a File object, you can use one to create an instance of FileInputStream, FileReader, FileOutputStream or FileWriter. The following example writes a single line to a file.
 
 ```java
-import java.io.File;
-import java.io.IOException;
-
-public class WriteText {
-	public static void main(String[] args)  throws IOException {
-String fileName = "/tmp/more-examples";
 File f = new File(fileName);
-FileWriter fw = new FileWriter (f);
-PrintWriter pw = new PrintWriter (fw);
-pw.println("Welcome home");
-pw.close();
-
-		String fileName = args[0];
-		File f = new File(fileName);
-		System.out.println("file " + fileName + " is " +
-						   f.length() + " bytes long");
-		System.out.println("Path: " + f.getCanonicalPath());
-	}
-}
+FileWriter fw = new FileWriter(f);
 ```
 
 ### OS-independent directory naming
 
 The above example uses UNIX file names. We can create similar File objects for Windows files as follows:
 
-```
+```java
 File c = new File("c:\\windows\\system\\smurf.gif");
 File d = new File("system\\smurf.gif");
 ```
@@ -121,19 +104,17 @@ will create objects for h and i that refer to the same file.
 If you want to write primitive data types to a file, you would combine DataOutputStream and FileOutputStream in the following manner:
 
 ```java
-import java.io.File;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class WriteData {
 	public static void main(String[] args)  throws IOException {
-		String fileName = args[0];
-String filename = ...;
-FileOutputStream fos = new FileOutputStream (filename);
-DataOutputStream dos = new DataOutputStream (fos);
-dos.writeInt (42);
-dos.writeDouble (Math.PI);
-dos.close();
-
+		FileOutputStream fos = new FileOutputStream("/tmp/junk.data");
+		DataOutputStream dos = new DataOutputStream(fos);
+		dos.writeInt (42);
+		dos.writeDouble (Math.PI);
+		dos.close();
 	}
 }
 ```
@@ -141,18 +122,18 @@ dos.close();
 In many cases, you'll want to buffer that output stream for efficiency's sake (i.e., don't write to the physical disk for each "write").
 
 ```java
-import java.io.File;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class BufferedWriteData.java {
+public class BufferedWriteData {
 	public static void main(String[] args)  throws IOException {
-		String fileName = args[0];
-FileOutputStream f = new FileOutputStream("junk");
-BufferedOutputStream bf = new BufferedOutputStream(f);
-DataOutputStream dos = new DataOutputStream (bf);
-dos.writeInt(34);
-dos.close();
-
+		FileOutputStream f = new FileOutputStream("/tmp/junk.data");
+		BufferedOutputStream bf = new BufferedOutputStream(f);
+		DataOutputStream dos = new DataOutputStream(bf);
+		dos.writeInt(34);
+		dos.close();
 	}
 }
 ```
@@ -166,11 +147,13 @@ static PrintStream err;
 
 Methods `print()` and `println()` are used to print (only) ASCII text representations of their arguments. For example,
 
+```java
 System.out.println("Hello");
+```
 
 #### Text
 
-To write ASCII (8-bit non UNICODE) text to a file, use the OutputStream hierarchy:
+To write ASCII (8-bit not using an encoding) text to a file, use the OutputStream hierarchy:
 
 ```java
 FileOutputStream out = new FileOutputStream("somefile");
@@ -188,7 +171,7 @@ pw.println("some text");
 pw.close();
 ```
 
-FileWriter assumes the default character encoding for your Locale. Encodings are used when converting between raw 8-bit bytes and sixteen-bit Unicode characters. For example, the encoding for a US computer is "US-ASCII" also known as "ISO646-US". See below for more about Unicode.
+FileWriter assumes the default character encoding for your Locale. Encodings are used when converting between raw 8-bit bytes and 16-bit Unicode characters. For example, the encoding for a US computer is "US-ASCII" also known as "ISO646-US". See below for more about Unicode.
 
 ### Reading
 
@@ -197,19 +180,18 @@ FileWriter assumes the default character encoding for your Locale. Encodings are
 To read primitive data types from a file, you would combine DataInputStream and FileInputStream in the following manner:
 
 ```java
-import java.io.File;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 
-public class WriteData {
+public class ReadData {
 	public static void main(String[] args)  throws IOException {
-		String fileName = args[0];
-String filename = ...;
-FileOutputStream fos = new FileOutputStream (filename);
-DataOutputStream dos = new DataOutputStream (fos);
-dos.writeInt (42);
-dos.writeDouble (Math.PI);
-dos.close();
-
+		FileInputStream fis = new FileInputStream("/tmp/junk.data");
+		DataInputStream dis = new DataInputStream(fis);
+		int fortyTwo = dis.readInt();
+		double pi = dis.readDouble();
+		dis.close();
+		System.out.printf("read %d and %1.5f\n", fortyTwo, pi);
 	}
 }
 ```
@@ -217,26 +199,23 @@ dos.close();
 
 #### Text
 
-To read text from stdin, things are a little weird due to Java I/O libraries being updated and having to maintain backward compatibility. From jGuru How do I read text from standard input?:
+To read text from stdin, things are a little weird due to Java I/O libraries being updated and having to maintain backward compatibility:
 
 ```java
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
-public class WriteText {
-	public static void main(String[] args)  throws IOException {
-String fileName = "/tmp/more-examples";
-File f = new File(fileName);
-FileWriter fw = new FileWriter (f);
-PrintWriter pw = new PrintWriter (fw);
-pw.println("Welcome home");
-pw.close();
-
+public class ReadText {
+	public static void main(String[] args) throws IOException {
 		String fileName = args[0];
-		File f = new File(fileName);
-		System.out.println("file " + fileName + " is " +
-						   f.length() + " bytes long");
-		System.out.println("Path: " + f.getCanonicalPath());
+		InputStreamReader isr = new InputStreamReader(System.in);
+		BufferedReader reader = new BufferedReader(isr);
+		String line = reader.readLine();
+		while (line != null) {
+			// Process line
+			line = reader.readLine();
+		}
 	}
 }
 ```
@@ -285,20 +264,19 @@ f.seek(0);
 The following example writes an integer and a floating point number to a file, rewinds the file, and reads them back:
 
 ```java
-import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 public class RandomAccessData {
 	public static void main(String[] args)  throws IOException {
-RandomAccessFile f = new RandomAccessFile("junk", "rw");
-f.writeInt(34);
-f.writeDouble(3.14159);
-f.seek(0);
-int i = f.readInt();
-double d = f.readDouble();
-f.close();
-
-		String fileName = args[0];
+		RandomAccessFile f = new RandomAccessFile("/tmp/junk.data", "rw");
+		f.writeInt(34);
+		f.writeDouble(3.14159);
+		f.seek(0);  // rewind and read again
+		int i = f.readInt();
+		double d = f.readDouble();
+		f.close();
+		System.out.printf("read %d and %1.5f\n", i, d);
 	}
 }
 ```
