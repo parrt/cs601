@@ -139,7 +139,7 @@ pw.println("some text");
 pw.close();
 ```
 
-FileWriter assumes the default character encoding for your Locale. Encodings are used when converting between raw 8-bit bytes and 16-bit Unicode characters. For example, the default file character encoding for a US computer is `UTF-8`. Ona Japanese machine, the encoding might be `euc-jp`. See below for more about Unicode and encodings.
+FileWriter assumes the default character encoding for your Locale. Encodings are used when converting between raw 8-bit bytes and 16-bit Unicode characters. For example, the default file character encoding for a US computer is `UTF-8`. On a Japanese machine, the encoding might be `euc-jp`. See below for more about Unicode and encodings.
 
 ### Reading
 
@@ -185,6 +185,12 @@ The most common file encoding is [UTF-8](http://www.fileformat.info/info/unicode
 11110xxx  |  10xxxxxx   | 10xxxxxx  |  10xxxxxx   | (3+6+6+6)=21 |   10FFFF hex (1,114,111)
 
 Regardless, the key here is that you read characters the same way they were written. The encoding will become important when you start working with sockets between different computers. The locale on the client and server may be different.
+
+As we will see when discussing the HTTP protocol, servers can send back headers that are essentially properties. One of the properties that browsers look for describes the encoding of the data coming back from the server. Our computer science Web server, for example, response to page fetches with header (among other things):
+
+```
+content-type=text/html; charset=UTF-8
+```
 
 Bottom line. If you are reading text from a file, you should be using the Reader I/O hierarchy, which will sense your "locale" and interpret a text file properly. Be careful that you do not get a file encoded and stored from another country and then try to open with a "native ASCII format" computer such as a computer in the USA. It will try to interpret the text as UTF-8 instead of the original encoding. Even if that encoding is only eight bits per character, it might have different mapping from characters to integer character values.
 
