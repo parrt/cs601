@@ -243,7 +243,7 @@ If you are reading ASCII characters like the digits 0..9 and only want to read c
 
 All text held in memory is represented as two-byte UNICODE characters. UNICODE is a standard that allows characters from character sets throughout the world to be represented in two bytes. Characters 0-127 of the UNICODE standard map directly to the ASCII standard. The rest of the character set is composed of "pages" that represent other character sets. The trick of course, is that each platform has its own native character set, which usually has some mapping to the UNICODE standard. Java needs some way to map the native character set to UNICODE.
 
-Java's text input and output classes translate the native characters to and from UNICODE. For each delivered JDK, there is a "default mapping" that is used for most translations. The default file character encoding for a US computer is `UTF-8`. Ona Japanese machine, the encoding might be `euc-jp`.
+Java's text input and output classes translate the native characters to and from UNICODE. For each delivered JDK, there is a "default mapping" that is used for most translations. The default file character encoding for a US computer is `UTF-8`. On a Japanese machine, the encoding might be `euc-jp`.
 
 #### Stream character encoding of Unicode
 
