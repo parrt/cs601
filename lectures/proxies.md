@@ -76,6 +76,7 @@ Transfer-Encoding: chunked
 ## Algorithm
 
 To process a single request, the basic algorithm was like this:
+
 1. get first line from browser, split into the command, the URI, and the HTTP version;
 e.g., "GET http://xyz.com/foo HTTP/1.0"
 1. read in headers until we see a blank line; force the header names to lowercase and put the name-value pairs into a map
