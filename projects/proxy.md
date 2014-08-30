@@ -22,6 +22,7 @@ http://www.cs.usfca.edu/robots.txt:
 2014-08-25 12:56:52 URL:http://www.cs.usfca.edu/_/rsrc/1407908848000/system/app/css/overlay.css [4099/4099] -> "www.cs.usfca.edu/_/rsrc/1407908848000/system/app/css/overlay.css" [1]
 ...
 $ wget -nv -P noproxy --proxy=on -r --level 1 http://www.cs.usfca.edu
+...
 $ diff -r noproxy withproxy # should be the same
 $
 ```
@@ -30,7 +31,7 @@ Please create two classes: `ProxyServer` and `ClientHandler`. The `ProxyServer` 
 
 ```
 Open a server socket
-looping forever:
+loop forever:
     wait for a socket connection
 	create a client handler, passing the Socket object
 	create and launch a Java thread attached to that client handler
@@ -56,7 +57,7 @@ public class ClientHandler implements Runnable {
 	}
 ```
 
-It's a good idea to have a debug flag in `ClientHandler` that, when true, prints out all sorts of interesting information. Here is what mine prints out:
+It's a good idea to have a debug flag in `ClientHandler` that, when true, prints out all sorts of interesting information. Here is what mine prints out (the 63787 is the port number associated with the individual socket connection, not the server socket):
 
 ```
 SOCKET 63787
@@ -69,6 +70,19 @@ READING UPSTREAM DATA
 DONE WRITING BACK 43200 BYTES TO BROWSER
 FLUSH BROWSER SOCKET 63787
 CLOSE BROWSER SOCKET 63787
+```
+
+You don't have to follow this recommendation, but the list of methods in class `ClientHandler` that I have is:
+
+```java
+forwardRemoteDataToBrowser()
+getHeaders()
+makeUpstreamRequest()
+openUpstreamSocket()
+process()
+readLine()
+run()
+writeHeaders()
 ```
 
 ## Requirements
