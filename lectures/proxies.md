@@ -75,25 +75,28 @@ Transfer-Encoding: chunked
 
 ## Algorithm
 
-To process a single request, the basic algorithm was like this:
+To process a single request, given a `Socket` the basic algorithm goes like this:
 
-1. get first line from browser, split into the command, the URI, and the HTTP version;
-e.g., "GET http://xyz.com/foo HTTP/1.0"
-1. read in headers until we see a blank line; force the header names to lowercase and put the name-value pairs into a map
-1. strip out user-agent, referer, and proxy-connection headers
+1. get first line from browser
+1. ignore and close the connection if there is no command
+1. split into the command, the URI, and the HTTP version;
+e.g. for this apart: "GET http://xyz.com/foo HTTP/1.0"
+1. read in headers until you see a blank line; force the header names to lowercase and put the name-value pairs into a map
+1. strip out user-agent, referer, proxy-connection headers
 1. strip out connection header if its value is keep-alive
 1. parse the URI to strip out the host and get the "file" name like /foo
 1. open a socket at port 80 at the remote host
 1. send it the same HTTP command that you got from the browser except make the version 1.0 not 1.1 so we don't have to worry about chunking and use the file name not the entire URI
-1. then send the remote host all of the headers we got from the browser minus the ones we deleted
-1. if POST, get the content-length header from the browser and copy the data following the browser headers to the socket to the remote host
-1. read the response line from the remote host like "HTTP/1.0 200 OK"
+1. then send the upstream host all of the headers we got from the browser minus the ones we deleted
+1. if POST, get the `content-length` header from the browser and copy the data following the browser headers to the socket to the  upstream host
+1. read the response line from the remote host like `HTTP/1.0 200 OK`
 1. send it back to the browser
 1. strip out connection header from the remote host response headers if its value is keep-alive
-1. send remote host response headers back to the browser
-1. read remote data and pass it back to the browser
+1. send  upstream host response headers back to the browser
+1. read  upstream data and pass it back to the browser
+1. flush and close the `Socket`
 
-Some servers and browsers use different cases, normalize your headers to all be lowercase. I tried this in my solution and it seems to work.
+Some servers and browsers use different cases, so normalize your headers to all be lowercase. I tried this in my solution and it seems to work.
 
 This algorithm does not deal with keep-alive connections. It forces browsers and servers to do one socket connection per request. Despite buffering input and output streams, browsing with my proxy is significantly less performant than without the proxy.
 

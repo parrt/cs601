@@ -27,6 +27,19 @@ $ diff -r noproxy withproxy # should be the same
 $
 ```
 
+Note that our CS website does not change from request to request, but many other websites do. For example, github sends timing information and other special numbers for sessions and things. The diff It will not be exactly the same. Here are two lines from github, the first one without the proxy in the second through the proxy:
+
+```html
+<li>&copy; 2014 <span title="0.00480s from github-fe137-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+```
+
+```html
+<li>&copy; 2014 <span title="0.00510s from github-fe132-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+```
+ Don't worry about these small differences. It's obvious that the proxy is working still.
+
+## Your task
+
 Please create two classes: `ProxyServer` and `ClientHandler`. The `ProxyServer` has the `main` program and does nothing but launch `ClientHandler` objects, one per socket connection. The algorithm is essentially just:
 
 ```
@@ -95,7 +108,7 @@ writeHeaders()
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) ...
 Referer: http://antlr.org/submit/challenge?type=grammar
 ```
-Also strip out `proxy-connection,accept-encoding` headers.
+Also strip out `proxy-connection` header.
 * Make sure that you trap "host not found" exceptions; I found one case where the New York Times website sent my proxy a ".comp" not ".com"-based hostname.  In this case, the proxy must send back a "HTTP/1.0 400 Bad Request" response to the browser because the requested upstream server does not exist.
 * You must send appropriate responses from the remote host back to the browser. For example, if the incoming server sees
 ```
