@@ -3,9 +3,9 @@ Proxy Servers
 
 See also [Wikipedia entry on proxies](http://en.wikipedia.org/wiki/Proxy_server).
 
-A tunneling server that:
+A proxy server is a tunneling server that:
 
-* Responds to GET protocol commands that name the full URI of the target resource:
+* Responds to GET protocol commands that name the *complete URI* of the target resource (not just the local resource name `/foo` like a regular non-proxy HTTP request):
 ``GET http://xyz.com/foo HTTP/1.0``
 * Responds to POST protocol commands, which passes the request body to the target resource:
 ``POST http://xyz.com/foo HTTP/1.1``
@@ -59,17 +59,15 @@ Trying 138.202.170.10...
 Connected to www.antlr.org.
 Escape character is '^]'.
 GET / HTTP/1.1
-Host: www.cs.usfca.edu
+Host: www.antlr.org
 
 HTTP/1.1 200 OK
-Date: Tue, 30 Aug 2011 17:53:02 GMT
-Set-Cookie: JSESSIONID=901C40246D69C9129E4AF7376B4553E1; Path=/
-Cache-Control: no-store
-Expires: Thu, 01 Jan 1970 00:00:00 GMT
-Pragma: no-cache
-Content-Type: text/html; charset=UTF-8
-Connection: close
-Transfer-Encoding: chunked
+Server: GitHub.com
+Content-Type: text/html; charset=utf-8
+Last-Modified: Wed, 16 Jul 2014 21:11:22 GMT
+Expires: Wed, 03 Sep 2014 19:31:35 GMT
+Cache-Control: max-age=600
+Content-Length: 9792
 ...data...
 ```
 

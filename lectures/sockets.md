@@ -204,6 +204,28 @@ Connection closed by foreign host.
 $ 
 ```
 
+Using 1.1 not 1.0 HTTP protocol, we would see the following:
+
+```bash
+$ telnet www.cs.usfca.edu 80|head
+Trying 138.202.170.2...
+Connected to www.cs.usfca.edu.
+Escape character is '^]'.
+GET / HTTP/1.1
+Host: www.cs.usfca.edu
+
+HTTP/1.1 200 OK
+Date: Wed, 03 Sep 2014 19:17:42 GMT
+Server: Apache/2.2.15 (CentOS)
+Accept-Ranges: bytes
+Content-Length: 43263
+Connection: close
+Content-Type: text/html; charset=UTF-8
+Connection closed by foreign host.
+...
+$ 
+```
+
 ## Creating a server
 
 Java makes socket programming extremely easy.  To create a server listening for requests, all you need to do is create a `ServerSocket` object attached to a port number and call method `accept()`.  For example, port 8080:
