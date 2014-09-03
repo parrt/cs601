@@ -1,6 +1,5 @@
 Sockets and network programming
 ====
-
 [Terence Parr](http://parrt.cs.usfca.edu)
 
 # Introduction
