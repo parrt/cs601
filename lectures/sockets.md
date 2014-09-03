@@ -239,7 +239,7 @@ pout.close();
 channel.close();
 ```
 
-See [Server.java](code/Server.java).
+See [Server.java](code/sockets/Server.java).
 
 ## Creating a client
 
