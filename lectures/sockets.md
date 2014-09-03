@@ -259,7 +259,7 @@ pout.close();
 s.close();
 ```
 
-See [Client.java](code/Client.java).
+See [Client.java](code/sockets/Client.java).
 
 The client's input stream is pulling from the server's output stream and vice versa.
 
@@ -267,6 +267,6 @@ The client's input stream is pulling from the server's output stream and vice ve
 
 You can think of client/server programming like a pizza-delivery place.  As an employee at the pizza place, you wait by the phone (you are the "server").  Upon receiving a call from a client, you send a "hello" message.  The client responds by sending you an order.  You acknowledge and write down the order (performing the server's task).  You or they hang up (connection closes).  Typically the server will spawn a thread to actually handle the request as it can be complicated, like making the pizza.  The server should go back to answering the phone rather than using a single-threaded model and making the pizza itself.  Note: the server blocks waiting on a request at the port rather than sitting in a spin loop, "picking up the phone" to see if anybody is there--it waits for a "telephone ring."
 
-The [PizzaHut](code/PizzaHut.java) code embodies a simple, single-threaded version of the above scenario (it assumes ASCII text communication).
+The [PizzaHut](code/sockets/PizzaHut.java) code embodies a simple, single-threaded version of the above scenario (it assumes ASCII text communication).
 
 When we get to threads you will learn how to allow the pizza to be made while the phone is being answered.  It is like hiring more than one employee.
