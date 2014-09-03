@@ -239,6 +239,8 @@ pout.close();
 channel.close();
 ```
 
+See [Server.java](code/Server.java).
+
 ## Creating a client
 
 To talk to a server, open a socket to the machine and port:
@@ -257,70 +259,14 @@ pout.close();
 s.close();
 ```
 
+See [Client.java](code/Client.java).
+
 The client's input stream is pulling from the server's output stream and vice versa.
 
 ## An Example
 
 You can think of client/server programming like a pizza-delivery place.  As an employee at the pizza place, you wait by the phone (you are the "server").  Upon receiving a call from a client, you send a "hello" message.  The client responds by sending you an order.  You acknowledge and write down the order (performing the server's task).  You or they hang up (connection closes).  Typically the server will spawn a thread to actually handle the request as it can be complicated, like making the pizza.  The server should go back to answering the phone rather than using a single-threaded model and making the pizza itself.  Note: the server blocks waiting on a request at the port rather than sitting in a spin loop, "picking up the phone" to see if anybody is there--it waits for a "telephone ring."
 
-The following code embodies a simple, single-threaded version of the above scenario (it assumes ASCII text communication).
-
-```java
-import java.net.*;
-import java.io.*;
-
-public class PizzaHut {
-  public static final int PIZZA_HUT_PHONE_NUMBER = 8080;
-  boolean openForBusiness = true;
-
-  public static void main(String[] args) {
-    try {
-      PizzaHut restaurant = new PizzaHut();
-      restaurant.startAnsweringPhone();
-    }
-    catch (IOException ioe) {
-      System.err.println("Can't open for business or problem serving!");
-      ioe.printStackTrace(System.err);
-    }
-  }
-
-  public void startAnsweringPhone() throws IOException {
-    ServerSocket phone = new ServerSocket(PIZZA_HUT_PHONE_NUMBER);
-    while (openForBusiness) {
-      DataInputStream din = null;
-      PrintStream pout = null;
-      Socket phoneCall = null;
-      try {
-        // wait for a call; sleep while you are waiting
-        phoneCall = phone.accept();
-        // get an input stream (the headset speaker)
-        InputStream in = phoneCall.getInputStream();
-        din = new DataInputStream(in);
-        // get an output stream (the microphone)
-        OutputStream out = phoneCall.getOutputStream();
-        pout = new PrintStream(out);
-
-        // say hello
-        pout.println("hello, Pizza Hut, how may I help you?");
-        // take the order
-        String order = din.readLine();
-        // read it back to customer
-        pout.println("your order: "+order); 
-
-        createPizza(order);
-      }
-      finally { // ensure close happens
-        din.close();
-        pout.close();
-        phoneCall.close();
-      }
-    }
-  }
-
-  protected void createPizza(String order) {
-    // parse order and perform work
-  }
-}
-```
+The [PizzaHut](code/PizzaHut.java) code embodies a simple, single-threaded version of the above scenario (it assumes ASCII text communication).
 
 When we get to threads you will learn how to allow the pizza to be made while the phone is being answered.  It is like hiring more than one employee.
