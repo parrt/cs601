@@ -176,7 +176,6 @@ User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (K
 Content-Type: application/x-www-form-urlencoded
 Accept-Encoding: gzip,deflate
 Accept-Language: en-US,en;q=0.8
-<BLANK LINE>
 
 ```
 
