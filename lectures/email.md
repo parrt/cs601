@@ -2,26 +2,25 @@
 
 ## Introduction
 
-To send a piece of email, you need a mail client (even if it's telnet) that connects to an SMTP (Simple Mail Transfer Protocol by Jonathan B. Postel, 1982) and provides a packet of email with a target email address user@domain.com.
+To send a piece of email, you need a mail client (even if it's telnet) that connects to an *SMTP* (Simple Mail Transfer Protocol by Jonathan B. Postel, 1982) and provides a packet of email with a target email address user@domain.com.
 
-The SMTP server contacts the MX DNS record target for a domain at port 25. When sending mail, you also must contact an SMTP server such as our outgoing mail server nexus.cs.usfca.edu:
+The SMTP server contacts the MX DNS record target for a domain at port 25. When sending mail, you also must contact an SMTP server such as our outgoing mail server smtp.usfca.edu:
 
 ```
-~/tmp $ telnet nexus 25
-Trying 138.202.171.19...
-Connected to cs601.cs.usfca.edu.
+~/tmp $ telnet smtp.usfca.edu 25
+Trying 138.202.192.18...
+Connected to smtp.usfca.edu.
 Escape character is '^]'.
-220 cs601.cs.usfca.edu ESMTP Sendmail 8.12.8/8.12.8; Thu, 6 Nov 2003
-13:29:16 -0800
+220 smtp.usfca.edu ESMTP Postfix
 ...
 ```
 
-The nexus server again uses the SMTP protocol to talk to the target server. The target server realizes that the user is allowed to receive mail for that domain on that machine, saving the mail in /var/spool/mail/user.
+The server again uses the SMTP protocol to talk to the target server. The target server realizes that the user is allowed to receive mail for that domain on that machine, saving the mail in `/var/spool/mail/user` (on UNIX).
 
-POP, Post Office Protocol, is another server that listens at port 110 on the target MX record box where mail is stored for a user. A POP client connects and asks for mail for that user.
+*POP*, Post Office Protocol, is another server that listens at port 110 on the target MX record box where mail is stored for a user. A POP client connects and asks for mail for that user.
 
 ```
-$ telnet cs601 110
+$ telnet cs601.cs.usfca.edu 110
 Trying 138.202.171.19...
 Connected to cs601.cs.usfca.edu.
 Escape character is '^]'.
@@ -31,67 +30,81 @@ Escape character is '^]'.
 
 ## How Mail is Routed
 
-To figure out which machine receives mail for domain.com, you do an MX (mail exchange) record lookahead like this:
+To figure out which machine receives mail for domain.com, you do an MX (mail exchange) record look up like this:
 
 ```
-$ dig -t mx cs.usfca.edu
+$ dig -t mx smtp.usfca.edu
+dig -t mx usfca.edu
 ...
-cs.usfca.edu.           1D IN MX        10 nexus.cs.usfca.edu.
+;; ANSWER SECTION:
+usfca.edu.		2436	IN	MX	20 usfca.edu.s9a2.psmtp.com.
+usfca.edu.		2436	IN	MX	30 usfca.edu.s9b1.psmtp.com.
 ...
 ```
-
-We have a special server called cs601.cs.usfca.edu to use for our class. Each person will get a userN@cs601 account for use in testing their webmail server; e.g., user01@cs601, user02@cs601, ...
-
-The MX record for that machine is specifically that machine:
-
-```
-cs601.cs.usfca.edu.     1D IN MX        20 cs601.cs.usfca.edu.
-```
-
-implying that it handles the mail rather than nexus or stargate.
 
 ## SMTP and sending mail
 Reference: [SMTP](http://www.ietf.org/rfc/rfc0821.txt)
 
-SMTP (Simple Mail Transfer Protocol) takes an envelope (header) and some data, an email message text, and routes it to a recipient's SMTP mail server for local delivery. SMTP is both a relay, such as smtp.cs.usfca.edu, and a local delivery system.
+SMTP (Simple Mail Transfer Protocol) takes an envelope (header) and some data, an email message text, and routes it to a recipient's SMTP mail server for local delivery. SMTP is both a relay, such as `smtp.usfca.edu`, and a local delivery system.
 
-The receiving SMTP server uses the envelope to decide who to deliver to locally (or relay to another server). The envelope is for routing and data is just appended (with route headers at top) to bottom of /var/spool/mail/user.
+The receiving SMTP server uses the envelope to decide who to deliver to locally (or relay to another server). The envelope is for routing and data is just appended (with route headers at top) to bottom of `/var/spool/mail/user` (on UNIX).
 
-The protocol is just HELO, MAIL FROM, RCPT TO, DATA, then the email message text following by a "." on a line by itself.
+The protocol is just `HELO`, `MAIL FROM`, `RCPT TO`, `DATA`, then the email message text following by a `.` on a line by itself.
 
 ```
-HELO cs.usfca.edu
-MAIL FROM: <parrt@jguru.com>
-250 2.1.0 <parrt@jguru.com>... Sender ok
-RCPT TO: <user08@cs601.cs.usfca.edu>
-250 2.1.5 <user08@cs601.cs.usfca.edu>... Recipient ok
+$ telnet smtp.usfca.edu 25
+Trying 138.202.192.18...
+Connected to smtp.usfca.edu.
+Escape character is '^]'.
+220 smtp.usfca.edu ESMTP Postfix
+HELO cs.usfca.edu   
+250 smtp.usfca.edu
+MAIL FROM: <parrt@cs.usfca.edu>
+250 Ok
+RCPT TO: <support@antlr.org>
+250 Ok
 DATA
-354 Enter mail, end with "." on a line by itself
-hi
+354 End data with <CR><LF>.<CR><LF>
+This is a test
+so nothing really
 .
-250 2.0.0 hA6MGdgd031032 Message accepted for delivery
+250 Ok: queued as 1A0C183F
 QUIT
+221 Bye
+Connection closed by foreign host.
 ```
 
-Here is what was stored on cs601 machine:
+Something like this was stored on antlr machine machine:
 
 ```
-Return-Path: <parrt@jguru.com>
-Received: from cs601.cs.usfca.edu (parrt.cs.usfca.edu
-[138.202.170.157])
-        by cs601.cs.usfca.edu (8.12.8/8.12.8) with SMTP id
-	hA6MGdgd031032
-        for <user08@cs601.cs.usfca.edu>; Thu, 6 Nov 2003 14:20:04
-	-0800
-Date: Thu, 6 Nov 2003 14:20:04 -0800
-From: parrt@jguru.com
-Message-Id: <200311062220.hA6MGdgd031032@cs601.cs.usfca.edu>
-Status:   
+From parrt@cs.usfca.edu  Mon Sep  8 13:38:16 2014
+Return-Path: <parrt@cs.usfca.edu>
+X-Original-To: support@antlr.org
+Delivered-To: support@antlr.org
+Received: by www.antlr.org (Postfix, from userid 8)
+	id 11AC034184E1; Mon,  8 Sep 2014 13:38:16 -0700 (PDT)
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on www.antlr.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,MISSING_SUBJECT,
+	RCVD_IN_DNSWL_MED autolearn=ham version=3.3.1
+Received: from na6sys009bog020.obsmtp.com (na6sys009bog020.obsmtp.com [74.125.150.80])
+	by www.antlr.org (Postfix) with SMTP id 571783418401
+	for <support@antlr.org>; Mon,  8 Sep 2014 13:38:09 -0700 (PDT)
+Received: from smtp.usfca.edu ([138.202.192.18]) by na6sys009bob020.postini.com ([74.125.148.12]) with SMTP
+	ID DSNKVA4TsLHDv64xsKZ/2MS3OjP94hhKdiiA@postini.com; Mon, 08 Sep 2014 13:38:09 PDT
+Received: from cs.usfca.edu (maniac.cs.usfca.edu [138.202.170.154])
+	by smtp.usfca.edu (Postfix) with SMTP id 1A0C183F
+	for <support@antlr.org>; Mon,  8 Sep 2014 13:37:49 -0700 (PDT)
+Message-Id: <20140908203801.1A0C183F@smtp.usfca.edu>
+Date: Mon,  8 Sep 2014 13:37:49 -0700 (PDT)
+From: parrt@cs.usfca.edu
+To: undisclosed-recipients:;
 
-hi
+This is a test
+so nothing really
 ```
 
-Note that the SMTP server adds some routing information. Normally, your mail client will add some header information like From, To, CC, and the following:
+Note that the SMTP server adds some routing information. Normally, your mail client will add some header information like `From`, `To`, `CC`, and the following:
 
 ```
 ...
@@ -100,58 +113,13 @@ Subject: test
 ...
 ```
 
-Using the protocol:
-
-```
-$ telnet cs601 25
-Trying 138.202.171.19...
-Connected to cs601.cs.usfca.edu.
-Escape character is '^]'.
-220 cs601.cs.usfca.edu ESMTP Sendmail 8.12.8/8.12.8; Thu, 6 Nov 2003
-14:26:49 -0800
-HELO cs.usfca.edu
-250 mail.cs.usfca.edu
-MAIL FROM: <parrt@jguru.com>
-250 2.1.0 <parrt@jguru.com>... Sender ok
-RCPT TO: <user08@cs601.cs.usfca.edu>
-250 2.1.5 <user08@cs601.cs.usfca.edu>... Recipient ok
-DATA
-354 Enter mail, end with "." on a line by itself
-Subject: foo
-hi again
-.
-250 2.0.0 hA6MQngc031036 Message accepted for delivery
-QUIT
-221 2.0.0 cs601.cs.usfca.edu closing connection
-```
-
-At the POP server, you'll see:
-
-```
-Return-Path: <parrt@jguru.com>
-Received: from parrt.cs.usfca.edu (parrt.cs.usfca.edu
-[138.202.170.157])
-        by cs601.cs.usfca.edu (8.12.8/8.12.8) with SMTP id
-	hA6MQngc031036
-        for <user08@cs601.cs.usfca.edu>; Thu, 6 Nov 2003 14:27:08
-	-0800
-Date: Thu, 6 Nov 2003 14:26:49 -0800
-From: parrt@jguru.com
-Message-Id: <200311062227.hA6MQngc031036@cs601.cs.usfca.edu>
-X-Authentication-Warning: cs601.cs.usfca.edu: parrt.cs.usfca.edu
-[138.202.170.157] didn't use HELO protocol
-Subject: foo
-Status:   
-
-hi again
-```
-
-All To, CC, Bcc addresses are sent to the server via RCPT as part of the envelope. The Bcc addresses are just not added as headers in the data part of the message like To and CC are.
+All `To`, `CC`, `Bcc` addresses are sent to the server via `RCPT TO` as part of the envelope. The `Bcc` addresses are just not added as headers in the data part of the message like `To` and `CC` are.
 
 It is pretty easy to forge From addresses as SMTP doesn't check anything.
 
 ## POP and retrieving mail
-Reference: POP
+
+Reference: [POP](http://www.freesoft.org/CIE/RFC/1725/)
 
 POP is pretty simple. You connect to the POP server, authenticate with a user and password (in the clear) and then ask for the messages. You have the option of deleting or removing the messages.
 
