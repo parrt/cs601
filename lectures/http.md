@@ -60,6 +60,8 @@ If no `Content-Length` use socket close for size.
 
 Chunked transfer as in cnn above uses a chunk size of 0 to mark the end of the content.
 
+Here is what our CS webserver responds with to a fetch of main page:
+
 ```
 $ telnet www.cs.usfca.edu 80
 Trying 138.202.170.2...
@@ -111,7 +113,7 @@ Transfer-Encoding: chunked
 ...
 ```
 
-then
+then, using www.stringtemplate.org, we can get to same IP but get different response. (Note: i have moved these sites since this output was captured.)
 
 ```
 $ telnet antlr.org 80
@@ -155,13 +157,28 @@ Password: <input type=password name=password><br><br>
 </html>
 ```
 
-<form method=POST action=/servlet/ProcessLogin>
-User: <input type=text name=user><br>
-Password: <input type=password name=password><br><br>
-<input type=submit value="login">
-</form>
+Which looks like:
 
+![login](figures/user-login.png)
 
+Entering `parrt/foobar` yields this traffic to server:
+
+```
+~/github/cs601/lectures/code/sockets $ j Server
+POST / HTTP/1.1
+Host: localhost:8080
+Connection: keep-alive
+Content-Length: 26
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Origin: null
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.94 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Accept-Encoding: gzip,deflate
+Accept-Language: en-US,en;q=0.8
+<BLANK LINE>
+
+```
 
 Send using email:
 
@@ -171,13 +188,6 @@ Name: <input name="name" type="text" /><br />
 <input type="submit" value="send" />
 </form>
 ```
-
-<form action="mailto:joe@antlr.org" method="POST">
-Name: <input name="name" type="text" /><br />
-<input type="submit" value="send" />
-</form>
-
-
 
 Uploading file:
 
