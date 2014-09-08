@@ -116,7 +116,7 @@ Transfer-Encoding: chunked
 then, using www.stringtemplate.org, we can get to same IP but get different response. (Note: i have moved these sites since this output was captured.)
 
 ```
-$ telnet antlr.org 80
+$ telnet stringtemplate.org 80
 Trying 138.202.170.10...
 Connected to antlr.org.
 Escape character is '^]'.
@@ -148,7 +148,7 @@ GET gets data and POST submits data. These are 2 most common.
 ```
 <html>
 <body>
-<form method=POST action=/servlet/ProcessLogin>
+<form method=POST action="http://localhost:8080/">
 User: <input type=text name=user><br>
 Password: <input type=password name=password><br><br>
 <input type=submit value="login">
