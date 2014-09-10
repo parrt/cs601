@@ -108,7 +108,26 @@ Here is the thread lifecycle:
 
 "critical section": Trains on same track (semaphore term comes from this).
 
-jGuru server pages: JSP share a single page object.  Threads were stepping on the dynamic computations and output yielding bizarre stuff like the user name of one page would appear on somebody elses.  I elected to have each page ref generate an object.  GC can handle this pretty well.  Plus I use a cache to avoid unnecessary computation.  
+jGuru server pages: JSP share a single page object.  Threads were stepping on the dynamic computations and output yielding bizarre stuff like the user name of one page would appear on somebody elses.  
+
+```html
+<html>
+
+<body>
+
+<%! User u = getUser(); %> <!-- defines instance var -->
+
+...
+
+Hello <%= u.getName() %>!!!
+
+</body>
+
+</html>
+```
+
+To solve: I elected to have each page ref generate an object.  GC can handle this pretty well.  Plus I use a cache to avoid unnecessary computation.
+
 
 ## Race condition example
 
