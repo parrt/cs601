@@ -27,6 +27,12 @@ $ diff -r noproxy withproxy # should be the same
 $
 ```
 
+I test my proxies with:
+
+```
+$ wget --proxy=on --post-data="user=parrt" http://localhost:8081/
+```
+
 Note that our CS website does not change from request to request, but many other websites do. For example, github sends timing information and other special numbers for sessions and things. The diff It will not be exactly the same. Here are two lines from github, the first one without the proxy in the second through the proxy:
 
 ```html
