@@ -6,7 +6,8 @@ import java.io.*;
 
 public class Server {
 	public static void main(String[] args) throws IOException {
-		ServerSocket s = new ServerSocket(8080);
+		int port = Integer.valueOf(args[0]);
+		ServerSocket s = new ServerSocket(port);
 		while ( true ) {
 			Socket channel = s.accept();
 			OutputStream out = channel.getOutputStream();
