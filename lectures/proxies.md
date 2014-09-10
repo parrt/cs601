@@ -71,6 +71,26 @@ Content-Length: 9792
 ...data...
 ```
 
+POSTs look like:
+
+```
+POST http://host/file HTTP/1.0
+content-type: application/x-www-form-urlencoded
+cache-control: max-age=0
+accept-language: en-US,en;q=0.8
+host: localhost:8081
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+content-length: 23
+origin: null
+accept-encoding: gzip,deflate
+
+user=parrt&password=abc
+```
+
+Where `user=parrt&password=abc` is the POST data. Note the blank line after the headers and before the POST data.
+
+Make sure you are reading *bytes* not *lines* or anything else. Do not interpret the data at all.
+
 ## Algorithm
 
 To process a single request, given a `Socket` the basic algorithm goes like this:
