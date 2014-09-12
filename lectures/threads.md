@@ -248,58 +248,6 @@ Note that while A and B operations are themselves atomic, we must declare the en
 * Remember to synchronize all read sites not just write sites to the same state and using the same lock!
 * Lock as little as possible and for a short of time as possible but no less. This is for liveness, simplicity, and speed.
 
-# Java Memory Model
-
-Synchronization is not just about synchronizing threads. It's also about making sure that threads can see data written by other threads. As Goetz et al pointed out in the Java concurrency book, it seems natural that thread X writing to field `salary` that thread Y would see the changed value if it occurs after the write operation. Without synchronization or `volatile`, this is not the case.  From Jeremy Manson, assume the following `ready` variable is `volatile`:
-
-![](http://farm4.static.flickr.com/3073/3035268779_f8a9dce89d.jpg)
-
-Because ready is volatile, the second thread is guaranteed to print 42. When thread 1 writes to ready and then the second thread reads ready, all data previously written by thread 1 becomes visible to thread 2.
- 
-It boils down to cache coherency and efficiency. To make threads operate efficiently on multi-core machines, the Java memory model has to allow thread to pretend to execute in its own sandbox (which allows the CPU running the thread to access data from its local cache and not have to go all went back to main memory).
-
-Jeremy Manson's [What Volatile Means in Java](http://jeremymanson.blogspot.com/2008/11/what-volatile-means-in-java.html)
-
-## Double checked locking
-
-[Double-Checked Locking is Broken](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
-
-The following is a correct but less than optimally efficient mechanism to get a singleton `Helper` object:
-
-```java
-// Correct multithreaded version
-class Foo {
-  private Helper helper = null;
-
-  public synchronized Helper getHelper() {
-    if (helper == null) {
-        helper = new Helper();
-	}
-    return helper;
-  }
-  // other functions and members...
-}
-```
-
-There will be locking for every reference to `getHelper()` even though we no longer need to lock because the object has been created.
-
-```java
-class Foo {
-        private volatile Helper helper = null; // MUST be volatile
-
-        public Helper getHelper() {
-            if (helper == null) {
-                synchronized(this) {
-                    if (helper == null)
-                        helper = new Helper(); // Helper init could happen out of order
-                }
-            }
-            return helper;
-        }
-}
-```
-
-
 ## Conditional synchronization and inter-thread communication
 
 Want 
@@ -472,6 +420,105 @@ public class Barrier {
     }
 }
 ```
+
+# Making shared data visible across threads
+
+*At this point, everything is just kind of work, but there is a hidden gotcha that we must ensure that data written in one thread is visible to another thread*.
+
+Synchronization is not just about synchronizing threads. It's also about making sure that threads can see data written by other threads. As Goetz et al pointed out in the Java concurrency book, it seems natural that thread X writing to field `salary` that thread Y would see the changed value if it occurs after the write operation. Without synchronization and/or `volatile`, this is not the case.  From Jeremy Manson, assume the following `ready` variable is `volatile`:
+
+![](http://farm4.static.flickr.com/3073/3035268779_f8a9dce89d.jpg)
+
+Because ready is volatile, the second thread is guaranteed to print 42. When thread 1 writes to ready and then the second thread reads ready, all data previously written by thread 1 becomes visible to thread 2. Without the volatile, it might be the case that just one of those variables could leak through. For example, if ready leaks through but answer does not, the second thread will print 0!
+
+To make threads operate efficiently on multi-core machines and to allow compiler optimizations that reorder operations, the Java memory model has to allow thread to pretend to execute in its own sandbox (which allows the CPU running the thread to access data from its local cache and not have to go all went back to main memory). [JDK5 and later extends the semantics for volatile so that the system will not allow a write of a volatile to be reordered with respect to any previous read or write, and a read of a volatile cannot be reordered with respect to any following read or write. ](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
+
+Jeremy Manson's [What Volatile Means in Java](http://jeremymanson.blogspot.com/2008/11/what-volatile-means-in-java.html)
+
+Synchronization is also a means to ensure data written in one thread is available to another thread. An unlock on O in thread X followed by a lock of O in Y, guarantees that all data written prior to the unlock by X is visible to thread Y.
+
+Manson: "*The reason that doesn't work for (non-volatile) double-checked locking is that only the writing thread ever performs the locking.*"
+
+Before learning all of these details, I never had a problem with data not being communicated across threads. It could be that I just got lucky but I suspect it's because I had all of my shared state synchronized properly and synchronization makes data visible (and prevents compiler optimizations that would cause problems).
+
+Volatile variables are slower because they cannot be cached and it prevents compiler optimizations that perform reordering. On the other hand volatile variables cannot cause deadlock because of locking as they are not locks
+
+Goetz example demonstrating that volatile variables are good for status flags that indicate when to exit loops:
+
+```java
+volatile boolean asleep;           // set by thread X
+...
+   while ( !asleep ) countSheep(); // read by thread Y
+```
+
+## Double checked locking
+
+[Double-Checked Locking is Broken](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
+
+The following is a correct but less than optimally efficient mechanism to get a singleton `Helper` object:
+
+```java
+// Correct multithreaded version
+class Foo {
+  private Helper helper = null;
+
+  public synchronized Helper getHelper() {
+    if (helper == null) {
+        helper = new Helper();
+	}
+    return helper;
+  }
+  // other functions and members...
+}
+```
+
+There will be locking for every reference to `getHelper()` even though we no longer need to lock because the object has been created.
+
+We can try to make it more efficient by doing this
+
+```java
+// Broken -- Do Not Use!
+class Foo {
+  private Helper helper = null;
+  public Helper getHelper() {
+    if (helper == null) {
+      synchronized(this) {
+        if (helper == null) {
+          helper = new Helper();
+        }
+      }
+    }
+  return helper;
+}
+```
+
+```java
+class Foo {
+	private volatile Helper helper = null; // MUST be volatile
+
+	public Helper getHelper() {
+		if (helper == null) {
+			synchronized(this) {
+				if (helper == null) {
+					// Helper init could happen out of order, i.e., after
+					// helper field has been written.
+					helper = new Helper();
+				}
+			}
+		}
+		return helper;
+	}
+}
+```
+
+Notice that if were using static singletons, [Java semantics guarantee that we won't see anything strange happened](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html):
+
+```java
+class HelperSingleton {
+  static Helper singleton = new Helper();
+}
+```
+
 
 # Starvation
 
