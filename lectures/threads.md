@@ -207,7 +207,7 @@ What happens when another thread interrupts and calls `deposit()`?  Solution:
 
 ```java
 class Account {
-  float balance = 0.0;
+  private double balance = 0.0;
   public synchronized void deposit(float value) {
     // lock on 'this' object acquired
     balance = balance + value;
