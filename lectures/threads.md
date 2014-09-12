@@ -5,9 +5,9 @@ Java Thread Basics
 
 From: [Concurrency vs parallel execution](http://programmers.stackexchange.com/questions/190719/the-difference-between-concurrent-and-parallel-execution):
 
-<blockquote>**Concurrency** means that two or more calculations happen within the same time frame, and there is usually some sort of dependency between them. (Terence: GUIs have multiple things going on at the same time and are therefore concurrent but there might only be one processor so no parallelism.)
+<blockquote><b>Concurrency</b> means that two or more calculations happen within the same time frame, and there is usually some sort of dependency between them. (Terence: GUIs have multiple things going on at the same time and are therefore concurrent but there might only be one processor so no parallelism.)
 
-<p>**Parallelism** means that two or more calculations happen simultaneously.
+<p><b>Parallelism</b> means that two or more calculations happen simultaneously.
 
 <p>Put boldly, concurrency describes a problem (two things need to happen together), while parallelism describes a solution (two processor cores are used to execute two things simultaneously).
 
@@ -158,6 +158,31 @@ class Account {
 
 We can solve this with a sickness method and making balance private.
 
+## Compound operations
+Compound operations are not thread-safe even when using thread-safe data structures. Protect code sequences that perform multiple operations that cannot be interrupted.
+
+```java
+class Amazon {
+	private List<Book> inventory =
+		Collections.synchronizedList(new ArrayList<Book>());
+	private List<Sale> sales =
+		Collections.synchronizedList(new ArrayList<Sale>());
+	...
+	public synchronized void checkout(Book b) {
+		inventory.remove(b);        // op A
+		sales.add(new Sale(b));     // op B
+	}
+	public synchronized Book audit() {
+	    // check that all books are accounted for
+		// This would give false "missing book" if we interrupt
+		// checkout() between A and B.
+	}
+}
+```
+Note that while A and B operations are themselves atomic, we must declare the entire checkout procedure as a critical section via `synchronized` that must not be interrupted.
+
+See also client-side locking below.
+
 # Monitors
 
 Java's thread model based upon monitors: chunks of data accessed only thru set of mutually exclusive accessor routines.  We can model this an object:
@@ -216,34 +241,6 @@ class HPLaser {
 *Note*: Assignments are atomic minus `long` and `double`.
 
 *Note*: local variables cannot be shared between threads so can't interfere.
-
-# Java data structures
-
-`java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
-
-Use `Collections.synchronizedXXX()` factories to make `ArrayList` and `HashMap` and friends thread-safe.
-
-Compound operations are not thread-safe even when using thread-safe data structures. Protect code sequences that perform multiple operations that cannot be interrupted.
-
-```java
-class Amazon {
-	private List<Book> inventory =
-		Collections.synchronizedList(new ArrayList<Book>());
-	private List<Sale> sales =
-		Collections.synchronizedList(new ArrayList<Sale>());
-	...
-	public synchronized void checkout(Book b) {
-		inventory.remove(b);        // op A
-		sales.add(new Sale(b));     // op B
-	}
-	public synchronized Book audit() {
-	    // check that all books are accounted for
-		// This would give false "missing book" if we interrupt
-		// checkout() between A and B.
-	}
-}
-```
-Note that while A and B operations are themselves atomic, we must declare the entire checkout procedure as a critical section via `synchronized` that must not be interrupted.
 
 
 # Conditional synchronization and inter-thread communication
@@ -418,6 +415,16 @@ public class Barrier {
     }
 }
 ```
+
+# Java data structures
+
+`java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
+
+Use `Collections.synchronizedXXX()` factories to make `ArrayList` and `HashMap` and friends thread-safe.
+
+```java
+```
+
 # Some recommendations, patterns
 
 You should read [Java concurrency in practice](http://jcip.net.s3-website-us-east-1.amazonaws.com/).

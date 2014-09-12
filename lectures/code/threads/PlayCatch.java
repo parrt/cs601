@@ -33,7 +33,6 @@ public class PlayCatch {
 	public static void main(String[] args) throws Exception {
 		new Thread(new TheCatcher()).start();
 		Thread.sleep(10);
-		List<Book> inventory = Collections.synchronizedList(new ArrayList<Object>())
 		new Thread(new TheThrower()).start();
 	}
 }

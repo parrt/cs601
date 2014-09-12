@@ -1,5 +1,5 @@
 /** Simple queue that holds single value */
-class BlockingQueue {
+class SingleElementBlockingQueue {
     int n = 0;
     Object data = null;
     public synchronized Object remove() {
