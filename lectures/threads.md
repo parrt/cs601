@@ -3,11 +3,23 @@ Java Thread Basics
 
 # Overview
 
-A thread is *not* an object, it's a series of executed instructions zipping thru method calls.  Imagine multiple CPUs and each one running code in your program (same data space) at the same time like ants crawling all over a code printout.  Java and the operating system take care of making one or a few CPUs handle many threads.  Here is the way I think of two threads executing methods `foo()` and `bar()`:
+From: [Concurrency vs parallel execution](http://programmers.stackexchange.com/questions/190719/the-difference-between-concurrent-and-parallel-execution):
+
+<blockquote>**Concurrency** means that two or more calculations happen within the same time frame, and there is usually some sort of dependency between them. (Terence: GUIs have multiple things going on at the same time and are therefore concurrent but there might only be one processor so no parallelism.)
+
+**Parallelism** means that two or more calculations happen simultaneously.
+
+Put boldly, concurrency describes a problem (two things need to happen together), while parallelism describes a solution (two processor cores are used to execute two things simultaneously).
+
+Parallelism is one way to implement concurrency, but it's not the only one. Another popular solution is interleaved processing (a.k.a. coroutines): split both tasks up into atomic steps, and switch back and forth between the two. (Terence: obviously timesharing on a single CPU is concurrent but not parallel)
+</blockquote>
+
+
+A thread is *not* an object, it's a series of executed instructions zipping thru method calls.  Imagine multiple CPUs and each one running code in your program (same data space) at the same time like ants crawling all over a code printout.  Java and the operating system take care of making one or a few CPUs handle many threads.  Here is the way I think of two threads executing methods `foo()` and `bar()` concurrently:
 
 ![](figures/thread.imagine.jpg)
 
-but in reality on single CPU:
+but in reality on single CPU with a single core they are interleaved:
 
 ![](figures/thread.context.switch.jpg)
 
@@ -410,14 +422,15 @@ public class Barrier {
 
 You should read [Java concurrency in practice](http://jcip.net.s3-website-us-east-1.amazonaws.com/).
 
-* Use immutable objects one possible
+* Try to avoid **shared state** between threads
+* If that is not possible, use **immutable objects** if you can:
 ```java
 public class Point {
     final int x,y;
 	public Point(int x, int y) { ... }
 }
 ```
-* For mutable objects, make sure that fields are not directly accessible and all methods that get and set data are synchronized.
+* For mutable objects, make sure that **fields are not directly accessible** and all methods that **get and set data are synchronized**.
 ```java
 // partially from Brian Goetz and Tim Peierls
 public class Point {
@@ -427,9 +440,9 @@ public class Point {
     public synchronized void set(int x, int y) { ... }
 }
 ```
-* Protect test-and-set operations like `account += value` and *if there is data, give me the next element*. `count++` is also not thread safe.
-* Remember to synchronize all read sites not just write sites to the same state and using the same lock!
-* Be careful you do not publish data that is not adequately protected by returning a data structure.
+* Protect **test-and-set** operations like `account += value` and *if there is data, give me the next element*. `count++` is also not thread safe.
+* Remember to **synchronize all read sites** not just write sites to the same state and using the same lock!
+* Be careful you **do not publish data** that is not adequately protected by returning a data structure.
 ```java
 class T {
 	static double secret = 99.0; // multiple threads can see this
@@ -440,7 +453,27 @@ class T {
 	public synchronized SomeMutable getValue(int i) { return internal[i]; }
 }
 ```
-* Lock as little as possible and for a short of time as possible but no less. This is for liveness, simplicity, and speed.
+* **Lock as little as possible** and for a short of time as possible but no less. This is for liveness, simplicity, and speed.
+* Either to overcome unsafe classes or to guard sequences of operations with safe classes that must be done together or not done at all, use **client-side locking**:
+```java
+// @author Brian Goetz and Tim Peierls
+public class SafeVectorHelpers {
+    public static Object getLast(Vector list) {
+        synchronized (list) {                // client-side lock
+            int lastIndex = list.size() - 1; // test
+            return list.get(lastIndex);      // set
+        }
+    }
+    public static void deleteLast(Vector list) {
+        synchronized (list) {
+            int lastIndex = list.size() - 1; // test
+            list.remove(lastIndex);          // set
+        }
+    }
+}
+```
+A thread could interrupt in between the `list.size()` and the `list.get()`.
+* Serialize access using a single thread. GUI event threads are the most obvious example. Java's Swing library has the [Event Dispatch Thread](http://docs.oracle.com/javase/tutorial/uiswing/concurrency/dispatch.html) do all of the manipulations on graphics objects. Multiple threads right to an event queue and there is a single thread that pulls work off of that queue. Very convenient in terms of thread safety but makes it slightly inconvenient when you need to react to events. If the event handler is a very expensive, the event thread must launch another thread to process it otherwise the entire GUI will freeze while the event is processed.
 
 # Making shared data visible across threads
 
