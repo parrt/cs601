@@ -99,49 +99,56 @@ Here is the thread lifecycle:
 
 ![](http://flylib.com/books/4/27/1/html/2/images/14fig06.jpg)
 
-# Synchronization, Interference
+# Thread safety issues
+
+*Given shared state among multiple threads, they are safe as long as only read operations are performed on that state. If even one of them must write to it, they must coordinate read/write operations to be safe.*
+
+We use `synchronized`, but also the `volatile` keyword as well as elements from `java.util.concurrent`.
+
+A *race condition* occurs when the result depends on the order in which operations between threads are executed. This is not necessarily bad as in games that interact with the user but it generally is bad.
 
 ## Shared resource example
 
 "critical section": Trains on same track (semaphore term comes from this).
 
-jGuru server pages: JSP share a single page object.  Threads were stepping on the dynamic computations and output yielding bizarre stuff like the user name of one page would appear on somebody elses.  
+Most common: The following terms all mean the same thing compare-and-set, test-and-set, check-then-act, read-modify-write. You check on some condition and then act on it but by the time you act, the condition might be changed. This can happen if you look both ways before crossing the street and then blindly walk; by the time you get into the road a car might be coming around the corner.  You might check to see if a file exists and then tried to delete it but another thread might get deleted before you perform the deletion.
 
-```html
-<html>
-
-<body>
-
-<%! User u = getUser(); %> <!-- defines instance var -->
-
-...
-
-Hello <%= u.getName() %>!!!
-
-</body>
-
-</html>
-```
-
-To solve: I elected to have each page ref generate an object.  GC can handle this pretty well.  Plus I use a cache to avoid unnecessary computation.
-
-
-## Race condition example
-
-Bank teller issue; get a student to be other teller.  Ask them to look at board where you have $100 in account.  Boss goes to other teller, you go to me as teller.  Both want to add 5$.  Race condition.  No matter what, it's wrong value.  "test and set" operations must be synchronized.  Then note that if you record changes not new value: $100, +5$, +5% then it's ok.  No test and set.  So, sync reqts depend on what you are doing.  Looks like
+## Lazy initialization example
 
 ```java
-class Account {
-  float balance = 0.0;
-  public void deposit(float value) {
-    balance = balance + value;
-  }
+// @author Brian Goetz and Tim Peierls
+public class LazyInitRace { // UNSAFE!!!!
+    private ExpensiveObject instance = null;
+
+    public ExpensiveObject getInstance() {
+        if (instance == null) { // two threads might reach this conclusion simultaneously
+            instance = new ExpensiveObject();
+		}
+        return instance;
+    }
 }
 ```
 
-## Monitors
+We can solve by supervising this method or by synchronizing just the comparison block as we will see below with "Double checked locking".
 
-Java's thread model based upon monitors: chunks of data accessed only thru set of mutually exclusive accessor routines.  We can this an object:
+## Improper banking example
+
+Bank has $100 in account.  Boss goes to other teller, you go to me as teller.  Both want to add 5$.  Race condition.  No matter what, it's wrong value.  "test and set" operations must be synchronized.  Then note that if you record changes not new value: $100, +5$, +5% then it's ok.  No test and set.  So, sync reqts depend on what you are doing.  Looks like
+
+```java
+class Account {
+    double balance = 0.0;
+    public void deposit(float value) { // UNSAFE!!!
+        balance = balance + value;
+    }
+}
+```
+
+We can solve this with a sickness method and making balance private.
+
+# Monitors
+
+Java's thread model based upon monitors: chunks of data accessed only thru set of mutually exclusive accessor routines.  We can model this an object:
 
 ```java
 class Data {
@@ -152,25 +159,39 @@ class Data {
 }
 ```
 
-A `synchronized` method acquires a lock on the object (not the class).
+A `synchronized` method acquires a lock on the object (not the class). Every instance possesses a lock; atomic elements like integers can only be locked by locking some object, perhaps an enclosing one.
 
-Protects methods exec not data.
+*Locking on an array object does not prevent multiple methods from accessing
+ the elements of the array.*
 
-What happens when another thread interrupts and calls deposit?  Solution:
+Protects methods execution not data.
+
+What happens when another thread interrupts and calls `deposit()`?  Solution:
 
 ```java
 class Account {
   float balance = 0.0;
   public synchronized void deposit(float value) {
+    // lock on 'this' object acquired
     balance = balance + value;
+	// lock released
   }
 }
 ```
 
-Like a "force field" around object.
+Like a "force field" around object. 
+
+* Lock is released upon exit from a synchronized method, even upon exception.
+* If multiple threads try to access the same method on the same object, one succeeds and the others wait to acquire the lock.
+* Non-synchronized methods do not respect the lock and can execute despite another thread having locked the object.
 
 *Note*: Can lock statements too with `synchronized (object) statement`.
 
+Same as
+
+```java
+public void deposit() { synchronized(this) { ... } }
+```
 *Note*: Class methods can be synchronized also:
 
 ```
@@ -184,29 +205,83 @@ class HPLaser {
 
 *Note*: local variables cannot be shared between threads so can't interfere.
 
+# Some recommendations, patterns
+
+You should read [Java concurrency in practice](http://jcip.net.s3-website-us-east-1.amazonaws.com/).
+
+* Use immutable objects one possible
+```java
+public class Point {
+    final int x,y;
+	public Point(int x, int y) { ... }
+}
+```
+* For mutable objects, make sure that fields are not directly accessible and all methods that get and set data are synchronized.
+```java
+// partially from Brian Goetz and Tim Peierls
+public class Point {
+    private final int x,y; // private!
+	public Point(int x, int y) { ... }
+    public synchronized int[] get() { return new int[]{x, y}; }
+    public synchronized void set(int x, int y) { ... }
+}
+```
+* Protect test-and-set operations like `account += value` and *if there is data, give me the next element*. `count++` is also not thread safe.
+* Similarly, protect code sequences that perform multiple operations that cannot be interrupted.
+```java
+class Amazon {
+	private List<Book> inventory;
+	private List<Sale> sales;
+	...
+	public synchronized void checkout(Book b) {
+		inventory.remove(b);        // op A
+		sales.add(new Sale(b));     // op B
+	}
+	public synchronized Book audit() {
+	    // check that all books are accounted for
+		// This would give false "missing book" if we interrupt
+		// checkout() between A and B.
+	}
+}
+```
+Note that while A and B operations are themselves atomic, we must declare the entire checkout procedure as a critical section that must not be interrupted.
+* Remember to synchronize all read sites not just write sites to the same state and using the same lock!
+* Lock as little as possible and for a short of time as possible but no less. This is for liveness, simplicity, and speed.
+
 # Java Memory Model
+
+Synchronization is not just about synchronizing threads. It's also about making sure that threads can see data written by other threads. As Goetz et al pointed out in the Java concurrency book, it seems natural that thread X writing to field `salary` that thread Y would see the changed value if it occurs after the write operation. Without synchronization or `volatile`, this is not the case.  From Jeremy Manson, assume the following `ready` variable is `volatile`:
+
+![](http://farm4.static.flickr.com/3073/3035268779_f8a9dce89d.jpg)
+
+Because ready is volatile, the second thread is guaranteed to print 42. When thread 1 writes to ready and then the second thread reads ready, all data previously written by thread 1 becomes visible to thread 2.
+ 
+It boils down to cache coherency and efficiency. To make threads operate efficiently on multi-core machines, the Java memory model has to allow thread to pretend to execute in its own sandbox (which allows the CPU running the thread to access data from its local cache and not have to go all went back to main memory).
 
 Jeremy Manson's [What Volatile Means in Java](http://jeremymanson.blogspot.com/2008/11/what-volatile-means-in-java.html)
 
-## Issues with synchronization
-
-[Double Checked Locking](http://jeremymanson.blogspot.com/2008/05/double-checked-locking.html)
+## Double checked locking
 
 [Double-Checked Locking is Broken](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
 
+The following is a correct but less than optimally efficient mechanism to get a singleton `Helper` object:
+
 ```java
 // Correct multithreaded version
-class Foo { 
+class Foo {
   private Helper helper = null;
 
   public synchronized Helper getHelper() {
-    if (helper == null) 
+    if (helper == null) {
         helper = new Helper();
+	}
     return helper;
   }
   // other functions and members...
 }
 ```
+
+There will be locking for every reference to `getHelper()` even though we no longer need to lock because the object has been created.
 
 ```java
 class Foo {
