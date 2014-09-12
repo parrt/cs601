@@ -7,11 +7,11 @@ From: [Concurrency vs parallel execution](http://programmers.stackexchange.com/q
 
 <blockquote>**Concurrency** means that two or more calculations happen within the same time frame, and there is usually some sort of dependency between them. (Terence: GUIs have multiple things going on at the same time and are therefore concurrent but there might only be one processor so no parallelism.)
 
-**Parallelism** means that two or more calculations happen simultaneously.
+<p>**Parallelism** means that two or more calculations happen simultaneously.
 
-Put boldly, concurrency describes a problem (two things need to happen together), while parallelism describes a solution (two processor cores are used to execute two things simultaneously).
+<p>Put boldly, concurrency describes a problem (two things need to happen together), while parallelism describes a solution (two processor cores are used to execute two things simultaneously).
 
-Parallelism is one way to implement concurrency, but it's not the only one. Another popular solution is interleaved processing (a.k.a. coroutines): split both tasks up into atomic steps, and switch back and forth between the two. (Terence: obviously timesharing on a single CPU is concurrent but not parallel)
+<p>Parallelism is one way to implement concurrency, but it's not the only one. Another popular solution is interleaved processing (a.k.a. coroutines): split both tasks up into atomic steps, and switch back and forth between the two. (Terence: obviously timesharing on a single CPU is concurrent but not parallel)
 </blockquote>
 
 
