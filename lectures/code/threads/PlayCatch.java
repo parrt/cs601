@@ -1,3 +1,7 @@
+import java.awt.print.Book;
+import java.util.ArrayList;
+import java.util.Collections;
+
 // Demonstrate the use of a random object as a semaphore
 public class PlayCatch {
 	static Object data = null;
@@ -29,6 +33,7 @@ public class PlayCatch {
 	public static void main(String[] args) throws Exception {
 		new Thread(new TheCatcher()).start();
 		Thread.sleep(10);
+		List<Book> inventory = Collections.synchronizedList(new ArrayList<Object>())
 		new Thread(new TheThrower()).start();
 	}
 }

@@ -205,33 +205,20 @@ class HPLaser {
 
 *Note*: local variables cannot be shared between threads so can't interfere.
 
-# Some recommendations, patterns
+# Java data structures
 
-You should read [Java concurrency in practice](http://jcip.net.s3-website-us-east-1.amazonaws.com/).
+`java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
 
-* Use immutable objects one possible
-```java
-public class Point {
-    final int x,y;
-	public Point(int x, int y) { ... }
-}
-```
-* For mutable objects, make sure that fields are not directly accessible and all methods that get and set data are synchronized.
-```java
-// partially from Brian Goetz and Tim Peierls
-public class Point {
-    private final int x,y; // private!
-	public Point(int x, int y) { ... }
-    public synchronized int[] get() { return new int[]{x, y}; }
-    public synchronized void set(int x, int y) { ... }
-}
-```
-* Protect test-and-set operations like `account += value` and *if there is data, give me the next element*. `count++` is also not thread safe.
-* Similarly, protect code sequences that perform multiple operations that cannot be interrupted.
+Use `Collections.synchronizedXXX()` factories to make `ArrayList` and `HashMap` and friends thread-safe.
+
+Compound operations are not thread-safe even when using thread-safe data structures. Protect code sequences that perform multiple operations that cannot be interrupted.
+
 ```java
 class Amazon {
-	private List<Book> inventory;
-	private List<Sale> sales;
+	private List<Book> inventory =
+		Collections.synchronizedList(new ArrayList<Book>());
+	private List<Sale> sales =
+		Collections.synchronizedList(new ArrayList<Sale>());
 	...
 	public synchronized void checkout(Book b) {
 		inventory.remove(b);        // op A
@@ -244,19 +231,18 @@ class Amazon {
 	}
 }
 ```
-Note that while A and B operations are themselves atomic, we must declare the entire checkout procedure as a critical section that must not be interrupted.
-* Remember to synchronize all read sites not just write sites to the same state and using the same lock!
-* Lock as little as possible and for a short of time as possible but no less. This is for liveness, simplicity, and speed.
+Note that while A and B operations are themselves atomic, we must declare the entire checkout procedure as a critical section via `synchronized` that must not be interrupted.
 
-## Conditional synchronization and inter-thread communication
 
-Want 
+# Conditional synchronization and inter-thread communication
+
+We want this:
 
 ```java
 await (condition) do statement;
 ```
 
-Have `wait()` and `notifyAll()`.
+But we have `wait()` and `notifyAll()`.
 
 Producer "/" consumer model such as blocking on I/O:
 
@@ -420,6 +406,41 @@ public class Barrier {
     }
 }
 ```
+# Some recommendations, patterns
+
+You should read [Java concurrency in practice](http://jcip.net.s3-website-us-east-1.amazonaws.com/).
+
+* Use immutable objects one possible
+```java
+public class Point {
+    final int x,y;
+	public Point(int x, int y) { ... }
+}
+```
+* For mutable objects, make sure that fields are not directly accessible and all methods that get and set data are synchronized.
+```java
+// partially from Brian Goetz and Tim Peierls
+public class Point {
+    private final int x,y; // private!
+	public Point(int x, int y) { ... }
+    public synchronized int[] get() { return new int[]{x, y}; }
+    public synchronized void set(int x, int y) { ... }
+}
+```
+* Protect test-and-set operations like `account += value` and *if there is data, give me the next element*. `count++` is also not thread safe.
+* Remember to synchronize all read sites not just write sites to the same state and using the same lock!
+* Be careful you do not publish data that is not adequately protected by returning a data structure.
+```java
+class T {
+	static double secret = 99.0; // multiple threads can see this
+	private SomeMutable[] internal = ... ;
+	// synchronize does nothing here as we publish all data
+	public synchronized SomeMutable[] getValues() { return internal; }
+	// synchronize does nothing here as we publish mutable object
+	public synchronized SomeMutable getValue(int i) { return internal[i]; }
+}
+```
+* Lock as little as possible and for a short of time as possible but no less. This is for liveness, simplicity, and speed.
 
 # Making shared data visible across threads
 
@@ -531,11 +552,3 @@ Unsatisfied wait condition.  Use HTTP project as an analogy (server must consume
 Or, I'm waiting on you and you're waiting on me.  Jim was waiting on me to tell him when I finished something and I was waiting on him.
 
 Dining philosophers: think and eat.  Get 2 students and some knives or chopsticks from the cafeteria.  Must have two to eat but only one in front of you.  Everybody grabs to the right and then waits for stick on left.  Deadlock.  If not available, wait until it is then eat.  Get a cookie for student volunteers.  One possibly solution is to have one philospher as a nonconformist: grabs left first.  If they are greedy they starve.  Could also have the grabbing of two sticks be synchronized so at least the first n-1 guys guy will finish.
-
-## Avoidance
-
-No universal solution.  Redflags:
-
-* watch out when x<->y and access methods are synchronized. 
-* watch out for unsatisfied conditions.
-* watch out for lots of threads competing for limited resources.
