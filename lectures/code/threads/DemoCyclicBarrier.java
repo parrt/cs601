@@ -1,7 +1,7 @@
 import java.util.concurrent.CyclicBarrier;
 
 // Demonstrate CyclicBarrier
-public class ParallelCompute {
+public class DemoCyclicBarrier {
 	public static final int N = 1000;
 	public static final int SPLITS = 10;
 	public static final int SPLIT_SIZE = N/SPLITS;

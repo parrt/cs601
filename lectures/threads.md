@@ -28,7 +28,7 @@ Threads are useful because:
 
 Do Jabber (like log server).  Show lines of execution with interleaving.
 
-```
+```java
 class Jabber implements Runnable {
   String str;
   public Jabber(String s) { str = s; }
@@ -61,7 +61,7 @@ Should intermix and not sync per line.
 
 # Thread control
 
-o `join()` wait for thread to finish
+* `join()` wait for thread to finish
 ```
 Computation c = new Computation(34);
 Thread t = new Thread(c);
@@ -69,12 +69,9 @@ t.start();
 t.join();
 System.out.println("done");
 ```
-
-o `sleep(int n)` sleep for n ms (keep locks) 
-
-o `interrupt()` send signal to interrupt a sleeping or waiting thread
-
-o `yield` suggest another can run
+* `sleep(int n)` sleep for n ms (keep locks) 
+* `interrupt()` send signal to interrupt a sleeping or waiting thread
+* `yield` suggest another can run
 
 Here is a modified `Jabber` that forces a yield every 5 prints:
 
@@ -133,7 +130,7 @@ To solve: I elected to have each page ref generate an object.  GC can handle thi
 
 Bank teller issue; get a student to be other teller.  Ask them to look at board where you have $100 in account.  Boss goes to other teller, you go to me as teller.  Both want to add 5$.  Race condition.  No matter what, it's wrong value.  "test and set" operations must be synchronized.  Then note that if you record changes not new value: $100, +5$, +5% then it's ok.  No test and set.  So, sync reqts depend on what you are doing.  Looks like
 
-```
+```java
 class Account {
   float balance = 0.0;
   public void deposit(float value) {
@@ -146,7 +143,7 @@ class Account {
 
 Java's thread model based upon monitors: chunks of data accessed only thru set of mutually exclusive accessor routines.  We can this an object:
 
-```
+```java
 class Data {
       // ... elements ...
       public synchronized void insert(Object o) {...}
@@ -161,7 +158,7 @@ Protects methods exec not data.
 
 What happens when another thread interrupts and calls deposit?  Solution:
 
-```
+```java
 class Account {
   float balance = 0.0;
   public synchronized void deposit(float value) {
@@ -197,7 +194,7 @@ Jeremy Manson's [What Volatile Means in Java](http://jeremymanson.blogspot.com/2
 
 [Double-Checked Locking is Broken](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
 
-```
+```java
 // Correct multithreaded version
 class Foo { 
   private Helper helper = null;
@@ -211,7 +208,7 @@ class Foo {
 }
 ```
 
-```
+```java
 class Foo {
         private volatile Helper helper = null; // MUST be volatile
 
@@ -232,7 +229,7 @@ class Foo {
 
 Want 
 
-```
+```java
 await (condition) do statement;
 ```
 
@@ -240,7 +237,7 @@ Have `wait()` and `notifyAll()`.
 
 Producer "/" consumer model such as blocking on I/O:
 
-```
+```java
 /** Extend Queue to make threads block until remove has
  *  data.
  */
@@ -269,7 +266,7 @@ Why write synchronized?  Critical section.
 
 Here is an implementation of a 1-element queue:
 
-```
+```java
 /** Simple queue that holds single value */
 class BlockingQueue {
     int n = 0;
@@ -301,7 +298,7 @@ class BlockingQueue {
 
 Here is a `main()` that tests the queue:
 
-```
+```java
 class BlockingQueueTest {
     static class Producer implements Runnable {
         public void run() {
@@ -335,11 +332,11 @@ For example, you might want to queue n people for each bus.
 
 Want to code like this:
 
-```
+```java
 class ParallelComputation implements Runnable {
     public void run() {
         // DO SOME COMPUTATION
-	// now wait for others to finish
+		// now wait for others to finish
         try {
             Main.barrier.waitForRelease();
         }
@@ -352,7 +349,7 @@ public class Main {
     public static void main(String[] args) {
         new Thread(new ParallelComputation()).start();
         new Thread(new ParallelComputation()).start();
-	// if you comment this one out, program hangs!
+		// if you comment this one out, program hangs!
         new Thread(new ParallelComputation()).start();
     }
 }
@@ -360,7 +357,7 @@ public class Main {
 
 and this implementation
 
-```
+```java
 /**A very simple barrier wait.  Once a thread has requested a
  * wait on the barrier with waitForRelease, it cannot fool the
  * barrier into releasing by "hitting" the barrier multiple times--
@@ -377,7 +374,7 @@ public class Barrier {
     public void reset() {
         count = 0;
     }
-    
+
     public synchronized void waitForRelease()
         throws InterruptedException
     {
