@@ -346,8 +346,10 @@ class ParallelComputation implements Runnable {
         // DO SOME COMPUTATION
 		// now wait for others to finish
         try {
+			barrier.wakeup();
             barrier.waitForRelease();
-        }
+			System.out.println("thread released when count="+barrier.count);
+		}
         catch(InterruptedException e) { e.printStackTrace(); }
     }
 }
@@ -356,15 +358,6 @@ class ParallelComputation implements Runnable {
 test code:
 
 ```java
-public class TestBarrier {
-	public static void main(String[] args) {
-		Barrier barrier = new Barrier(3);
-		new Thread(new ParallelComputation(barrier)).start();
-		new Thread(new ParallelComputation(barrier)).start();
-		// if you comment this one out, program hangs!
-		new Thread(new ParallelComputation(barrier)).start();
-	}
-}
 ```
 
 and this implementation
@@ -387,6 +380,10 @@ public class Barrier {
 		count = 0;
 	}
 
+	public synchronized void wakeup() {
+		notifyAll();
+	}
+
 	public synchronized void waitForRelease()
 		throws InterruptedException
 	{
@@ -399,15 +396,14 @@ public class Barrier {
 			notifyAll();
 		}
 		else while ( count<threshold ) {
-			System.out.println("thread waits");
+//			System.out.println("thread waits");
 			wait();
-			System.out.println("thread awakens");
 		}
 	}
 
 	/** What to do when the barrier is reached */
 	public void action() {
-		System.out.println("done");
+		System.out.println("done "+count);
 	}
 }
 ```
@@ -581,18 +577,6 @@ public class DemoSingleElementBlockingQueue {
 ```
 
 Note that I try to consume first.  It will wait for 2 seconds (2000 ms) before the producer starts up and adds the element.
-
-Here is a more realistic example of two threads trying to communicate with each other. I have set it up so that each object has a thread that makes it behave like an actor.  The producer is easy as it just tries to add things to a consumer's queue with the `enqueue()` method:
-
-```java
-```
-
-The consumer is where all of the complicated stuff happens. The `call()` method is very simple in that it is just a loop around our `take()` method until it finds the end of file signal.
-
-```java
-```
-
-We need a fixed size buffer to receive objects though and then two synchronized methods to add and delete elements from the queue. Key elements here are `take()`'s *wait until there is data*, `enqueue()`'s *wait until there is room in the queue*, and the `wait/notify` calls. There is a wait and notify in **both** methods.
 
 # Some recommendations, patterns
 

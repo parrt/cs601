@@ -413,18 +413,6 @@ Here is a `main()` that tests the queue:
 
 Note that I try to consume first.  It will wait for 2 seconds (2000 ms) before the producer starts up and adds the element.
 
-Here is a more realistic example of two threads trying to communicate with each other. I have set it up so that each object has a thread that makes it behave like an actor.  The producer is easy as it just tries to add things to a consumer's queue with the `enqueue()` method:
-
-```java
-```
-
-The consumer is where all of the complicated stuff happens. The `call()` method is very simple in that it is just a loop around our `take()` method until it finds the end of file signal.
-
-```java
-```
-
-We need a fixed size buffer to receive objects though and then two synchronized methods to add and delete elements from the queue. Key elements here are `take()`'s *wait until there is data*, `enqueue()`'s *wait until there is room in the queue*, and the `wait/notify` calls. There is a wait and notify in **both** methods.
-
 # Some recommendations, patterns
 
 You should read [Java concurrency in practice](http://jcip.net.s3-website-us-east-1.amazonaws.com/).
