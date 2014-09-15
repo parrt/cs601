@@ -9,8 +9,10 @@ class ParallelComputation implements Runnable {
         // DO SOME COMPUTATION
 		// now wait for others to finish
         try {
+			barrier.wakeup();
             barrier.waitForRelease();
-        }
+			System.out.println("thread released when count="+barrier.count);
+		}
         catch(InterruptedException e) { e.printStackTrace(); }
     }
 }

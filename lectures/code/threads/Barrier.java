@@ -15,6 +15,10 @@ public class Barrier {
 		count = 0;
 	}
 
+	public synchronized void wakeup() {
+		notifyAll();
+	}
+
 	public synchronized void waitForRelease()
 		throws InterruptedException
 	{
@@ -27,14 +31,13 @@ public class Barrier {
 			notifyAll();
 		}
 		else while ( count<threshold ) {
-			System.out.println("thread waits");
+//			System.out.println("thread waits");
 			wait();
-			System.out.println("thread awakens");
 		}
 	}
 
 	/** What to do when the barrier is reached */
 	public void action() {
-		System.out.println("done");
+		System.out.println("done "+count);
 	}
 }
