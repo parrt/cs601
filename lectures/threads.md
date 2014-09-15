@@ -291,9 +291,11 @@ But we have `wait()` and `notifyAll()`. To call these functions you have to have
 * `X.notify()`: awaken a thread waiting on `X`'s lock.
 * `X.notifyAll()`: awaken all threads waiting on `X`'s lock.
 
-There might be lots of threads waiting on `X` for lots of different conditions. We cannot assume that we have been awakened for the proper condition and so it must be checked again. If we fail to find the event we wanted, we have to go back to sleep.
+Note: `Thread.sleep(n)` does not release the lock as it does not have to be executed within a synchronized block. The sleep method is not a valid inter-thread communication; it just causes the current process for a while without consuming CPU time.
 
-Instead of using weight and notify, we could use *busy waits* but those are typically very inefficient (not always...they are great if you need very low latency responses). See [SleepyBoundedBuffer.java](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/SleepyBoundedBuffer.java).
+There might be lots of threads waiting on `X` for lots of different conditions. We cannot assume that we have been awakened for the proper condition and so it must be checked again. If we fail to find the event we wanted, we have to go back to sleep.  Goetz's concurrency book describes an example where lots of the being is going off in the kitchen; could be the microwave, the refrigerator door open, a cell phone, the oven, etc... Everyone wakes up to figure out if it's the condition they care about.
+
+Instead of using `wait` and `notify`, we could use *busy waits* but those are typically very inefficient (not always...they are great if you need very low latency responses). See [SleepyBoundedBuffer.java](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/SleepyBoundedBuffer.java).
 
 ```java
     public void put(V v) throws InterruptedException {
@@ -383,6 +385,80 @@ public class Barrier {
 	}
 }
 ```
+
+Here's a real example using job is built-in `CyclicBarrier`:
+
+```java
+import java.util.concurrent.CyclicBarrier;
+
+/** Take data array of size N and split into SPLITS chunks.
+ *  Launch a thread running an Adder on each chunk.
+ *  The Adders right to partialResults array. There is no safety issue
+ *  because they write to different positions in the array.
+ *  Wait for all of them to reach the barrier.
+ *  Reduce the results to a single some and print it out.
+ */
+public class DemoCyclicBarrier {
+	public static final int N = 1000;
+	public static final int SPLITS = 10;
+	public static final int SPLIT_SIZE = N/SPLITS;
+	static int[] data = new int[N];
+	static int[] partialResults = new int[SPLITS];
+
+	// +1 for main thread
+	static final CyclicBarrier barrier = new CyclicBarrier(SPLITS+1);
+
+	static class Adder implements Runnable {
+		int split;
+		public Adder(int split) {	this.split = split;	}
+		public void run() {
+			int start = split * SPLIT_SIZE;
+			for (int i=0; i<SPLIT_SIZE; i++) {
+				partialResults[split] += data[start+i];
+			}
+			System.out.println(Thread.currentThread().getName()+" done");
+			try { barrier.await(); }
+			catch (Exception e) { System.out.println("eh?"); }
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		// init
+		for (int i=0; i<N; i++) data[i] = i+1; // 1, 2, 3, 4, ..., N
+
+		final Thread[] threads = new Thread[SPLITS];
+
+		for (int i=0; i<SPLITS; i++) {
+			threads[i] = new Thread(new Adder(i));
+		}
+
+		// MAP
+		for (int i=0; i<SPLITS; i++) threads[i].start();
+
+		barrier.await(); // wait for all threads
+
+		// REDUCE
+		int sum = 0;
+		for (int i=0; i<SPLITS; i++) {
+			sum += partialResults[i];
+		}
+
+		// should be (1 + N)*(N/2) = 500500
+		System.out.println("Sum is "+sum);
+	}
+}
+```
+
+Java API for `CyclicBarrier`:
+
+<blockquote>
+A synchronization aid that allows a set of threads to all wait for
+ * each other to reach a common barrier point.  CyclicBarriers are
+ * useful in programs involving a fixed sized party of threads that
+ * must occasionally wait for each other. The barrier is called
+ * <em>cyclic</em> because it can be re-used after the waiting threads
+ * are released.
+</blockquote>
 
 # Inter-thread communication
 

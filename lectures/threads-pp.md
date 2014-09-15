@@ -291,9 +291,11 @@ But we have `wait()` and `notifyAll()`. To call these functions you have to have
 * `X.notify()`: awaken a thread waiting on `X`'s lock.
 * `X.notifyAll()`: awaken all threads waiting on `X`'s lock.
 
-There might be lots of threads waiting on `X` for lots of different conditions. We cannot assume that we have been awakened for the proper condition and so it must be checked again. If we fail to find the event we wanted, we have to go back to sleep.
+Note: `Thread.sleep(n)` does not release the lock as it does not have to be executed within a synchronized block. The sleep method is not a valid inter-thread communication; it just causes the current process for a while without consuming CPU time.
 
-Instead of using weight and notify, we could use *busy waits* but those are typically very inefficient (not always...they are great if you need very low latency responses). See [SleepyBoundedBuffer.java](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/SleepyBoundedBuffer.java).
+There might be lots of threads waiting on `X` for lots of different conditions. We cannot assume that we have been awakened for the proper condition and so it must be checked again. If we fail to find the event we wanted, we have to go back to sleep.  Goetz's concurrency book describes an example where lots of the being is going off in the kitchen; could be the microwave, the refrigerator door open, a cell phone, the oven, etc... Everyone wakes up to figure out if it's the condition they care about.
+
+Instead of using `wait` and `notify`, we could use *busy waits* but those are typically very inefficient (not always...they are great if you need very low latency responses). See [SleepyBoundedBuffer.java](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/SleepyBoundedBuffer.java).
 
 ```java
     public void put(V v) throws InterruptedException {
@@ -329,6 +331,23 @@ and this implementation
 ```java
 !INCLUDE "code/threads/Barrier.java"
 ```
+
+Here's a real example using job is built-in `CyclicBarrier`:
+
+```java
+!INCLUDE "code/threads/DemoCyclicBarrier.java"
+```
+
+Java API for `CyclicBarrier`:
+
+<blockquote>
+A synchronization aid that allows a set of threads to all wait for
+ * each other to reach a common barrier point.  CyclicBarriers are
+ * useful in programs involving a fixed sized party of threads that
+ * must occasionally wait for each other. The barrier is called
+ * <em>cyclic</em> because it can be re-used after the waiting threads
+ * are released.
+</blockquote>
 
 # Inter-thread communication
 

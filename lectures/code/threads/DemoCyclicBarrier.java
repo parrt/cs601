@@ -1,6 +1,12 @@
 import java.util.concurrent.CyclicBarrier;
 
-// Demonstrate CyclicBarrier
+/** Take data array of size N and split into SPLITS chunks.
+ *  Launch a thread running an Adder on each chunk.
+ *  The Adders right to partialResults array. There is no safety issue
+ *  because they write to different positions in the array.
+ *  Wait for all of them to reach the barrier.
+ *  Reduce the results to a single some and print it out.
+ */
 public class DemoCyclicBarrier {
 	public static final int N = 1000;
 	public static final int SPLITS = 10;
