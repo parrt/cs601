@@ -416,13 +416,11 @@ Note that I try to consume first.  It will wait for 2 seconds (2000 ms) before t
 Here is a more realistic example of two threads trying to communicate with each other. I have set it up so that each object has a thread that makes it behave like an actor.  The producer is easy as it just tries to add things to a consumer's queue with the `enqueue()` method:
 
 ```java
-!INCLUDE "code/threads/ProducerActor.java"
 ```
 
 The consumer is where all of the complicated stuff happens. The `call()` method is very simple in that it is just a loop around our `take()` method until it finds the end of file signal.
 
 ```java
-!INCLUDE "code/threads/ConsumerActor.java"
 ```
 
 We need a fixed size buffer to receive objects though and then two synchronized methods to add and delete elements from the queue. Key elements here are `take()`'s *wait until there is data*, `enqueue()`'s *wait until there is room in the queue*, and the `wait/notify` calls. There is a wait and notify in **both** methods.
