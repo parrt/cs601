@@ -18,8 +18,6 @@ public class DemoBlockingQueue {
 	static Object EOF = new Object();
 
 	static BlockingQueue<Object> queue = new ArrayBlockingQueue<Object>(1024);
-	static Object data = null;
-	static Object semaphore = new Object();
 
 	static class Producer implements Callable<Void> {
 		public Void call() {

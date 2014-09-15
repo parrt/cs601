@@ -111,6 +111,39 @@ Here is the thread lifecycle:
 
 ![](http://flylib.com/books/4/27/1/html/2/images/14fig06.jpg)
 
+# Job pools
+
+Works but no job control because `join()` only works on one thread:
+
+```java
+Thread t = new Thread(new Producer());
+t.setName("Producer");
+t.start();
+t = new Thread(new Consumer());
+t.setName("Consumer");
+t.start();
+```
+
+Can't wait until we're done. Need `ExecutorService`:
+
+```java
+class Consumer implements Callable<Void> {
+	public Void call()  { return null; }
+}
+...
+ExecutorService pool = Executors.newFixedThreadPool(2);
+List<Callable<Void>> jobs = new ArrayList<Callable<Void>>();
+
+Consumer c = new Consumer();
+Producer p = new Producer(c);
+jobs.add(p);
+jobs.add(c);
+
+pool.invokeAll(jobs);
+pool.shutdown();
+pool.awaitTermination(2, TimeUnit.SECONDS);
+```
+
 # Thread safety issues
 
 *Given shared state among multiple threads, they are safe as long as only read operations are performed on that state. If even one of them must write to it, they must coordinate read/write operations to be safe.*
@@ -216,7 +249,7 @@ class Account {
 }
 ```
 
-Like a "force field" around object. 
+Like a "force field" around object.
 
 * Lock is released upon exit from a synchronized method, even upon exception.
 * If multiple threads try to access the same method on the same object, one succeeds and the others wait to acquire the lock.
@@ -242,8 +275,9 @@ class HPLaser {
 
 *Note*: local variables cannot be shared between threads so can't interfere.
 
+Java uses the synchronized keyword not only for thread safety but also for synchronizing the execution of statements across threads and also for passing information between threads.
 
-# Conditional synchronization and inter-thread communication
+# Conditional synchronization
 
 We want this:
 
@@ -251,15 +285,116 @@ We want this:
 await (condition) do statement;
 ```
 
-But we have `wait()` and `notifyAll()`.
+But we have `wait()` and `notifyAll()`. To call these functions you have to have a lock on the object because they inherently are waiting on state changes.
 
-Producer "/" consumer model such as blocking on I/O:
+* `X.wait()`: releases the lock and suspends. Other threads can acquire the lock on `X`. Upon awakening, it requires the lock. The idea is to go to sleep until some event has occurred like data is available or I have completed the task.
+* `X.notify()`: awaken a thread waiting on `X`'s lock.
+* `X.notifyAll()`: awaken all threads waiting on `X`'s lock.
+
+There might be lots of threads waiting on `X` for lots of different conditions. We cannot assume that we have been awakened for the proper condition and so it must be checked again. If we fail to find the event we wanted, we have to go back to sleep.
+
+Instead of using weight and notify, we could use *busy waits* but those are typically very inefficient (not always...they are great if you need very low latency responses). See [SleepyBoundedBuffer.java](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/SleepyBoundedBuffer.java).
+
+```java
+    public void put(V v) throws InterruptedException {
+        while (true) {
+            synchronized (this) {
+                if (!isFull()) {
+                    doPut(v);
+                    return;
+                }
+            }
+            Thread.sleep(SLEEP_GRANULARITY);
+        }
+    }
+```
+
+
+## Barrier wait
+
+`t.join()` allows us to wait until `t` has finished, but what about having _n_ threads wait at a _barrier_ like this?  Let's implement our own barrier so that we can see how Java's library must do it.
+
+![](figures/thread.barrier.jpg)
+
+For example, you might want to queue n people for each bus.
+
+Want to code like this:
+
+```java
+class ParallelComputation implements Runnable {
+	Barrier barrier;
+
+	ParallelComputation(Barrier barrier) {
+		this.barrier = barrier;
+	}
+
+	public void run() {
+        // DO SOME COMPUTATION
+		// now wait for others to finish
+        try {
+            barrier.waitForRelease();
+        }
+        catch(InterruptedException e) {}
+    }
+}
+```
+
+and this implementation
+
+```java
+/**A very simple barrier wait.  Once a thread has requested a
+ * wait on the barrier with waitForRelease, it cannot fool the
+ * barrier into releasing by "hitting" the barrier multiple times--
+ * the thread is blocked on the wait().
+ */
+public class Barrier {
+	protected int threshold;
+	protected int count = 0;
+
+	public Barrier(int t) {
+		threshold = t;
+	}
+
+	public void reset() {
+		count = 0;
+	}
+
+	public synchronized void waitForRelease()
+		throws InterruptedException
+	{
+		count++;
+		// The final thread to reach barrier resets barrier and
+		// releases all threads
+		if ( count==threshold ) {
+			// notify blocked threads that threshold has been reached
+			action(); // perform the requested operation
+			notifyAll();
+		}
+		else while ( count<threshold ) {
+			System.out.println("thread waits");
+			wait();
+			System.out.println("thread awakens");
+		}
+	}
+
+	/** What to do when the barrier is reached */
+	public void action() {
+		System.out.println("done");
+	}
+}
+```
+
+# Inter-thread communication
+
+## Producer "/" consumer model
+
+Typically blocking on I/O and network traffic:
 
 ```java
 /** Extend Queue to make threads block until remove has
  *  data.
  */
-class BlockingQueue {
+class MyBlockingQueue {
    int n = 0;
    Queue data = ...;
    public synchronized Object remove() {
@@ -286,7 +421,7 @@ Here is an implementation of a 1-element queue:
 
 ```java
 /** Simple queue that holds single value */
-class BlockingQueue {
+class SingleElementBlockingQueue {
     int n = 0;
     Object data = null;
     public synchronized Object remove() {
@@ -308,7 +443,7 @@ class BlockingQueue {
         n++;
         // add data to queue
         data = o;
-        // have data.  tell any waiting threads to wake up 
+        // have data.  tell any waiting threads to wake up
         notifyAll();
     }
 }
@@ -317,104 +452,31 @@ class BlockingQueue {
 Here is a `main()` that tests the queue:
 
 ```java
-class BlockingQueueTest {
-    static class Producer implements Runnable {
-        public void run() {
-            q.write("hello");
-        }
-    }
+public class DemoSingleElementBlockingQueue {
+	static SingleElementBlockingQueue q;
 
-    static class Consumer implements Runnable {
-        public void run() {
-            System.out.println("data is "+q.remove());
-        }
-    }
+	static class Producer implements Runnable {
+		public void run() {
+			q.write("hello");
+		}
+	}
 
-    static BlockingQueue q;
-    public static void main(String[] args) throws Exception {
-        q = new BlockingQueue();
-        new Thread(new Consumer()).start();
-        Thread.sleep(2000);
-        new Thread(new Producer()).start();
-    }
+	static class Consumer implements Runnable {
+		public void run() {
+			System.out.println("data is "+q.remove());
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		q = new SingleElementBlockingQueue();
+		new Thread(new Consumer()).start();
+		Thread.sleep(2000);
+		new Thread(new Producer()).start();
+	}
 }
 ```
 
 Note that I try to consume first.  It will wait for 2 seconds (2000 ms) before the producer starts up and adds the element.
-
-*Barrier wait example*.  `t.join()` allows us to wait until `t` has finished, but what about having _n_ threads wait at a _barrier_ like this?  
-
-![](figures/thread.barrier.jpg)
-
-For example, you might want to queue n people for each bus.
-
-Want to code like this:
-
-```java
-class ParallelComputation implements Runnable {
-    public void run() {
-        // DO SOME COMPUTATION
-		// now wait for others to finish
-        try {
-            Main.barrier.waitForRelease();
-        }
-        catch(InterruptedException e) {}
-    }
-}
-
-public class Main {
-    public static Barrier barrier = new Barrier(3);
-    public static void main(String[] args) {
-        new Thread(new ParallelComputation()).start();
-        new Thread(new ParallelComputation()).start();
-		// if you comment this one out, program hangs!
-        new Thread(new ParallelComputation()).start();
-    }
-}
-```
-
-and this implementation
-
-```java
-/**A very simple barrier wait.  Once a thread has requested a
- * wait on the barrier with waitForRelease, it cannot fool the
- * barrier into releasing by "hitting" the barrier multiple times--
- * the thread is blocked on the wait().
- */
-public class Barrier {
-    protected int threshold;
-    protected int count = 0;
-
-    public Barrier(int t) {
-        threshold = t;
-    }
-
-    public void reset() {
-        count = 0;
-    }
-
-    public synchronized void waitForRelease()
-        throws InterruptedException
-    {
-        count++;
-        // The final thread to reach barrier resets barrier and
-        // releases all threads
-        if ( count==threshold ) {
-            // notify blocked threads that threshold has been reached
-            action(); // perform the requested operation
-            notifyAll();
-        }
-        else while ( count<threshold ) {
-            wait();
-        }
-    }
-
-    /** What to do when the barrier is reached */
-    public void action() {
-        System.out.println("done");
-    }
-}
-```
 
 # Java data structures
 
@@ -423,53 +485,32 @@ public class Barrier {
 Use `Collections.synchronizedXXX()` factories to make `ArrayList` and `HashMap` and friends thread-safe.
 
 ```java
-import com.oracle.jrockit.jfr.Producer;
+/** Simple queue that holds single value */
+class SingleElementBlockingQueue {
+    int n = 0;
+    Object data = null;
+    public synchronized Object remove() {
+        // wait until there is something to read
+        try {
+            while (n==0) wait();
+        }
+        catch (InterruptedException ie) {
+            System.err.println("heh, who woke me up too soon?");
+        }
+        // we have the lock and state we're seeking; remove, return element
+        Object o = this.data;
+        this.data = null; // kill the old data
+        n--;
+        return o;
+    }
 
-import java.util.Date;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
-// Demo Java's BlockingQueue.
-public class DemoBlockingQueue {
-	static BlockingQueue<String> queue = new ArrayBlockingQueue<String>(10);
-	static Object data = null;
-	static Object semaphore = new Object();
-
-	static class Producer implements Runnable {
-		public void run() {
-			while ( true ) {
-				try {
-					queue.put(String.valueOf(new Date().getTime()));
-				}
-				catch (InterruptedException ie) {
-					ie.printStackTrace(System.err);
-				}
-			}
-		}
-	}
-
-	static class Consumer implements Runnable {
-		public void run() {
-			while ( true ) {
-				try {
-					String s = queue.take();
-					//System.out.println(s);
-				}
-				catch (InterruptedException ie) {
-					ie.printStackTrace(System.err);
-				}
-			}
-		}
-	}
-
-	public static void main(String[] args) throws Exception {
-		Thread t = new Thread(new Consumer());
-		t.setName("Consumer");
-		t.start();
-		t = new Thread(new Producer());
-		t.setName("Producer");
-		t.start();
-	}
+    public synchronized void write(Object o) {
+        n++;
+        // add data to queue
+        data = o;
+        // have data.  tell any waiting threads to wake up
+        notifyAll();
+    }
 }
 ```
 
