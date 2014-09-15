@@ -1,6 +1,8 @@
 import java.util.concurrent.CyclicBarrier;
 
-/** Take data array of size N and split into SPLITS chunks.
+/** Map-Reduce addition example
+ *
+ *  Take data array of size N and split into SPLITS chunks.
  *  Launch a thread running an Adder on each chunk.
  *  The Adders right to partialResults array. There is no safety issue
  *  because they write to different positions in the array.
@@ -32,11 +34,12 @@ public class DemoCyclicBarrier {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// init
+		// init; make some data
 		for (int i=0; i<N; i++) data[i] = i+1; // 1, 2, 3, 4, ..., N
 
 		final Thread[] threads = new Thread[SPLITS];
 
+		// create a thread on each split
 		for (int i=0; i<SPLITS; i++) {
 			threads[i] = new Thread(new Adder(i));
 		}

@@ -216,6 +216,12 @@ Note that while A and B operations are themselves atomic, we must declare the en
 
 See also client-side locking below.
 
+# Java thread-safe data structures
+
+`java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
+
+Use `Collections.synchronizedXXX()` factories to make `ArrayList` and `HashMap` and friends thread-safe.
+
 # Monitors
 
 Java's thread model based upon monitors: chunks of data accessed only thru set of mutually exclusive accessor routines.  We can model this an object:
@@ -277,6 +283,12 @@ class HPLaser {
 
 Java uses the synchronized keyword not only for thread safety but also for synchronizing the execution of statements across threads and also for passing information between threads.
 
+# Java data structures
+
+`java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
+
+Use `Collections.synchronizedXXX()` factories to make `ArrayList` and `HashMap` and friends thread-safe.
+
 # Conditional synchronization
 
 We want this:
@@ -295,7 +307,7 @@ Note: `Thread.sleep(n)` does not release the lock as it does not have to be exec
 
 There might be lots of threads waiting on `X` for lots of different conditions. We cannot assume that we have been awakened for the proper condition and so it must be checked again. If we fail to find the event we wanted, we have to go back to sleep.  Goetz's concurrency book describes an example where lots of the being is going off in the kitchen; could be the microwave, the refrigerator door open, a cell phone, the oven, etc... Everyone wakes up to figure out if it's the condition they care about.
 
-Instead of using `wait` and `notify`, we could use *busy waits* but those are typically very inefficient (not always...they are great if you need very low latency responses). See [SleepyBoundedBuffer.java](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/SleepyBoundedBuffer.java).
+Instead of using `wait` and `notify`, we could use *busy waits* but those are typically very inefficient (not always...they are great if you need very low latency responses). See [SleepyBoundedBuffer.java](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/SleepyBoundedBuffer.java):
 
 ```java
     public void put(V v) throws InterruptedException {
@@ -336,8 +348,22 @@ class ParallelComputation implements Runnable {
         try {
             barrier.waitForRelease();
         }
-        catch(InterruptedException e) {}
+        catch(InterruptedException e) { e.printStackTrace(); }
     }
+}
+```
+
+test code:
+
+```java
+public class TestBarrier {
+	public static void main(String[] args) {
+		Barrier barrier = new Barrier(3);
+		new Thread(new ParallelComputation(barrier)).start();
+		new Thread(new ParallelComputation(barrier)).start();
+		// if you comment this one out, program hangs!
+		new Thread(new ParallelComputation(barrier)).start();
+	}
 }
 ```
 
@@ -391,7 +417,9 @@ Here's a real example using job is built-in `CyclicBarrier`:
 ```java
 import java.util.concurrent.CyclicBarrier;
 
-/** Take data array of size N and split into SPLITS chunks.
+/** Map-Reduce addition example
+ *
+ *  Take data array of size N and split into SPLITS chunks.
  *  Launch a thread running an Adder on each chunk.
  *  The Adders right to partialResults array. There is no safety issue
  *  because they write to different positions in the array.
@@ -423,11 +451,12 @@ public class DemoCyclicBarrier {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// init
+		// init; make some data
 		for (int i=0; i<N; i++) data[i] = i+1; // 1, 2, 3, 4, ..., N
 
 		final Thread[] threads = new Thread[SPLITS];
 
+		// create a thread on each split
 		for (int i=0; i<SPLITS; i++) {
 			threads[i] = new Thread(new Adder(i));
 		}
@@ -474,16 +503,15 @@ class MyBlockingQueue {
    int n = 0;
    Queue data = ...;
    public synchronized Object remove() {
-      // wait until there is something to read
-      while (n==0) this.wait();
+      while (n==0) wait(); // wait until there is something to read
       // we have the lock and state we're seeking
       n--;
       // return data element from queue
     }
     public synchronized void write(Object o) {
       n++;
-      // add data to queue
-      // have data.  tell any waiting threads to wake up
+      ... add data to queue ...
+      // Since have data, tell any waiting threads to wake up
       notifyAll();
     }
 }
@@ -554,46 +582,78 @@ public class DemoSingleElementBlockingQueue {
 
 Note that I try to consume first.  It will wait for 2 seconds (2000 ms) before the producer starts up and adds the element.
 
-# Java data structures
-
-`java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
-
-Use `Collections.synchronizedXXX()` factories to make `ArrayList` and `HashMap` and friends thread-safe.
+Here is a more realistic example of two threads trying to communicate with each other. I have set it up so that each object has a thread that makes it behave like an actor.  The producer is easy as it just tries to add things to a consumer's queue with the `enqueue()` method:
 
 ```java
-/** Simple queue that holds single value */
-class SingleElementBlockingQueue {
-    int n = 0;
-    Object data = null;
-    public synchronized Object remove() {
-        // wait until there is something to read
-        try {
-            while (n==0) wait();
-        }
-        catch (InterruptedException ie) {
-            System.err.println("heh, who woke me up too soon?");
-        }
-        // we have the lock and state we're seeking; remove, return element
-        Object o = this.data;
-        this.data = null; // kill the old data
-        n--;
-        return o;
-    }
+import java.util.concurrent.Callable;
 
-    public synchronized void write(Object o) {
-        n++;
-        // add data to queue
-        data = o;
-        // have data.  tell any waiting threads to wake up
-        notifyAll();
-    }
+class ProducerActor implements Callable<Void> {
+	ConsumerActor consumer;
+	ProducerActor(ConsumerActor consumer) {
+		this.consumer = consumer;
+	}
+	public Void call() {
+		for (int i = 1; i<= DemoActor.N; i++) {
+			consumer.enqueue(i);
+		}
+		consumer.enqueue(DemoActor.EOF);
+		return null; // just to satisfy the Java compiler's Void type
+	}
 }
 ```
+
+The consumer is where all of the complicated stuff happens. The `call()` method is very simple in that it is just a loop around our `take()` method until it finds the end of file signal.
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+
+class ConsumerActor implements Callable<Void> {
+//		static Vector<Object> queue = new Vector<Object>(MAX_BUFFER_SIZE);
+	static List<Object> queue = new ArrayList<Object>(DemoActor.MAX_BUFFER_SIZE);
+
+	@Override
+	public Void call() throws Exception {
+		Object o = take();
+		while ( o != DemoActor.EOF ){
+			o = take();
+		}
+		return null;
+	}
+	public synchronized Object take() {
+		while ( queue.size()==0 ) {
+			try { wait(); }
+			catch (InterruptedException ie) {
+				System.err.println("interruped?");
+			}
+		}
+		Object o = queue.remove(0);
+		notify();
+		return o;
+	}
+	public synchronized void enqueue(Object o) {
+		while ( queue.size() >= DemoActor.MAX_BUFFER_SIZE ) {
+			try { wait(); }
+			catch (InterruptedException ie) {
+				System.err.println("interruped?");
+			}
+		}
+		queue.add(o);
+		notify();
+	}
+}
+```
+
+We need a fixed size buffer to receive objects though and then two synchronized methods to add and delete elements from the queue. Key elements here are `take()`'s *wait until there is data*, `enqueue()`'s *wait until there is room in the queue*, and the `wait/notify` calls. There is a wait and notify in **both** methods.
 
 # Some recommendations, patterns
 
 You should read [Java concurrency in practice](http://jcip.net.s3-website-us-east-1.amazonaws.com/).
 
+* Try to avoid threads.
+* Have a single thread that is the only one to access critical data structures. This would be like the GUI event queue. (See more in next item.)
+* Serialize access using a single thread. GUI event threads are the most obvious example. Java's Swing library has the [Event Dispatch Thread](http://docs.oracle.com/javase/tutorial/uiswing/concurrency/dispatch.html) do all of the manipulations on graphics objects. Multiple threads right to an event queue and there is a single thread that pulls work off of that queue. Very convenient in terms of thread safety but makes it slightly inconvenient when you need to react to events. If the event handler is a very expensive, the event thread must launch another thread to process it otherwise the entire GUI will freeze while the event is processed.
 * Try to avoid **shared state** between threads
 * If that is not possible, use **immutable objects** if you can:
 ```java
@@ -645,11 +705,11 @@ public class SafeVectorHelpers {
 }
 ```
 A thread could interrupt in between the `list.size()` and the `list.get()`.
-* Serialize access using a single thread. GUI event threads are the most obvious example. Java's Swing library has the [Event Dispatch Thread](http://docs.oracle.com/javase/tutorial/uiswing/concurrency/dispatch.html) do all of the manipulations on graphics objects. Multiple threads right to an event queue and there is a single thread that pulls work off of that queue. Very convenient in terms of thread safety but makes it slightly inconvenient when you need to react to events. If the event handler is a very expensive, the event thread must launch another thread to process it otherwise the entire GUI will freeze while the event is processed.
+
 
 # Making shared data visible across threads
 
-*At this point, everything is just kind of work, but there is a hidden gotcha that we must ensure that data written in one thread is visible to another thread*.
+*At this point, everything just kind of works, but there is a hidden gotcha that we must ensure that data written in one thread is visible to another thread*.
 
 Synchronization is not just about synchronizing threads. It's also about making sure that threads can see data written by other threads. As Goetz et al pointed out in the Java concurrency book, it seems natural that thread X writing to field `salary` that thread Y would see the changed value if it occurs after the write operation. Without synchronization and/or `volatile`, this is not the case.  From Jeremy Manson, assume the following `ready` variable is `volatile`:
 
@@ -719,9 +779,9 @@ class Foo {
 ```
 
 ```java
+// This one works since volatile got fixed in java 1.5 or 1.6 I think
 class Foo {
 	private volatile Helper helper = null; // MUST be volatile
-
 	public Helper getHelper() {
 		if (helper == null) {
 			synchronized(this) {
@@ -744,6 +804,8 @@ class HelperSingleton {
   static Helper singleton = new Helper();
 }
 ```
+
+No matter how many threads reference a class, Java guarantees that a single thread wins the race to load the class, which does the initialization as well.
 
 
 # Starvation

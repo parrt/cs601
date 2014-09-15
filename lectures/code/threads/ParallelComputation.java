@@ -11,6 +11,6 @@ class ParallelComputation implements Runnable {
         try {
             barrier.waitForRelease();
         }
-        catch(InterruptedException e) {}
+        catch(InterruptedException e) { e.printStackTrace(); }
     }
 }
