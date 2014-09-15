@@ -1,4 +1,4 @@
-public class TestBarrier {
+public class DemoBarrier {
 	public static void main(String[] args) {
 		Barrier barrier = new Barrier(3);
 		new Thread(new ParallelComputation(barrier)).start();
