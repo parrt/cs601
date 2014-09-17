@@ -323,6 +323,8 @@ Instead of using `wait` and `notify`, we could use *busy waits* but those are ty
     }
 ```
 
+## Explicit locks
+
 Java >= 1.5 also provides a [`Lock`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/Lock.html) object.  In many ways it's very similar to `synchronized(object)` but we have control over when the object is unlocked and we can also ask it if it is locked. There is also no way to cancel an intrinsic lock.
 
 <blockquote>
@@ -339,6 +341,8 @@ BEWARE (API doc):
 <blockquote>
 Acquiring the monitor lock of a Lock instance has no specified relationship with invoking any of the lock() methods of that instance. It is recommended that to avoid confusion you never use Lock instances in this way, except within their own implementation.
 </blockquote>
+
+From Java 1.6 forward, the cost of doing intrinsic locking versus these explicit locks is basically the same. For simplicity I generally use the intrinsic locking. On the other hand, there are situations where we need to pull the lock or generally need more flexability. In that case, I use `Lock` explicitly.
 
 See the lock-ordering deadlock section below for more use of `Lock`.
 
@@ -385,16 +389,50 @@ A synchronization aid that allows a set of threads to all wait for
  * are released.
 </blockquote>
 
+## One writer, multiple reader locks
+
+The intrinsic locking and the `ReentrantLock` provide absolute exclusivity to a single thread, which is easy to think about but it's pretty conservative for some operations. For example, consider a list object that we primarily read from and only occasionally write to. It's overly expensive to prevent multiple readers on the off chance that a write comes in. [`ReadWriteLock`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReadWriteLock.html) is another kind of lock that allows multiple readers but a single writer.
+
+API: "*A ReadWriteLock maintains a pair of associated locks, one for read-only operations and one for writing. The read lock may be held simultaneously by multiple reader threads, so long as there are no writers. The write lock is exclusive.*"
+
+This object only gives you the ability to implement a data structure that handles multiple readers and a single writer but it doesn't guarantee you have such a data structure. Ultimately it's just a pair locks that are managed properly for multiple readers and a single writer. You still have to guard all reads and writes within your data structure appropriately. See Goetz's [ReadWriteMap](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/ReadWriteMap.java):
+
+```java
+public class ReadWriteMap <K,V> {
+    private final Map<K, V> map;
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock r = lock.readLock();
+    private final Lock w = lock.writeLock();
+	
+	public V put(K key, V value) {
+		w.lock();
+		try { return map.put(key, value); }
+		finally { w.unlock(); }
+	}
+
+	public V remove(Object key) {
+		w.lock();
+		try { return map.remove(key); }
+		finally { w.unlock(); }
+	}
+	...
+}
+```
+
 # Inter-thread communication
 
 ## Producer "/" consumer model
 
-Typically blocking on I/O and network traffic:
+Example: blocking on I/O or network traffic.
+
+Example: Message passing between actors.
+
+### Blocking-queue "old school" <= Java 1.5
+
+Here is a blocking queue template with unbounded buffer size:
 
 ```java
-/** Extend Queue to make threads block until remove has
- *  data.
- */
+/** Augment a Queue to make threads block until remove() has data. */
 class MyBlockingQueue {
    int n = 0;
    Queue data = ...;
@@ -430,6 +468,41 @@ Here is a `main()` that tests the queue:
 ```
 
 Note that I try to consume first.  It will wait for 2 seconds (2000 ms) before the producer starts up and adds the element.
+
+### Blocking queue >= 1.6 Java
+
+The producer consumer mechanism is significantly easier these days. Here is the implementation from [`ArrayBlockingQueue`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ArrayBlockingQueue.html).
+
+```java
+final ReentrantLock lock;         // Main lock guarding all access
+private final Condition notEmpty; // Condition for waiting takes
+private final Condition notFull;  // Condition for waiting puts
+```
+
+```java
+public E take() throws InterruptedException {
+	final ReentrantLock lock = this.lock;
+	lock.lockInterruptibly();
+	try {
+		while (count == 0) notEmpty.await();
+		return extract();
+	}
+	finally { lock.unlock(); }
+}
+```
+
+```java
+public void put(E e) throws InterruptedException {
+	checkNotNull(e);
+	final ReentrantLock lock = this.lock;
+	lock.lockInterruptibly();
+	try {
+		while (count == items.length) notFull.await();
+		insert(e);
+	}
+	finally { lock.unlock(); }
+}
+```
 
 # Some recommendations, patterns
 
