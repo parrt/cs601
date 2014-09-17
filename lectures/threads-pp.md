@@ -323,6 +323,24 @@ Instead of using `wait` and `notify`, we could use *busy waits* but those are ty
     }
 ```
 
+Java >= 1.5 also provides a [`Lock`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/Lock.html) object.  In many ways it's very similar to `synchronized(object)` but we have control over when the object is unlocked and we can also ask it if it is locked. There is also no way to cancel an intrinsic lock.
+
+<blockquote>
+Lock implementations provide additional functionality over the use of synchronized methods and statements by providing a non-blocking attempt to acquire a lock (tryLock()), an attempt to acquire the lock that can be interrupted (lockInterruptibly(), and an attempt to acquire the lock that can timeout (tryLock(long, TimeUnit)).
+</blockquote>
+
+Here's a simple example use that properly increments a count variable. Without the locking, incorrect results occur reliably.
+
+```java
+!INCLUDE "code/threads/DemoLock.java"
+```
+
+BEWARE (API doc):
+<blockquote>
+Acquiring the monitor lock of a Lock instance has no specified relationship with invoking any of the lock() methods of that instance. It is recommended that to avoid confusion you never use Lock instances in this way, except within their own implementation.
+</blockquote>
+
+See the lock-ordering deadlock section below for more use of `Lock`.
 
 ## Barrier wait
 
@@ -341,7 +359,7 @@ Want to code like this:
 test code:
 
 ```java
-!INCLUDE "code/threads/TestBarrier.java"
+!INCLUDE "code/threads/DemoBarrier.java"
 ```
 
 and this implementation
@@ -580,8 +598,48 @@ A thread with higher priority preempts your thread, never allowing it any CPU ti
 
 # Deadlock
 
-Unsatisfied wait condition.  Use HTTP project as an analogy (server must consume all headers from browser after the GET before sending result back or browser may hang.  It's not looking for the response yet as it's waiting for the server to read all the headers).
+Unsatisfied wait condition.  I ask for a piece of data that never becomes available.
 
-Or, I'm waiting on you and you're waiting on me.  Jim was waiting on me to tell him when I finished something and I was waiting on him.
+Or, I'm waiting on you and you're waiting on me.  Jim was waiting on me to tell him when I finished something and I was waiting on him. This is the *deadly embrace*.
 
-Dining philosophers: think and eat.  Get 2 students and some knives or chopsticks from the cafeteria.  Must have two to eat but only one in front of you.  Everybody grabs to the right and then waits for stick on left.  Deadlock.  If not available, wait until it is then eat.  Get a cookie for student volunteers.  One possibly solution is to have one philospher as a nonconformist: grabs left first.  If they are greedy they starve.  Could also have the grabbing of two sticks be synchronized so at least the first n-1 guys guy will finish.
+Famous *dining philosophers*: think and eat.  2 students with forks.  Must have two to eat but only one in front of you.  Everybody grabs to the right and then waits for stick on left.  Deadlock.  If not available, wait until it is then eat.  One possible solution is to have one philospher as a nonconformist: grabs left first.  If they are greedy they starve.  Could also have the grabbing of two sticks be synchronized so at least the first n-1 guys guy will finish.
+
+## Lock-ordering deadlock
+
+Explicit locks also allow us to poll locks to avoid potential deadlock situations. See Goetz's [DynamicOrderDeadlock](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/DynamicOrderDeadlock.java). Here is a snippet that shows an attempt to get two locks:
+
+```java
+synchronized (fromAccount) {
+    synchronized (toAccount) {
+        if (fromAccount.getBalance().compareTo(amount) < 0)
+            throw new InsufficientFundsException();
+        else {
+            fromAccount.debit(amount);
+            toAccount.credit(amount);
+        }   
+    }   
+}   
+```
+
+The problem of course is that another thread might have locked one of the other objects. Here's the scenario: X tries to move money from my account to your account at the same time thread Y tries to move money from your account to my account. If X gets a hold of my account and Y gets a hold of your account, we have a deadlock!
+
+This situation differs from our `Amazon` example above with a compound operation because that example uses a single lock for two data structures whereas here we have two different locks, one for each data structure.
+
+The solution is to hold the locks to see if we can get both of them and, if not, hang out for a bit and try again. This is basically what ethernet does to get on the bus. A timed `tryLock` can be used to fail if we can't gain access to the resources soon enough. See Goetz's [DeadlockAvoidance](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/DeadlockAvoidance.java).
+
+```java
+while (true) {
+    if (fromAcct.lock.tryLock()) {
+        try {
+            if (toAcct.lock.tryLock()) {
+                try {
+                   ...
+                }
+                finally { toAcct.lock.unlock(); }
+            }   
+        } 
+        finally { fromAcct.lock.unlock(); }
+    }   
+    NANOSECONDS.sleep(fixedDelay + rnd.nextLong() % randMod);
+}   
+```

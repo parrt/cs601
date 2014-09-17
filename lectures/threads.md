@@ -323,6 +323,70 @@ Instead of using `wait` and `notify`, we could use *busy waits* but those are ty
     }
 ```
 
+Java >= 1.5 also provides a [`Lock`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/Lock.html) object. One thread can hold a lock at once like with `synchronized(this)`. Other threads that try to acquire it block until lock is free.
+
+```java
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class DemoLock {
+	public static final int N = 10000;
+	private static int count = 0;
+	private static Lock lock = new ReentrantLock();
+	private static CyclicBarrier barrier = new CyclicBarrier(3);
+
+	static class Operation implements Runnable {
+		public void run() {
+			for (int i=1; i<=N; i++) {
+				increment();
+			}
+			try {barrier.await();}
+			catch (Exception e) {e.printStackTrace();}
+		}
+
+		void increment() {
+			lock.lock();
+			try {
+				count = count + 1;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+
+		/** results in output like "Count 11148 should be 20000" */
+		void unsafeIncrement() {
+			count = count + 1;
+		}
+	}
+
+	public static void main(String[] args) throws BrokenBarrierException, InterruptedException {
+		Operation op = new Operation();
+		Thread t = new Thread(op);
+		t.start();
+
+		Operation op2 = new Operation();
+		Thread t2 = new Thread(op2);
+		t2.start();
+
+		barrier.await();
+		System.out.printf("Count %d should be %d\n", count, N*2);
+	}
+}
+```
+
+API doc:
+
+<blockquote>
+Lock implementations provide additional functionality over the use of synchronized methods and statements by providing a non-blocking attempt to acquire a lock (tryLock()), an attempt to acquire the lock that can be interrupted (lockInterruptibly(), and an attempt to acquire the lock that can timeout (tryLock(long, TimeUnit)).
+</blockquote>
+
+BEWARE (API doc):
+<blockquote>
+Acquiring the monitor lock of a Lock instance has no specified relationship with invoking any of the lock() methods of that instance. It is recommended that to avoid confusion you never use Lock instances in this way, except within their own implementation.
+</blockquote>
 
 ## Barrier wait
 
@@ -358,6 +422,15 @@ class ParallelComputation implements Runnable {
 test code:
 
 ```java
+public class DemoBarrier {
+	public static final int N = 100;
+	public static void main(String[] args) {
+		Barrier barrier = new Barrier(N);
+		for (int i=1; i<=N; i++) {
+			new Thread(new ParallelComputation(barrier)).start();
+		}
+	}
+}
 ```
 
 and this implementation
