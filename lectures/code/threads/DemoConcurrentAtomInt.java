@@ -1,7 +1,7 @@
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ConcAtomInt {
+public class DemoConcurrentAtomInt {
 	final static int N = 10;
 	static AtomicInteger n = new AtomicInteger(0);
 	static final CyclicBarrier barrier = new CyclicBarrier(N+1);
@@ -20,7 +20,7 @@ public class ConcAtomInt {
 				}
 			}
 			try {barrier.await();}
-			catch (Exception e) { }
+			catch (Exception e) { e.printStackTrace(); }
 		}
 	}
 

@@ -485,7 +485,7 @@ public E take() throws InterruptedException {
 	lock.lockInterruptibly();
 	try {
 		while (count == 0) notEmpty.await();
-		return extract();
+		return extract(); // calls notFull.signal();
 	}
 	finally { lock.unlock(); }
 }
@@ -498,11 +498,13 @@ public void put(E e) throws InterruptedException {
 	lock.lockInterruptibly();
 	try {
 		while (count == items.length) notFull.await();
-		insert(e);
+		insert(e); // calls notEmpty.signal();
 	}
 	finally { lock.unlock(); }
 }
 ```
+
+We have much finer granularity here then with the intrinsic wait and notifyAll(). First, we can awaken just a single thread because we know which queue of threads we are potentially waking up rather than all possible conditions. That is more efficient. Is also easier to understand with two different `Condition` objects. The other choices to have a single intrinsic queue of waiting threads with potentially multiple conditions they are actually waiting on.
 
 # Some recommendations, patterns
 
@@ -716,3 +718,67 @@ while (true) {
     NANOSECONDS.sleep(fixedDelay + rnd.nextLong() % randMod);
 }   
 ```
+
+# Nonblocking algorithms
+
+The idea is to avoid locks for performance reasons but nonblocking algorithms are also immune to deadlock. While a thread is blocked the lock, it can't do anything else and another thread holding the lock could be delayed. Locks also could involve context switches, which are very expensive. Unfortunately nonblocking algorithms are vastly more complicated to think about and design (i.e., get right) than locking algorithms.  Nonblocking algorithms rely on hardware instructions such as compare-and-swap and compare-and-set rather than locking which require operating system intervention:
+
+```java
+boolean compareAndSet(expectedValue, updateValue);
+```
+
+Here's an example that updates and integer without having to do a heavyweight lock:
+
+```java
+AtomicInteger n = new AtomicInteger(0);
+...
+v = ...;
+while ( true ) {
+	int current = n.get();
+	int newValue = current + v;
+	if ( n.compareAndSet(current, newValue) ) {
+		break; // heh, we succeeded in setting the value safely!
+	}
+}
+```
+
+This is the thread safe equivalent of:
+
+```java
+int n = 0;
+...
+v = ...;
+n = n + v;
+```
+
+In many ways these are like transactions. We attempt to do something, and if it fails, we try again until we succeed, optionally pausing slightly before trying again. Naturally, these operate at a much finer granularity than either transactions or locks, which is the source of their performance advantage.
+
+Locks are *pessimistic* whereas fine-grained atomic operations are *optimistic*, assuming that contention likelihood is low, particularly given the small cost of these atomic operations.
+
+## Compare and swap (CAS) instructions
+
+The operation:
+
+```
+CAS addr,old,new
+```
+
+atomically updates `addr` to the `new` value but only if the value at that address matches the expected `old` value. Multiple competing threads that attempt CAS on `addr` have one winner which updates the value and the rest lose. The losers are notified that they didn't win and should try again. This really helps with liveness because we are not stuck like we would be with a lock.
+
+## Nonblocking atomic elements
+
+To build nonblocking algorithms in Java, we need the so-called *atomic variable classes* such as [`AtomicInteger`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicInteger.html). See the general description at the [java.util.concurrentatomic package](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/package-summary.html).
+
+```java
+!INCLUDE "code/threads/DemoConcurrentAtomInt.java"
+```
+
+These operations significantly outperform locking operations but are obviously more complicated to implement because of the boilerplate code. Java 8 lambda notation might make this easier. On a single processor, CAS might only take a few cycles but on a multiprocessor machine it could take 100 cycles.
+
+In order to get atomic floating-point, you have to use unsigned integers and convert from floats to bits. ick.
+
+`Volatile` variables and atomic variables are different. The volatile ones simply guarantee that the value can be properly shared across threads but they do not prevent race conditions during compare and set operations.  For example, incrementing a volatile from multiple threads can lose a few updates, but that's okay if you don't care. If you are creating a pseudo random sequence of numbers, you care about dropping values as it alters the sequence. In that case, you need to hold things in and atomic integer.
+
+## Lock-less data structures
+
+Java provides a number of lock was data structures that often perform well in the presence of multiple threads accessing them. E.g., [`ConcurrentHashMap`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentHashMap.html). "*Retrieval operations (including get) generally do not block, so may overlap with update operations (including put and remove).*" Also see [`ConcurrentLinkedQueue`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentLinkedQueue.html). Their designs and implementations were done by experts. Such algorithms use lots of tricks such as dividing up data structures into regions and having threads work on different regions. According to Goetz, "*The key to creating nonblocking algorithms is figuring out how to limit the scope of atomic changes to a single *variable* while maintaining data consistency*."
