@@ -1,7 +1,7 @@
 /** Simple queue that holds single value */
 class SingleElementBlockingQueue {
-    int n = 0;
-    Object data = null;
+    private volatile int n = 0;
+    private volatile Object data = null;
     public synchronized Object remove() {
         // wait until there is something to read
         try {
@@ -14,10 +14,18 @@ class SingleElementBlockingQueue {
         Object o = this.data;
         this.data = null; // kill the old data
         n--;
-        return o;
+		notifyAll();
+		return o;
     }
 
     public synchronized void write(Object o) {
+		// wait until there is room to write
+		try {
+			while ( n==1 ) wait();
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException("woke up", ie);
+		}
         n++;
         // add data to queue
         data = o;

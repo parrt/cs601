@@ -13,6 +13,7 @@ public class DemoLock {
 		public void run() {
 			for (int i=1; i<=N; i++) {
 				increment();
+//				unsafeIncrement();
 			}
 			try {barrier.await();}
 			catch (Exception e) {e.printStackTrace();}
