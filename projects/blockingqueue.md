@@ -43,15 +43,15 @@ The test rig launches `ThreadObserver` objects to track how much of the time our
 
 Using a [circular buffer](http://en.wikipedia.org/wiki/Circular_buffer), sometimes called a *ring buffer*, you must create a lock plus message buffer. We think of the buffer as circular because we start writing over elements at the beginning instead of falling off the end of the buffer. But, it's easier to think about linearly. Here's the initial state of the buffer for n=4.
 
-<img src="figures/ring-init.png" width=350>
+<img src="figures/ring-init.png" width=330>
 
 Where `r` is where we are about to read and `w` is where we had just written. Therefore, a full buffer is when `w` it's the end of the buffer and cannot rap because we have not read yet:
 
-<img src="figures/ring-full.png" width=425>
+<img src="figures/ring-full.png" width=405>
 
 After we have read the single element, `w` can wrap to 0:
 
-<img src="figures/ring-full-read-1.png" width=435>
+<img src="figures/ring-full-read-1.png" width=415>
 
 Note that we are tracking absolute indexes, using `long`s, rather than keeping a pointer inside the array or an index in 0..n-1. This is convenient as it can tell us how many we have read and written but also is important for the lock plus nature of this data structure. `r` and `w` will constantly chase each other towards infinity as `AtomicLong`s.
 

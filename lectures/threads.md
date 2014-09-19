@@ -964,6 +964,8 @@ while ( true ) {
 }
 ```
 
+See [DemoConcurrentAtomInt](https://github.com/parrt/cs601/blob/master/lectures/code/threads/DemoConcurrentAtomInt.java).
+
 This is the thread safe equivalent of:
 
 ```java
