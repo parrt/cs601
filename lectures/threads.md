@@ -946,10 +946,20 @@ while (true) {
 The idea is to avoid locks for performance reasons but nonblocking algorithms are also immune to deadlock. While a thread is blocked the lock, it can't do anything else and another thread holding the lock could be delayed. Locks also could involve context switches, which are very expensive. Unfortunately nonblocking algorithms are vastly more complicated to think about and design (i.e., get right) than locking algorithms.  Nonblocking algorithms rely on hardware instructions such as compare-and-swap and compare-and-set rather than locking which require operating system intervention:
 
 ```java
-boolean compareAndSet(expectedValue, updateValue);
+boolean compareAndSet(x, expectedValue, newValue);
 ```
 
-Here's an example that updates and integer without having to do a heavyweight lock:
+The goal is to atomically set the value of `x` to `newvalue` if `x` is currently `expectedValue`.
+
+The machine instruction looks like:
+
+```
+CAS addr,old,new
+```
+
+which atomically updates data at  `addr` to the `new` value only if the value at that address matches the expected `old` value. Multiple competing threads that attempt CAS on `addr` have one winner which updates the value and the rest lose. The losers are notified that they didn't win and should try again. This really helps with liveness because we are not stuck like we would be with a lock.
+
+Here's an example like our bank account that updates an integer without having to do a heavyweight lock:
 
 ```java
 AtomicInteger n = new AtomicInteger(0);
@@ -975,19 +985,25 @@ v = ...;
 n = n + v;
 ```
 
-In many ways these are like transactions. We attempt to do something, and if it fails, we try again until we succeed, optionally pausing slightly before trying again. Naturally, these operate at a much finer granularity than either transactions or locks, which is the source of their performance advantage.
+In many ways these are like transactions. We attempt to do something, and if it fails, we try again until we succeed, optionally pausing slightly before trying again. Naturally, these operate at a much finer granularity than either transactions or locks, which is the source of their performance advantage. The code for `getAndIncrement`, for example, is illuminating:
 
-Locks are *pessimistic* whereas fine-grained atomic operations are *optimistic*, assuming that contention likelihood is low, particularly given the small cost of these atomic operations.
-
-## Compare and swap (CAS) instructions
-
-The operation:
-
+```java
+/** Atomically increments by one the current value. */
+public final int getAndIncrement() {
+	for (;;) {
+		int current = get();
+		int next = current + 1;
+		if (compareAndSet(current, next)) {}
+			// only set to newValue if 
+			return current;
+		}
+	}
+}
 ```
-CAS addr,old,new
-```
 
-atomically updates `addr` to the `new` value but only if the value at that address matches the expected `old` value. Multiple competing threads that attempt CAS on `addr` have one winner which updates the value and the rest lose. The losers are notified that they didn't win and should try again. This really helps with liveness because we are not stuck like we would be with a lock.
+
+
+Locks are *pessimistic* whereas fine-grained atomic operations are *optimistic*. They assume that contention likelihood is low, which is valid particularly given the small cost of these atomic operations.
 
 ## Nonblocking atomic elements
 
