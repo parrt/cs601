@@ -349,6 +349,7 @@ public class DemoLock {
 		public void run() {
 			for (int i=1; i<=N; i++) {
 				increment();
+//				unsafeIncrement();
 			}
 			try {barrier.await();}
 			catch (Exception e) {e.printStackTrace();}
@@ -635,8 +636,8 @@ Here is an implementation of a 1-element queue:
 ```java
 /** Simple queue that holds single value */
 class SingleElementBlockingQueue {
-    int n = 0;
-    Object data = null;
+    private volatile int n = 0;
+    private volatile Object data = null;
     public synchronized Object remove() {
         // wait until there is something to read
         try {
@@ -649,10 +650,18 @@ class SingleElementBlockingQueue {
         Object o = this.data;
         this.data = null; // kill the old data
         n--;
-        return o;
+		notifyAll();
+		return o;
     }
 
     public synchronized void write(Object o) {
+		// wait until there is room to write
+		try {
+			while ( n==1 ) wait();
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException("woke up", ie);
+		}
         n++;
         // add data to queue
         data = o;
@@ -671,11 +680,13 @@ public class DemoSingleElementBlockingQueue {
 	static class Producer implements Runnable {
 		public void run() {
 			q.write("hello");
+			q.write("again");
 		}
 	}
 
 	static class Consumer implements Runnable {
 		public void run() {
+			System.out.println("data is "+q.remove());
 			System.out.println("data is "+q.remove());
 		}
 	}
@@ -683,7 +694,7 @@ public class DemoSingleElementBlockingQueue {
 	public static void main(String[] args) throws Exception {
 		q = new SingleElementBlockingQueue();
 		new Thread(new Consumer()).start();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		new Thread(new Producer()).start();
 	}
 }
