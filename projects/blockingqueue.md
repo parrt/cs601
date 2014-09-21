@@ -68,13 +68,12 @@ After we have read the single element, `w` can wrap to 0:
 
 <img src="figures/ring-full-read-1.png" width=415>
 
-Note that we are tracking absolute indexes, using `long`s, rather than keeping a pointer inside the array or an index in 0..n-1. This is convenient as it can tell us how many we have read and written but also is important for the lock plus nature of this data structure. `r` and `w` will constantly chase each other towards infinity as `volatile long`s.
+Note that we are tracking absolute indexes, using `long`s, rather than keeping a pointer inside the array or an index in 0..n-1. This is convenient as it can tell us how many we have read and written but also is important for the lock plus nature of this data structure. `r` and `w` will constantly chase each other towards infinity as `AtomicLong`s. (Recall that `long` increments/assignments are not atomic.)
 
 ```java
 public class RingBuffer<T> implements MessageQueue<T> {
-	// must be volatile as reader/writer threads share w, r
-	private volatile long w = -1L;		// just wrote location
-	private volatile long r = 0L;		// about to read location
+	private final AtomicLong w = new AtomicLong(-1);	// just wrote location
+	private final AtomicLong r = new AtomicLong(0);		// about to read location
 	...
 	public RingBuffer(int n) { ... }
 }
