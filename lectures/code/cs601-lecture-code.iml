@@ -6,9 +6,11 @@
       <sourceFolder url="file://$MODULE_DIR$/io" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/sockets" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/threads" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/web" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="jetty-9.2.3" level="project" />
   </component>
 </module>
 

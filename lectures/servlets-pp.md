@@ -70,19 +70,19 @@ A servlet runs in the same address space as the server and typically represents 
 
 # Jetty
 
-[Embedding Jetty](http://www.eclipse.org/jetty/documentation/current/embedding-jetty.html)
-
-Download and then:
+[Download jetty-9](http://download.eclipse.org/jetty/stable-9/dist/) and then:
 
 ```bash
-$ mv jetty-distribution-9.1.4.v20140401/lib  /usr/local/lib/jetty-9.1.4
+$ mv jetty-distribution-9.2.3.v20140905/lib /usr/local/lib/jetty-9.2.3
 ```
 
-JAX-RS Java API for RESTful Web Services is a Java programming language API that provides support in creating web services according to the Representational State Transfer (REST) architectural pattern. From version 1.1 on, JAX-RS is an official part of Java EE 6.
+[Embedding Jetty](http://www.eclipse.org/jetty/documentation/current/embedding-jetty.html)
 
 ## Services
 
 *do later*
+
+JAX-RS Java API for RESTful Web Services is a Java programming language API that provides support in creating web services according to the Representational State Transfer (REST) architectural pattern. From version 1.1 on, JAX-RS is an official part of Java EE 6.
 
 https://jersey.java.net/download.html
 mv /Volumes/SSD2/Users/parrt/tmp/jaxrs-ri/lib /usr/local/lib/jersey-jaxrs

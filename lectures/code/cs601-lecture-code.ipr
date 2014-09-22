@@ -160,5 +160,15 @@
     <mapping directory="" vcs="" />
     <mapping directory="$PROJECT_DIR$/../.." vcs="Git" />
   </component>
+  <component name="libraryTable">
+    <library name="jetty-9.2.3">
+      <CLASSES>
+        <root url="file:///usr/local/lib/jetty-9.2.3" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+      <jarDirectory url="file:///usr/local/lib/jetty-9.2.3" recursive="false" />
+    </library>
+  </component>
 </project>
 
