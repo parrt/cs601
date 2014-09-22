@@ -42,13 +42,13 @@ See [Servlet package doc](http://java.sun.com/products/servlet/2.3/javadoc/index
 
 Useful class summary:
 
-o       HttpServlet,
-o       HttpServletRequest, 
-o       HttpServletResponse,
-o       HttpSession, 
-o       Cookie, 
-o       URLEncoder, 
-o       java.netURLEncoder.encode(...).
+*       HttpServlet,
+*       HttpServletRequest, 
+*       HttpServletResponse,
+*       HttpSession, 
+*       Cookie, 
+*       URLEncoder, 
+*       java.netURLEncoder.encode(...).
 
 Generates HTML that is sent back to the browser.
 
@@ -56,9 +56,9 @@ http servlets have methods are associated with the http protocol. GET, POST, etc
 
 The servlet life cycle:
 
-1 init
-1 service many times (doGet/doPost in our case)
-1 destroy
+1. init
+1. service many times (doGet/doPost in our case)
+1. destroy
 
 One instance of a servlet per server.  Watch out for threading issues.  Can tell it to be singlethreaded, but very slow.  Reference example of using instance vars setting/getting from within service (see section below).
 
@@ -67,6 +67,36 @@ Later we'll talk about generating html properly and can discuss in detail.
 How do they work?  Unfortunately that really depends on the servlet _container_ you are using.  Some let you place your .java file inside a special directory and your server will be able to send URL requests to that code.  The HTTP server compiles the code for you (and can replace an old one on a running server).  With Jetty, it will find your servlet code from the CLASSPATH so make sure you start your app with the path set to see both jetty stuff and your stuff.
 
 A servlet runs in the same address space as the server and typically represents a middle tier in a three tier system.
+
+# Jetty
+
+[Embedding Jetty](http://www.eclipse.org/jetty/documentation/current/embedding-jetty.html)
+
+Download and then:
+
+```bash
+$ mv jetty-distribution-9.1.4.v20140401/lib  /usr/local/lib/jetty-9.1.4
+```
+
+JAX-RS Java API for RESTful Web Services is a Java programming language API that provides support in creating web services according to the Representational State Transfer (REST) architectural pattern. From version 1.1 on, JAX-RS is an official part of Java EE 6.
+
+## Services
+
+*do later*
+
+https://jersey.java.net/download.html
+mv /Volumes/SSD2/Users/parrt/tmp/jaxrs-ri/lib /usr/local/lib/jersey-jaxrs
+mv /Volumes/SSD2/Users/parrt/tmp/jaxrs-ri/api/javax.ws.rs-api-2.0.jar /usr/local/lib/jersey-jaxrs
+
+jetty and xml/json and jersey
+
+http://jlunaquiroga.blogspot.com/2014/01/restful-web-services-with-jetty-and.html
+doc: https://jersey.java.net/documentation/latest/index.html
+
+ugh: all examples seem to be 1.x not 2.0. fixed with this info:
+
+https://java.net/projects/jersey/lists/users/archive/2013-06/message/91
+http://stackoverflow.com/questions/18086218/java-lang-classnotfoundexception-com-sun-jersey-spi-container-servlet-servletco
 
 # Simple Servlets
 
