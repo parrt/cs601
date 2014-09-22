@@ -72,7 +72,7 @@ For some reason, this issue has nagged at me.  As such, I thought I would quickl
 From: Intellectual Property at Eclipse foundation
 Date: Mon, 8 Jul 2013 11:19:31 -0400
 <blockquote>
-I work with Janet Campbell here at the Eclipse Foundation.  Hope things are going well for you.  I know you have helped us out in the past concerning Antlr Runtime.  We have just received a request to distribute StringTemplate version 3.2.1.  I know StringTemplate is under the BSD License.  I’d like your help to understand if contributions to StringTemplate are also covered by the Antlr Project Developer's Certificate of Origin [1]?
+I work with XXX here at the Eclipse Foundation.  Hope things are going well for you.  I know you have helped us out in the past concerning Antlr Runtime.  We have just received a request to distribute StringTemplate version 3.2.1.  I know StringTemplate is under the BSD License.  I’d like your help to understand if contributions to StringTemplate are also covered by the Antlr Project Developer's Certificate of Origin [1]?
 </blockquote>
 
 From: VP of Marketing and Ecosystem at Eclipse foundation
@@ -86,7 +86,7 @@ Date: Feb 26, 2010, at 1:08 PM
 <blockquote>
 I would usually begin an email with a little bit of background about
 Eclipse, but I think you may already know about us so I won't bore you ;-).
-You really helped us out a few years ago when Janet Campbell, our Director
+You really helped us out a few years ago when XXX, our Director
 of IP, was in touch with you:  you rewrote ANTLR runtime under the BSD. 
 
 It is my understanding that at that time, you were in the process of
