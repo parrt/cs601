@@ -1,9 +1,25 @@
 Software licensing
 =====
 
-As a developer, you are responsible for never cleaning somebody else's work as your own. This is true in school and at work. Naturally, we want to reuse as much code as possible but we must do so legally and ethically.
+As a developer, you are responsible for never claiming somebody else's work as your own. This is true in school and at work. Naturally, we want to reuse as much code as possible but we must do so legally and ethically. The safest thing to do is to reuse the binary of a library as you are not creating a derivative work.
 
-We all cut-and-paste little snippets of code from the web to get our job done and has generally okay as long as it's not hold methods and so on. If that's the case, we must check the license and/or copyright notices to see if it's legal to do so. If the license seems to indicate we can use it, we still have to attribute it to the original author or authors. Usually the license makes this clear. A number of licenses are included below.
+We all cut-and-paste little snippets of code from the web to get our job done and that is generally okay as long as it's not whole methods and so on. If that's the case, we must check the license and/or copyright notices to see if it's legal to do so. If the license seems to indicate we can use it, we still have to attribute it to the original author or authors. Usually the license makes this clear. A number of licenses are included below.
+
+Protection from theft is critical for innovation as developers know that the rule of law prevents people from stealing their hard work. This is true for both copyright and patents and trademarks.
+
+# Software copyright
+
+By default, [American copyright law](http://en.wikipedia.org/wiki/Software_copyright) gives you copyright over your creations. This covers a tangible fixed piece of source code.  The law prevents someone from claiming your source code as their own, just as it does for a novel or textbook. You have copyright over your creation without having to explicitly state that is the case: [*Copyright exists from the moment the work is created*](http://copyright.gov/help/faq/faq-general.html#register).
+
+Note that copyright is not the same thing as a patent or trademark. A copyright is like a book: a tangible fixed object. A patent on the other hand documents inventions or discoveries. In exchange for explaining everything about the invention, the inventor gets exclusive rights to use the invention for certain period of time.
+
+# Trademarks
+
+A trademark is a way to register your brand so that you can protect it. Coca-Cola and Google viciously protect their brand because they spend a lot of time and money creating a good brand. 
+
+From [copyright.gov](http://copyright.gov/help/faq/faq-general.html#mywork): "*A trademark protects words, phrases, symbols, or designs identifying the source of the goods or services of one party and distinguishing them from those of others.*"
+
+Again, protection under the law is required for investment.
 
 # Software licenses
 
@@ -84,7 +100,7 @@ simple and effective!) URL you've set up?
 
 The intellectual-property folks at the Eclipse foundation told me that they evaluate all code before allowing its inclusion in their project. They look in the documentation and websites for contributors and then they look at the code to see if there are any copyright holders. They tried to clarify ownership and so on with the primary author(s). They may approach the other copyright holders to confirm the answers to questions:
 
-Identify all committer & contributors name and contact information.  For each individual, seek the following information (replacing X with the project's name, and Y with the license used by the project):
+Identify all committer & contributors name and contact information.  For each individual, they seek the following information (replacing X with the project's name, and Y with the license used by the project):
 
 1. Did you agree to contribute the code to the X project,
     a. to be licensed as open source under the Y agreement?; and now
