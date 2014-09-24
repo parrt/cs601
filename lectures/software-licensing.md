@@ -11,7 +11,9 @@ Protection from theft is critical for innovation as developers know that the rul
 
 By default, [American copyright law](http://en.wikipedia.org/wiki/Software_copyright) gives you copyright over your creations. This covers a tangible fixed piece of source code.  The law prevents someone from claiming your source code as their own, just as it does for a novel or textbook. You have copyright over your creation without having to explicitly state that is the case: [*Copyright exists from the moment the work is created*](http://copyright.gov/help/faq/faq-general.html#register).
 
-Note that copyright is not the same thing as a patent or trademark. A copyright is like a book: a tangible fixed object. A patent on the other hand documents inventions or discoveries. In exchange for explaining everything about the invention, the inventor gets exclusive rights to use the invention for certain period of time.
+# Patents
+
+Note that copyright is not the same thing as a patent (or trademark). A copyright is like a book: a tangible fixed object. A patent on the other hand documents inventions or discoveries. In exchange for explaining everything about the invention, the inventor gets exclusive rights to use the invention for certain period of time.
 
 # Trademarks
 
