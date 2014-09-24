@@ -75,39 +75,43 @@ $ mv jetty-distribution-9.2.3.v20140905/lib /usr/local/lib/jetty-9.2.3
 
 [Example source](https://github.com/parrt/cs601/tree/master/lectures/code/web)
 
-## First example
+## Handlers
 
-The biggest issue will be getting the class path right:
-
-```bash
-$ j -cp ".:/usr/local/lib/jetty-9.2.3/*" OneHandler
-2014-09-24 12:20:14.823:INFO::main: Logging initialized @59ms
-2014-09-24 12:20:14.859:INFO:oejs.Server:main: jetty-9.2.3.v20140905
-2014-09-24 12:20:14.895:INFO:oejs.ServerConnector:main: Started ServerConnector@d3cb1cb{HTTP/1.1}{0.0.0.0:8080}
-2014-09-24 12:20:14.896:INFO:oejs.Server:main: Started @159ms
-...
-```
-
-The code it is running a server:
+As a first example, let's get a piece of code to respond to a URL request. It is not specifically a servlet, but rather a generic `Handler`  with a `handle()` method. We can put whatever we want in that method. We generate output with:
 
 ```java
-//
-//  ========================================================================
-//  Copyright (c) 1995-2014 Mort Bay Consulting Pty. Ltd.
-//  ------------------------------------------------------------------------
-//  All rights reserved. This program and the accompanying materials
-//  are made available under the terms of the Eclipse Public License v1.0
-//  and Apache License v2.0 which accompanies this distribution.
-//
-//      The Eclipse Public License is available at
-//      http://www.eclipse.org/legal/epl-v10.html
-//
-//      The Apache License v2.0 is available at
-//      http://www.opensource.org/licenses/apache2.0.php
-//
-//  You may elect to redistribute this code under either of these licenses.
-//  ========================================================================
-//
+response.getWriter().println("hello");
+```
+
+Jetty says:
+
+<blockquote>
+To produce a response to a request, Jetty requires that you set a Handler on the server. A handler may:
+
+<ul>
+<li>Examine/modify the HTTP request.
+
+<li>Generate the complete HTTP response.
+
+<li>Call another Handler (see HandlerWrapper).
+
+<li>Select one or many Handlers to call (see HandlerCollection).
+</ul>
+</blockquote>
+
+These handlers are a jetty concept which is fine to get us started but we will generally be using Servlets because that is a portable Java mechanism that would work in, say, tomcat. Servlets have the notion of sessions, which we will talk about later, that preserves state between HTTP requests. Handlers don't have that by default.
+
+[Handlers vs Servlets](http://stackoverflow.com/questions/4163553/jetty-servlets-vs-handlers).
+
+## A first example
+
+Here is the startup code that launches a socket handler:
+
+```java
+// Derived from:
+// http://download.eclipse.org/jetty/stable-9/xref/org/eclipse/jetty/embedded/FileServer.html
+// Copyright (c) 1995-2014 Mort Bay Consulting Pty. Ltd.
+// Released under Eclipse Public License v1.0 and Apache License v2.0
 
 import org.eclipse.jetty.server.Server;
 
@@ -127,23 +131,10 @@ public class OneHandler
 and then a `Handler`:
 
 ```java
-//
-//  ========================================================================
-//  Copyright (c) 1995-2014 Mort Bay Consulting Pty. Ltd.
-//  ------------------------------------------------------------------------
-//  All rights reserved. This program and the accompanying materials
-//  are made available under the terms of the Eclipse Public License v1.0
-//  and Apache License v2.0 which accompanies this distribution.
-//
-//      The Eclipse Public License is available at
-//      http://www.eclipse.org/legal/epl-v10.html
-//
-//      The Apache License v2.0 is available at
-//      http://www.opensource.org/licenses/apache2.0.php
-//
-//  You may elect to redistribute this code under either of these licenses.
-//  ========================================================================
-//
+// Derived from:
+// http://download.eclipse.org/jetty/stable-9/xref/org/eclipse/jetty/embedded/FileServer.html
+// Copyright (c) 1995-2014 Mort Bay Consulting Pty. Ltd.
+// Released under Eclipse Public License v1.0 and Apache License v2.0
 
 import java.io.IOException;
 
@@ -190,108 +181,188 @@ public class HelloHandler extends AbstractHandler
 }
 ```
 
+The biggest issue will be getting the class path right:
+
+```bash
+$ j -cp ".:/usr/local/lib/jetty-9.2.3/*" OneHandler
+2014-09-24 12:20:14.823:INFO::main: Logging initialized @59ms
+2014-09-24 12:20:14.859:INFO:oejs.Server:main: jetty-9.2.3.v20140905
+2014-09-24 12:20:14.895:INFO:oejs.ServerConnector:main: Started ServerConnector@d3cb1cb{HTTP/1.1}{0.0.0.0:8080}
+2014-09-24 12:20:14.896:INFO:oejs.Server:main: Started @159ms
+...
+```
+
 Once that starts up, go to `http://localhost:8080/` in your browser and it should show you `Hello World`.
 
 A handler is a generic bit of code that Jetty knows how to run. Servlets are based on these handlers.
 
-## Simple file serving
+## Simple file server
 
-Here is a simple program that starts up a web server at port 8080 and has a document root specified by args[0]:
+Here is a simple program that starts up a web server at port 8080 and has a document root of the current directory:
 
 ```java
-import org.mortbay.http.*;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.servlet.*;
-import org.mortbay.log.*;
+// Derived from:
+// http://download.eclipse.org/jetty/stable-9/xref/org/eclipse/jetty/embedded/FileServer.html
+// Copyright (c) 1995-2014 Mort Bay Consulting Pty. Ltd.
+// Released under Eclipse Public License v1.0 and Apache License v2.0
 
-public class MyServer {
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+
+public class FileServer {
     public static void main(String[] args) throws Exception {
-	String DOC_ROOT = args[0];
-        Server server = new Server();
-        server.addListener(":8080");
-        server.setRequestLog(getServerLogging());
-        server.addWebApplication("/", DOC_ROOT);
+        Server server = new Server(8080);
+        ResourceHandler resource_handler = new ResourceHandler();
+        resource_handler.setDirectoriesListed(true);
+		resource_handler.setResourceBase(".");                    // must set root dir
+
+        HandlerList handlers = new HandlerList();
+        handlers.setHandlers(new Handler[] { resource_handler, 	  // file handler
+											 new DefaultHandler() // handles 404 etc...
+		});
+        server.setHandler(handlers);
+
         server.start();
+        server.join();
     }
+
 }
 ```
 
-You will need the following additions to your `CLASSPATH`:
+Start your server like this:
 
 ```java
-/home/public/cs601/jetty/javax.servlet.jar
-/home/public/cs601/jetty/org.mortbay.jetty.jar
-/home/public/cs601/jetty/log4j-1.2.12.jar
-/home/public/cs601/jetty/jasper-compiler.jar
-/home/public/cs601/jetty/jasper-runtime.jar
-/home/public/cs601/jetty/xercesImpl.jar
-/home/public/cs601/jetty/commons-logging.jar
+$ java -cp ".:/usr/local/lib/jetty-9.2.3/*" FileServer
 ```
 
-which are the jars used by Jetty.  Start your server like this:
+http://localhost:8080/FileServer.java
+
+which will start serving files underneath whatever the working directory is when you launch it. If you start it from the directory containing the code itself, you can use URL
+
+`http://localhost:8080/FileServer.java`
+
+to display the Java code.
+
+## Logging
+
+At this point, Jetty will serve files, but you are not recording requests to your server. We need a small tweaks to the server startup:
 
 ```java
-java MyServer ~/foo
+Server server = new Server(8080);
+HandlerCollection handlers = new HandlerCollection();
+server.setHandler(handlers);
+
+ServletHandler servlet = new ServletHandler();
+servlet.addServletWithMapping(HelloServlet.class, "/*");
+handlers.addHandler(servlet);
+
+handlers.addHandler(new DefaultHandler()); // must be after servlet it seems
 ```
 
-which will start serving files underneath `~/foo`.  URLs like _host_`:8080/t.html` will get file `~/foo/t.html` from the disk.
-
-At this point, Jetty will serve files, but you are not recording requests to your server.  Add the following method:
+and then we add the following code:
 
 ```java
-private static RequestLog getServerLogging() throws Exception {
-    NCSARequestLog a = new NCSARequestLog("./request.log");
-    a.setRetainDays(90);
-    a.setAppend(true);
-    a.setExtended(false);
-    a.setLogTimeZone("GMT");
-    a.start();
-    return a;
-`   
+// log using NCSA (common log format)
+// http://en.wikipedia.org/wiki/Common_Log_Format
+NCSARequestLog requestLog = new NCSARequestLog();
+requestLog.setFilename("/tmp/yyyy_mm_dd.request.log");
+requestLog.setFilenameDateFormat("yyyy_MM_dd");
+requestLog.setRetainDays(90);
+requestLog.setAppend(true);
+requestLog.setExtended(true);
+requestLog.setLogCookies(false);
+requestLog.setLogTimeZone("GMT");
+RequestLogHandler requestLogHandler = new RequestLogHandler();
+requestLogHandler.setRequestLog(requestLog);
+handlers.addHandler(requestLogHandler);
 ```
 
-And add this line before the server.start():
+Now when it starts up it gives you among other things the following:
 
-```java
-server.setRequestLog(getServerLogging());
+```
+2014-09-24 15:04:53.360:INFO:oejs.AbstractNCSARequestLog:main: Opened /private/tmp/2014_09_24.request.log
+2014-09-24 15:04:53.373:INFO:oejs.ServerConnector:main: Started ServerConnector@1c466919{HTTP/1.1}{0.0.0.0:8080}
 ```
 
-You still get a warning from Jetty, but ignore it:
-
-```java
-log4j:WARN No appenders could be found for logger (org.mortbay.util.Container).
-log4j:WARN Please initialize the log4j system properly.
+That `/tmp/2014_09_24.request.log` file contains the following line after a single hit from my web browser:
+ 
+```
+0:0:0:0:0:0:0:1 -  -  [24/Sep/2014:22:04:55 +0000] "GET / HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.122 Safari/537.36"
 ```
 
-## GET
+## Servlets
+
+We will primarily use jetty as a servlet container.  It serves servlets using a handler called `ServletHandler`.
+
+Jetty requires a mapping from the URL to servlet.
+
+
+### GET
 
 Note that the servlet receives a request and response object.  The request object contains information about the HTTP request, plus parameters, and other header info.  The response object lets you set response headers, cookies, and lets you write to the output stream.
 
 ```java
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+// Derived from:
+// http://download.eclipse.org/jetty/stable-9/xref/org/eclipse/jetty/embedded/FileServer.html
+// Copyright (c) 1995-2014 Mort Bay Consulting Pty. Ltd.
+// Released under Eclipse Public License v1.0 and Apache License v2.0
 
-public class HelloServlet extends HttpServlet {
-    public void doGet(HttpServletRequest request,
-		      HttpServletResponse response)
-	throws ServletException, IOException
-    {
-	PrintWriter out = response.getWriter();
+import java.io.IOException;
 
-	out.println("<html>");
-	out.println("<body>");
-	out.println("<h1>Servlet test</h1>");
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-	out.println("Hello, there!");
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletHandler;
 
-	out.println("</body>");
-	out.println("</html>");
+public class MinimalServlets {
+    public static void main(String[] args) throws Exception {
+        // Create a basic jetty server object that will listen on port 8080.  Note that if you set this to port 0
+        // then a randomly available port will be assigned that you can either look in the logs for the port,
+        // or programmatically obtain it for use in test cases.
+        Server server = new Server(8080);
+
+        // The ServletHandler is a dead simple way to create a context handler that is backed by an instance of a
+        // Servlet.  This handler then needs to be registered with the Server object.
+        ServletHandler handler = new ServletHandler();
+        server.setHandler(handler);
+
+        // Passing in the class for the servlet allows jetty to instantite an instance of that servlet and mount it
+        // on a given context path.
+
+        // !! This is a raw Servlet, not a servlet that has been configured through a web.xml or anything like that !!
+        handler.addServletWithMapping(HelloServlet.class, "/*");
+
+        // Start things up! By using the server.join() the server thread will join with the current thread.
+        // See "http://docs.oracle.com/javase/1.5.0/docs/api/java/lang/Thread.html#join()" for more details.
+        server.start();
+        server.join();
+    }
+
+    public static class HelloServlet extends HttpServlet {
+        @Override
+        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+        {
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println("<h1>Hello SimpleServlet</h1>");
+        }
     }
 }
 ```
 
-## POST
+```bash
+java -cp ".:/usr/local/lib/jetty-9.2.3/*" MinimalServlets
+```
+
+If you go to any directory at localhost:8080, you should see `Hello SimpleServlet`.
+
+### POST
 
 Used as target of form processing.  Can handle much more data (I think) in terms of parameters.  `request.getParameter` is used to get URL parameters.
 
@@ -308,39 +379,34 @@ Used as target of form processing.  Can handle much more data (I think) in terms
 
 Servlet responding to form (note both `doGet` and `doPost` methods):
 
+```java
+```
+
+You can actually wire `doGet` to `doPost` as they are more or less same thing.
 
 Use HttpUtils.getRequestURL(request) to reconstruct URL minus query (args).
 
-Other useful methods in: [getRemoteHost()](http://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#getRemoteHost())
+Other useful methods in: [getRemoteHost()](http://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html#getRemoteHost()
 
+## Multiple connectors
 
+A `Connector` in jetty terminology is something sitting on a port that will invoke a handler upon requests to that port. When we create a `Server(8080)` it automatically creates an HTTP connection at 8080.
 
-### Serving Servlets
+Sometimes we want more than one connector, such as for HTTP and HTTPS. You can go take a look at the [`ManyConnectors.java`](http://download.eclipse.org/jetty/stable-9/xref/org/eclipse/jetty/embedded/ManyConnectors.html) example from jetty that demonstrates SSL/HTTPS connections.
 
-To get Jetty to handle servlets, update your server code to look like this:
+## Multiple URL context
+
+ It's often the case that we want to serve static pages as well as invoke Java code. Jetty supports the notion of context for this. From their documentation, here's a way to serve static files under `/tmp` and create servlets complete with sessions and so on everywhere else:
 
 ```java
-Server server = new Server();
-server.addListener(":8080");
+Server server = new Server(8080);
+ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+context.setContextPath("/");
+server.setHandler(context);
 
-// logging
-server.setRequestLog(getServerLogging());
-
-// Servlets
-ServletHttpContext context = 
-    (ServletHttpContext) server.getContext("/");
-context.addServlet("Invoker","/servlet/*",
-       "org.mortbay.jetty.servlet.Invoker");
-
-// HTTP
-server.addWebApplication("/", "./");
-
-server.start();
+context.addServlet(org.eclipse.jetty.servlet.DefaultServlet.class,"/");
+context.addServlet(new ServletHolder(new DumpServlet()),"/dump/*");
 ```
-
-Servlet `HelloServlet` would be visible at _host_`:8080/servlet/HelloServlet`.
-
-
 
 # Thread safety
 
@@ -361,7 +427,7 @@ class PageServlet extends HttpServer {
 }
 ```
 
-One thread can set the id then switch to another thread which resets id.  When that second thread finishes the first thread would start up and proceed to print out the same value as the second thread.  I.e., if url s?ID=1 and s?ID=2 result in simultaneous exec of this servlet, you risk seeing the same id value printed out.
+One thread can set the `id` then switch to another thread which resets id.  When that second thread finishes the first thread would start up and proceed to print out the same value as the second thread.  I.e., if url `/foo?ID=1` and `/foo/?ID=2` result in simultaneous exec of this servlet, you risk seeing the same id value printed out. (Assuming `/foo` is how we have mapped to the servlet.)
 
 # File Uploads
 
