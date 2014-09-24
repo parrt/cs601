@@ -91,13 +91,103 @@ $ j -cp ".:/usr/local/lib/jetty-9.2.3/*" OneHandler
 The code it is running a server:
 
 ```java
-!INCLUDE "code/web/OneHandler.java"
+//
+//  ========================================================================
+//  Copyright (c) 1995-2014 Mort Bay Consulting Pty. Ltd.
+//  ------------------------------------------------------------------------
+//  All rights reserved. This program and the accompanying materials
+//  are made available under the terms of the Eclipse Public License v1.0
+//  and Apache License v2.0 which accompanies this distribution.
+//
+//      The Eclipse Public License is available at
+//      http://www.eclipse.org/legal/epl-v10.html
+//
+//      The Apache License v2.0 is available at
+//      http://www.opensource.org/licenses/apache2.0.php
+//
+//  You may elect to redistribute this code under either of these licenses.
+//  ========================================================================
+//
+
+import org.eclipse.jetty.server.Server;
+
+public class OneHandler
+{
+    public static void main(String[] args) throws Exception
+    {
+        Server server = new Server(8080);
+        server.setHandler(new HelloHandler());
+
+        server.start();
+        server.join();
+    }
+}
 ```
 
 and then a `Handler`:
 
 ```java
-!INCLUDE "code/web/HelloHandler.java"
+//
+//  ========================================================================
+//  Copyright (c) 1995-2014 Mort Bay Consulting Pty. Ltd.
+//  ------------------------------------------------------------------------
+//  All rights reserved. This program and the accompanying materials
+//  are made available under the terms of the Eclipse Public License v1.0
+//  and Apache License v2.0 which accompanies this distribution.
+//
+//      The Eclipse Public License is available at
+//      http://www.eclipse.org/legal/epl-v10.html
+//
+//      The Apache License v2.0 is available at
+//      http://www.opensource.org/licenses/apache2.0.php
+//
+//  You may elect to redistribute this code under either of these licenses.
+//  ========================================================================
+//
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+
+public class HelloHandler extends AbstractHandler
+{
+    final String _greeting;
+    final String _body;
+
+    public HelloHandler()
+    {
+        _greeting="Hello World";
+        _body=null;
+    }
+
+    public HelloHandler(String greeting)
+    {
+        _greeting=greeting;
+        _body=null;
+    }
+
+    public HelloHandler(String greeting,String body)
+    {
+        _greeting=greeting;
+        _body=body;
+    }
+
+    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+    {
+        response.setContentType("text/html;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        baseRequest.setHandled(true);
+
+        response.getWriter().println("<h1>"+_greeting+"</h1>");
+        if (_body!=null)
+            response.getWriter().println(_body);
+    }
+}
 ```
 
 Once that starts up, go to `http://localhost:8080/` in your browser and it should show you `Hello World`.
@@ -178,7 +268,27 @@ log4j:WARN Please initialize the log4j system properly.
 Note that the servlet receives a request and response object.  The request object contains information about the HTTP request, plus parameters, and other header info.  The response object lets you set response headers, cookies, and lets you write to the output stream.
 
 ```java
-!INCLUDE "code/web/HelloServlet.java"
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class HelloServlet extends HttpServlet {
+    public void doGet(HttpServletRequest request,
+		      HttpServletResponse response)
+	throws ServletException, IOException
+    {
+	PrintWriter out = response.getWriter();
+
+	out.println("<html>");
+	out.println("<body>");
+	out.println("<h1>Servlet test</h1>");
+
+	out.println("Hello, there!");
+
+	out.println("</body>");
+	out.println("</html>");
+    }
+}
 ```
 
 ## POST
@@ -198,7 +308,6 @@ Used as target of form processing.  Can handle much more data (I think) in terms
 
 Servlet responding to form (note both `doGet` and `doPost` methods):
 
-!INCLUDE "code/web/SimpleResponse.java"
 
 Use HttpUtils.getRequestURL(request) to reconstruct URL minus query (args).
 
