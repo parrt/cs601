@@ -32,7 +32,7 @@ public class CookieServlet extends HttpServlet {
 		Server server = new Server(8080);
 		ServletHandler handler = new ServletHandler();
 		server.setHandler(handler);
-		handler.addServletWithMapping(SetCookieServlet.class, "/cookies");
+		handler.addServletWithMapping(CookieServlet.class, "/cookies");
 		server.start();
 		server.join();
 	}

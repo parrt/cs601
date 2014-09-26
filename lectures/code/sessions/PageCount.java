@@ -40,7 +40,7 @@ public class PageCount extends HttpServlet {
 		// To use sessions, we have to use ServletContextHandler not
 		// ServletHandler
 		ServletContextHandler handler = new
-		            ServletContextHandler(ServletContextHandler.SESSIONS);
+			ServletContextHandler(ServletContextHandler.SESSIONS);
 		server.setHandler(handler);
 		handler.addServlet(PageCount.class, "/count");
 		server.start();
