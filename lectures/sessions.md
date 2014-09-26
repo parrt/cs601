@@ -37,7 +37,7 @@ if ( u==null ) {
 }
 ```
 
-Here is how you can "log in" a user:
+# Logging in
 
 ```java
 public void login(HttpSession session, User user) {
@@ -46,7 +46,7 @@ public void login(HttpSession session, User user) {
 }
 ```
 
-and logout:
+# Logging out
 
 ```java
 public void logout(HttpSession session) {
