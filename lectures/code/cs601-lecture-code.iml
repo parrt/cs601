@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/sockets" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/threads" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/web" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/cookies" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
