@@ -56,4 +56,10 @@ public void logout(HttpSession session) {
 }
 ```
 
-Here is an example @(sessions/Login.java, Login page) and simple @(sessions/PageCount.java, pagecount page).
+# Using a session to count pages
+
+Do example [PageCount](https://github.com/parrt/cs601/blob/master/lectures/code/sessions/PageCount.java).
+
+# Sample server
+
+Here is an example server with [`/login`](https://github.com/parrt/cs601/blob/master/lectures/code/sessions/Login.java) URL that pushes out a web form and then a response servlet at [`/reponse`](https://github.com/parrt/cs601/blob/master/lectures/code/sessions/LoginResponse.java) that pulls parameter data.
