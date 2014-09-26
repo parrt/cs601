@@ -1,9 +1,11 @@
 Cookies
 ====
 
+See also [a Tutorial on cookies in servlets](http://pdf.coreservlets.com/Cookies.pdf).
+
 HTTP is stateless and anonymous with a very simple request response model.  In order to build websites like Amazon or any other website that lets you login, we need a mechanism for identifying users to come back to the same server. By identifying, we mean recognizing the same person, not actually knowing who they are.
 
-HTTP is pretty simple but ~20 years ago, we came up with a good idea to support stateful communications between client/server. The idea is to piggyback key-value pairs called *cookies* as regular old headers already allowed within the HTTP protocol. These key-value pairs therefore do not affect the data payload (stuff after the headers).
+HTTP is pretty simple but ~20 years ago, we came up with a good idea to support stateful communications between client/server. The idea is to piggyback key-value pairs called [*cookies*](http://docs.oracle.com/javaee/5/api/javax/servlet/http/Cookie.html) as regular old headers already allowed within the HTTP protocol. These key-value pairs therefore do not affect the data payload (stuff after the headers).
 
 The cookie mechanism relies on a simple agreement between client and server. The sequence goes like this when a client visits a server for the first time:
 
@@ -183,7 +185,7 @@ String user = request.getParameter("user");
 setCookieValue(response, "user", ...);
 ```
 
-See [CookieServlet.java]()
+See [CookieServlet.java](https://raw.githubusercontent.com/parrt/cs601/master/lectures/code/cookies/CookieServlet.java).
 
 http://localhost:8080/cookies
 http://localhost:8080/cookies?user=tombu
