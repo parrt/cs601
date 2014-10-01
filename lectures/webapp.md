@@ -157,7 +157,7 @@ The other benefit to multiple mini SPA's is just the separation of functionality
 
 [Ember](http://emberjs.com/) comes highly recommended to me as a better approach than angular but also has a steep learning curve.
 
-It's really hard to cash JS stuff as nothing is really going back and forth between the server as HTML anymore.
+It's really hard to cache JavaScript stuff as nothing is really going back and forth between the server as HTML anymore.
 
 ### WebSockets
 
