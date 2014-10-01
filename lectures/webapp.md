@@ -82,7 +82,7 @@ Building diagrams for all your processing FSMs is extremely useful design-wise a
 
 The so-called Web 2.0 generation (mid 2000s) started getting more interaction on the client side to avoid so many page transitions. Along with the static HTML, we started sending JavaScript and using libraries such as [jQuery](http://en.wikipedia.org/wiki/JQuery) in order to get client-side scripting and more interactive apps.
 
-With [ajax](http://en.wikipedia.org/wiki/Ajax_(programming) (Introduced [here](http://www.adaptivepath.com/ideas/ajax-new-approach-web-applications/)), we get event handling is done in JavaScript and these events request DATA not HTML from the server. Ajax is basically html + CSS + DOM manipulation + XML data interchange + asynchronous data retrieval for better responsiveness + bound together with JavaScript.
+With [ajax](http://en.wikipedia.org/wiki/Ajax_(programming)) (Introduced [here](http://www.adaptivepath.com/ideas/ajax-new-approach-web-applications/)), we get event handling is done in JavaScript and these events request DATA not HTML from the server. Ajax is basically html + CSS + DOM manipulation + XML data interchange + asynchronous data retrieval for better responsiveness + bound together with JavaScript.
 
 Diagrams from [Jesse James Garrett](http://www.adaptivepath.com/ideas/ajax-new-approach-web-applications/)
 
