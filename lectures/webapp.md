@@ -1,9 +1,9 @@
 Web Application Architecture
 ====
 
-Building applications for the web is evolved over the last 20 years from brain-dead cgi-bin applications that executed shell processes with no shared memory between requests all the way up to pure JavaScript *single-page apps*. (From thin to thick client.)
+Building applications for the web has evolved over the last 20 years from brain-dead cgi-bin applications that executed shell processes with no shared memory between requests all the way up to pure JavaScript *single-page apps*. (From thin to thick client.)
 
-Regardless of the type of presentation layer, HTML or HTML+JavaScript or JavaScript, portions of the architecture remain the same.
+Regardless of the type of presentation layer, HTML or HTML+JavaScript or JavaScript, portions of the architecture remain the same. Where they live is different.
 
 ![](figures/webapp.png)
 
@@ -21,13 +21,13 @@ Highly cacheable.
 
 ## Enter Java, Web 1.0
 
-With Java servlets in the late 90s, a single running process actually the real server and can maintain state between requests. The Java servlets generated HTML which was then sent back to the browser as before.
+With Java servlets in the late 90s, a single running process acts as the server and can maintain state between requests. The Java servlets generated HTML which was then sent back to the browser as before.
 
 Any interaction with the user required a new page request to the server.
 
 The generated page is more or less static once it gets to the browser.
 
-CSS started to become popular to alter the look and feel of the generated HTML, but it is not really useful to make wholesale changes to a page structure.
+CSS started to become popular to alter the look and feel of the generated HTML, but it is not really useful to make wholesale changes to a page structure. Better to alter the DOM or get new page for that.
 
 Each "screen" of the application is a new URL. Any change to a single element requires a refresh of the entire page, leading to lots of wasted bandwidth and slow user experience.
 
@@ -45,7 +45,38 @@ $phones:{p | <li>$p$</li>}$
 </html>
 ```
 
-Highly cacheable.
+Most of page is cacheable.
+
+How can you cache pages where each user can set their own font and other prefs?
+
+### Formal view of page connectivity
+
+You can look at the collection of pages in a website as a graph with the pages representing nodes and http GET, POST methods representing edges. Further, you can see this graph (or network) as a simple finite state machine (FSM).
+
+You could represent graphically the link from page p1 to page p2 as:
+
+![](figures/get.png)
+
+Similarly a button on, say page edit_msg, whose enclosing <form> tag target is process_edit might look like:
+
+![](figures/post.png)
+
+
+Pages can perform redirections via HttpServletResponse.redirect(url), which you can represent as:
+
+![](figures/redirect.png)
+
+Your processing pages should always compute and redirect to another page, never leaving the browser pointing to a processing page. Aside from revealing internal details (people seem to love to try random combinations of URL arguments to screw up your site), it allows a browser "REFRESH" to execute that code again and again (for example, purchasing the same airline ticket n times).
+
+The complete forum message edit/view FSM might look like:
+
+![](figures/editmsg.png)
+
+Because not all pages are reachable from every other (directly or indirectly), you actually have a collection of subgraphs or FSMs.
+
+Building diagrams for all your processing FSMs is extremely useful design-wise and for documentation purposes. For example, here is a decent start on your web mail project:
+
+![](figures/webmail.png)
 
 ## Intermediate stage
 
