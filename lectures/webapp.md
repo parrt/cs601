@@ -144,9 +144,9 @@ It's good to put UI related logic on the client and business logic on server. So
 Good design: The server provides the general formatting of a page as HTML and then on the client side you have a simple `div` that says: "*stick the view here*."
 
 <table>
-<tr><td>**Example**. Imagine a webpage for an accounting application where there are different sections of the site for receivables, payables, reports, and so on.  There is a navigation menu across the top of the page.
+<tr><td><b>Example</b>. Imagine a webpage for an accounting application where there are different sections of the site for receivables, payables, reports, and so on.  There is a navigation menu across the top of the page.
 
-A <a href="ttp://en.wikipedia.org/wiki/Single-page_application">single page app</a> (<i>SPA</i>) would have to render the nav menu client side and would have to manage things like the login name, track which sections there are, etc...  As an alternative, the server can render the navigation menu.  As you switch pages, the browser would load up a different SPA (or maybe the same one with different data/state).  This lessens the amount of logic you have to send to the client and possibly makes it easier for something like SEO and search indexing.
+A <a href="http://en.wikipedia.org/wiki/Single-page_application">single page app</a> (<i>SPA</i>) would have to render the nav menu client side and would have to manage things like the login name, track which sections there are, etc...  As an alternative, the server can render the navigation menu.  As you switch pages, the browser would load up a different SPA (or maybe the same one with different data/state).  This lessens the amount of logic you have to send to the client and possibly makes it easier for something like SEO and search indexing.
 
 The other benefit to multiple mini SPA's is just the separation of functionality.  Now you can have multiple people working on the same code base without really stepping on each other's toes. It is a way of handling the complexity of a large, multi-person project.
 </td></tr></table>
