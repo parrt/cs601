@@ -121,7 +121,7 @@ $("#btn1").click(function(){
 
 Starts trend towards JSON away from XML data.
 
-A big disadvantage is that it's very **hard to web crawl these dynamic applications.** Another is that you **can't really bookmark** or pass along a URL that represents a particular state or location within the application. At least you have to work hard to make that possible. Github does a good job of this. From [SPA on wikipedia](http://en.wikipedia.org/wiki/Single-page_application): <blockquote>The traditional solution for SPA's has been to change the browser URL's hash fragment identifier in accord with the current screen state. This can be achieved with JavaScript, and causes URL history events to be built up within the browser. As long as the SPA is capable of resurrecting the same screen state from information contained within the URL hash, the expected back button behavior is retained.</blockquote>
+
 
 The callback-style programming is **pretty complicated** and these pages quickly become a god-awful mess.
 
@@ -156,6 +156,8 @@ The other benefit to multiple mini SPA's is just the separation of functionality
 [Bootstrap](http://getbootstrap.com/) is very nice "HTML, CSS, and JS framework for developing responsive, mobile first projects on the web." The same page can look pretty good on a small phone and automatically reorganizes itself. My [parrt website](http://parrt.cs.usfca.edu/) was built using Bootstrap. Try it on your phone and a browser.
 
 [Ember](http://emberjs.com/) comes highly recommended to me as a better approach than angular but also has a steep learning curve.
+
+A big disadvantage is that it's very **hard to web crawl these dynamic applications.** Another is that you **can't really bookmark** or pass along a URL that represents a particular state or location within the application. At least you have to work hard to make that possible. Github does a good job of this. From [SPA on wikipedia](http://en.wikipedia.org/wiki/Single-page_application): <blockquote>The traditional solution for SPA's has been to change the browser URL's hash fragment identifier in accord with the current screen state. This can be achieved with JavaScript, and causes URL history events to be built up within the browser. As long as the SPA is capable of resurrecting the same screen state from information contained within the URL hash, the expected back button behavior is retained.</blockquote>
 
 It's really hard to cache JavaScript stuff as nothing is really going back and forth between the server as HTML anymore.
 
