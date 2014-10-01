@@ -82,17 +82,17 @@ Building diagrams for all your processing FSMs is extremely useful design-wise a
 
 The so-called Web 2.0 generation (mid 2000s) started getting more interaction on the client side to avoid so many page transitions. Along with the static HTML, we started sending JavaScript and using libraries such as [jQuery](http://en.wikipedia.org/wiki/JQuery) in order to get client-side scripting and more interactive apps.
 
-With [ajax](http://en.wikipedia.org/wiki/Ajax_(programming)) (Introduced [here](http://www.adaptivepath.com/ideas/ajax-new-approach-web-applications/)), we get event handling is done in JavaScript and these events request DATA not HTML from the server. Ajax is basically html + CSS + DOM manipulation + XML data interchange + asynchronous data retrieval for better responsiveness + bound together with JavaScript.
+With [ajax](http://en.wikipedia.org/wiki/Ajax_(programming)) (Introduced [here](http://www.adaptivepath.com/ideas/ajax-new-approach-web-applications/)), we get event handling done in JavaScript and these events request DATA not HTML from the server. Ajax is basically html + CSS + DOM manipulation + XML data interchange + asynchronous data retrieval for better responsiveness + bound together with JavaScript.
 
 Diagrams from [Jesse James Garrett](http://www.adaptivepath.com/ideas/ajax-new-approach-web-applications/)
 
 ![](http://www.adaptivepath.com/uploads/archive/images/publications/essays/ajax-fig1_small.png?timestamp=1412184116222)
 
-The asynchronous part is important because the user at least has a page of and data gets loaded in the background; UI elements appear when the data becomes available. Previously we had to wait for the entire page to load from the server before we saw anything. booo!
+The **asynchronous** part is important because the user at least has a page up and data gets loaded in the background; UI elements appear when the data becomes available. Previously we had to wait for the entire page to load from the server before we saw anything. booo!
 
 ![](http://www.adaptivepath.com/uploads/archive/images/publications/essays/ajax-fig2_small.png?timestamp=1412184116223)
 
-jQuery is about DOM manipulation. Can easily find/alter DOM subtrees/elements.  Let's you attach events to DOM nodes rather than requiring HTML attributes that call JavaScript like `onClick`. [Hide all p elements](http://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_hide_p):
+jQuery is about DOM manipulation. [jQuery tutorials](http://www.w3schools.com/jquery/). Can easily find/alter DOM subtrees/elements.  Let's you attach events to DOM nodes rather than requiring HTML attributes that call JavaScript like `onClick`. [Hide all p elements](http://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_hide_p):
 
 ```javascript
 <script>
@@ -121,8 +121,6 @@ $("#btn1").click(function(){
 
 Starts trend towards JSON away from XML data.
 
-[jQuery tutorials](http://www.w3schools.com/jquery/)
-
 A big disadvantage is that it's very **hard to web crawl these dynamic applications.** Another is that you **can't really bookmark** or pass along a URL that represents a particular state or location within the application. At least you have to work hard to make that possible. Github does a good job of this. From [SPA on wikipedia](http://en.wikipedia.org/wiki/Single-page_application): <blockquote>The traditional solution for SPA's has been to change the browser URL's hash fragment identifier in accord with the current screen state. This can be achieved with JavaScript, and causes URL history events to be built up within the browser. As long as the SPA is capable of resurrecting the same screen state from information contained within the URL hash, the expected back button behavior is retained.</blockquote>
 
 The callback-style programming is **pretty complicated** and these pages quickly become a god-awful mess.
@@ -141,14 +139,14 @@ Harder but not impossible to cache things.
 
 Load a single page from server that has JavaScript. From then on, data goes back and forth not HTML page fetches. Switches to a *Service-oriented architecture.* Server is mainly a keeper of the model and responds to service requests. View is all on the client side.
 
-It's good put UI related logic on the client and business logic on server. So instead of doing a business calc on the client, the calc is done on the server and the result is passed to the client.
+It's good to put UI related logic on the client and business logic on server. So instead of doing a business calc on the client, the calc is done on the server and the result is passed to the client.
 
 Good design: The server provides the general formatting of a page as HTML and then on the client side you have a simple `div` that says: "*stick the view here*."
 
 <table>
 <tr><td>**Example**. Imagine a webpage for an accounting application where there are different sections of the site for receivables, payables, reports, and so on.  There is a navigation menu across the top of the page.
 
-A [single page app](http://en.wikipedia.org/wiki/Single-page_application) (*SPA*) would have to render the nav menu client side and would have to manage things like the login name, track which sections there are, etc...  As an alternative, the server can render the navigation menu.  As you switch pages, the browser would load up a different SPA (or maybe the same one with different data/state).  This lessens the amount of logic you have to send to the client and possibly makes it easier for something like SEO and search indexing.
+A <a href="ttp://en.wikipedia.org/wiki/Single-page_application">single page app</a> (<i>SPA</i>) would have to render the nav menu client side and would have to manage things like the login name, track which sections there are, etc...  As an alternative, the server can render the navigation menu.  As you switch pages, the browser would load up a different SPA (or maybe the same one with different data/state).  This lessens the amount of logic you have to send to the client and possibly makes it easier for something like SEO and search indexing.
 
 The other benefit to multiple mini SPA's is just the separation of functionality.  Now you can have multiple people working on the same code base without really stepping on each other's toes. It is a way of handling the complexity of a large, multi-person project.
 </td></tr></table>
