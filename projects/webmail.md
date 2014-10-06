@@ -1,6 +1,8 @@
 Webmail Project
 ====
 
+*under construction...*
+
 In this project you will build a website that acts as a web-based email client server like gmail or hotmail, but with some nice additions.  You will be required to submit functionality and design documents to complement your project as well as status reports every two weeks.
 
 To give you an idea what an extremely successful project looks like, here are the videos Jean Bovet made of his project from years ago:

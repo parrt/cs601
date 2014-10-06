@@ -1,19 +1,18 @@
-Intelligent Web Site Page Generation
+Dynamic Web Page Generation
 ====
 
 # Introduction
 
 Static web sites are a collection of HTML files.  Dynamic sites like Amazon.com, on the other hand, require that you generate pages on the fly.  This essentially means that your site becomes an application instead of a bunch of text files.  Your web server must now map a URL to a snippet of executable code that spits out HTML rather than mapping to a file.
 
-In the Java world, you have 2 main choices for executing server-side-Java:
+In the Java world, there are 2 main choices for executing raw server-side-Java:
 
 1. *Servlets*: HTTP protocol requests are routed to `doGet()` and `doPost()` methods in an `HttpServlet` subclass.  Your code has embedded HTML.
 1. *JSP*: An HTML file with embedded, unrestricted Java code.  Implemented as the `doGet()` method of an auto-generated `Servlet`.
 
 JSP files are enticing at first as they are easier to use than servlets, but they encourage all sorts of bad habits are hard to deal with for large sites.
 
-The best approach is servlets + a template engine.  A template engine is usually an MVC (model-view-controller) based scheme where a template (the _view_) has "holes" it that you can stick values, computed by your business logic (the _model_).  The "holes" are typically restricted to just attribute references or simple computations/loops to avoid re-inventing JSP.  The web server + page code executed for a URL embody the _controller_.  There are a million of these engines such as Velocity, FreeMarker, StringTemplate, Tea,
-...
+The best approach is servlets + a template engine.  A template engine is usually an MVC (model-view-controller) based scheme where a template (the _view_) has "holes" it that you can stick values, computed by your business logic (the _model_).  The "holes" are typically restricted to just attribute references or simple computations/loops to avoid re-inventing JSP.  The web server + page code executed for a URL embody the _controller_.  There are a million of these engines such as [Velocity](http://velocity.apache.org/engine/devel/), FreeMarker, [StringTemplate](http://www.stringtemplate.org), Tea, ...
 
 To understand why the servlet + template engine approach is superior, it helps to look at the path all developers seem to follow on their way to template engines.
 
@@ -52,9 +51,9 @@ Hello <%=request.getParameter("name")%>
 
 Everyone was very excited by in 1999 when this came out as it was really fast to slam out some dynamic HTML pages.  Trouble arose, however, when people started building big sites with lots of dynamic pages:
 
-o JSP files may start out as HTML files with simple references to data, as in this example, but they quickly degenerate into fully entangled code and HTML specifications like Servlets.
+* JSP files may start out as HTML files with simple references to data, as in this example, but they quickly degenerate into fully entangled code and HTML specifications like Servlets.
 
-o JSP encourages bad object-oriented design. For example, an include file is a poor substitute for class inheritance. JSP pages may not be subclassed, which makes it hard for programmers to factor out common code and HTML. @(http://www.servlets.com/soapbox/problems-jsp.html, Jason Hunter) summarizes a few other problems with JSP.
+* JSP encourages bad object-oriented design. For example, an include file is a poor substitute for class inheritance. JSP pages may not be subclassed, which makes it hard for programmers to factor out common code and HTML. [Jason Hunter](http://www.servlets.com/soapbox/problems-jsp.html) summarizes a few other problems with JSP.
 
 JSP has grown a lot since 1999, but it has not solved the real problem of separating the data model from it's presentation.  See below for a discussion of template engines.
 
@@ -109,11 +108,11 @@ public class HelloServlet extends PageServlet {
 
 ## Problem 2: Objectionable OO Design
 
-The second problem relates to design.  Is Page a kind of Servlet?  Not really.  A servlet is merely the glue that connects a web server to the notion of a page that generates output.  One could for example reuse the notion of a page to generate output for use in a non-server app that happened to use HTML to display information (e.g., with HotJava java-based browser component).
+The second problem relates to design.  Is `Page` a kind of `Servlet`?  Not really.  A servlet is merely the glue that connects a web server to the notion of a page that generates output.  One could for example reuse the notion of a page to generate output for use in a non-server app that happened to use HTML to display information (e.g., with HotJava java-based browser component).
 
 A better OO design would result in a servlet that creates an instance of a page (solving some threading issues) and invokes its display methods.
 
-Further, *you should attempt to isolate your application from the quirks and details of the web server, doing as much as you can in code*.  You may switch web servers from TomCat to Resin etc... and, in general, you just generally have more control in code than in the server config file.  For example, you should do your own page caching as you know better than the web server when data becomes stale.
+Further, *you should attempt to isolate your application from the quirks and details of the web server, doing as much as you can in code*.  You may switch web servers from TomCat to Resin to Jetty etc... and, in general, you just generally have more control in code than in the server config file.  For example, you should do your own page caching as you know better than the web server when data becomes stale.
 
 Here is a generic `Page` object (decoupled from the details of Servlets except for the request/response objects):
 
@@ -193,7 +192,7 @@ public class DispatchServlet extends HttpServlet {
 }
 ```
 
-Naturally the if-then sequence in `lookupPage()` method should be coded as a `HashMap` that maps URI (the non query part of the URL) to a `Class` object:
+Naturally the if-then sequence in `lookupPage()` method should be coded as a `HashMap` that maps URI (URI is a more general URL) to a `Class` object:
 
 ```java
 public HashMap uriToPageMap = new HashMap();
@@ -216,11 +215,8 @@ public void doGet(HttpServletRequest request,
     Class c = uriTopageMap.get(uri);
 
     // Create an instance using correct ctor
-    Class[] ctorArgTypes = new Class[] {
-        HttpServletRequest.class,
-        HttpServletResponse.class
-    };
-    Constructor ctor = c.getConstructor(ctorArgTypes);
+    Constructor ctor = c.getConstructor(HttpServletRequest.class,
+										HttpServletResponse.class);
     Object[] ctorActualArgs = new Object[] {request,response};
     Page p = (Page)ctor.newInstance(ctorActualArgs);
 
@@ -229,34 +225,11 @@ public void doGet(HttpServletRequest request,
 }
 ```
 
-You need to set your web server to map all URLs (but images etc...) to your dispatcher so any `/x/y?args` lands you in your single servlet.  Here is a sample @(http://www.caucho.com, Resin) configuration:
-
-```java
-<!-- handle special cases that you don't want to hit your dispatcher -->
-<servlet-mapping url-pattern='/images/*'
-    servlet-name='com.caucho.server.http.FileServlet'/>
-<servlet-mapping url-pattern='/favicon.ico'
-    servlet-name='com.caucho.server.http.FileServlet'/>
-<servlet-mapping url-pattern='/error.jsp'
-    servlet-name='com.caucho.jsp.JspServlet'/>
-
-<!-- make your dispatcher handle all others -->
-<servlet-mapping url-pattern='/'
-     servlet-name='DispatchServlet'/>
-```
-
-We are using Jetty though and can modify our Java code to accept anything as a servlet:
-
-```java
-ServletHttpContext context =
-    (ServletHttpContext) server.getContext("/");
-context.addServlet("Invoker","/*",
-    "org.mortbay.jetty.servlet.Invoker");
-```
+You need to set your web server to map all URLs (but images etc...) to your dispatcher so any `/x/y?args` lands you in your single servlet.  Here is how to [configure Jetty to map all non-static page URLs to a single servlet](https://github.com/parrt/cs601-webmail-skeleton/blob/master/src/WebmailServer.java).
 
 Now, you have totally isolated your project code from the notion of how pages are requested.  You could, for example, build a cmd-line tool that generated pages.
 
-You can also make your Page object handle argument processing and so on.  Just add a verify() method:
+You can also make your `Page` object handle argument processing and so on.  Just add a `verify()` method:
 
 ```java
 public class Page {
@@ -269,7 +242,7 @@ public class Page {
     }
     public void handleDefaultArgs() {
         // handle default args like page number, etc...
-        pageNum = request.getParameter("p");
+        pageNum = request.getParameter("page");
     }
     public void generate() {
         out = response.getWriter();
@@ -296,7 +269,6 @@ public class HelloPage extends Page {
         if ( request.getParameter("name")==null ) {
 	   throw new VerifyException("Name argument required!");
 	}
-    }
     public void body() {
         String name = request.getParameter("name");
         out.println("Hello "+name);
@@ -310,7 +282,7 @@ Eventually everyone reaches the conclusion that you must separate the code and t
 
 The mantra of every experienced web application developer is the same: _thou shalt separate business logic from display_.  
 
-One look at the following should give you the idea (taken from a Jetty example):
+One look at the following servlet should give you the idea (taken from an old Jetty example):
 
 ```java
 public void completeSections() {
@@ -333,7 +305,14 @@ public void completeSections() {
 ...
 ```
 
-These enticing benefits derive entirely from a single principle: separating the specification of a page's business logic and data computations from the specification of how a page displays such information. With separate encapsulated specifications, template engines promote component reuse, pluggable, single-points-of-change for common components, and high overall system clarity.
+The key principle is to separate the specification of a page's business logic and data computations from the specification of how a page displays such information. With separate encapsulated specifications, template engines promote component reuse, pluggable, single-points-of-change for common components, and high overall system clarity.
+
+* **dynamic**. You can change the templates on-the-fly w/o restarting the server. Further, conditionals are evaluated dynamically so that the look can change depending on arguments.
+* **structured**. The components of your system such as a search box template are neatly organized into separate components. Each page is a hierarchy of nested templates. Analogous to good functional decomposition.
+* **reusable components**. With a good structured design, you are encouraged to reuse components.
+* **templates groups**. To have multiple looks for jGuru, we used a StringTemplateGroup that essentially provides a scoping mechanism. When you reference template searchbox, for example, you will get the search box template associated with your group/look. Organizing your site look into structured, reusable components makes inheritance possible.
+* **strict model-view separation**. Allows programmer and graphics designer to work independently and in parallel. We verified this ability many times.
+
 
 I have discussed the principle of separation with many experienced programmers and have examined many commonly-available template engines used with a variety of languages including Java, C, and Perl.  Without exception, programmers espouse separation of logic and display as an ideal principle.  In practice, however, programmers and engine producers are loath to enforce separation, fearing loss of power resulting in a crucial page that they cannot generate while satisfying the principle.  Instead, they _encourage_ rather than _enforce_ the principle, leaving themselves a gaping "backdoor" to avoid insufficient page generation power.
 
