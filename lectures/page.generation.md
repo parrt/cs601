@@ -134,6 +134,7 @@ public class Page {
         footer();
     }
     public void header() {...}
+    public void body() {...}
     public void footer() {...}
 }
 ```
@@ -267,7 +268,8 @@ public class HelloPage extends Page {
     ...
     public void verify() throws VerifyException {
         if ( request.getParameter("name")==null ) {
-	   throw new VerifyException("Name argument required!");
+	        throw new VerifyException("Name argument required!");
+		}
 	}
     public void body() {
         String name = request.getParameter("name");
