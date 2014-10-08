@@ -1,7 +1,5 @@
-import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
