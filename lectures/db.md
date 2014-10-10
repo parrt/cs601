@@ -61,19 +61,19 @@ sqlite>
 
 *To exit, hit EOF (CTRL-D on UNIX, CTRL-Z on Windows).*
 
-**Make sure you have the latest version.** I belatedly noticed that I had five different versions in the wrong one was coming up. You want this version or beyond:
+**Make sure you have the latest version.** I belatedly noticed that I had five different versions  and the wrong one was coming up. You want this version or beyond:
 
 ```
 SQLite version 3.8.6 2014-08-15 11:46:33
 ```
 
-Let's start by creating a table using SQL:
+Let's get friendly with SQL by creating our first table:
 
 ```sql
 CREATE TABLE Customers(
 	ID INT NOT NULL,
-	First VARCHAR(45), -- let's say it's okay to be null/empty
-	Last VARCHAR (45) NOT NULL
+	First TEXT, -- let's say it's okay to be null/empty
+	Last TEXT NOT NULL
 );
 ```
 
@@ -83,7 +83,7 @@ Then see if there is any data:
 select * from Customers;
 ```
 
-Nope. Ok, let's do an import of some comma-separated data that has a header row indicating the column names (*the order of columns must match the fields we defined in the table above*):
+Nope. Ok, let's do an import of some comma-separated data that has no header row (*the order of values must match the fields we defined in the table above*):
 
 ```csv
 1,William,Smith
@@ -92,6 +92,7 @@ Nope. Ok, let's do an import of some comma-separated data that has a header row 
 ```
 
 ```
+-- stuff that starts with a dot is peculiar to SQLite
 .separator ','
 .import sample.csv data
 ```
@@ -148,12 +149,12 @@ A database consists of a set of tables and a table consists of rows of data that
 
 *I would avoid using column names with spaces*.
 
-It only has the following atomic types:
+SQLite only has the following atomic types:
  
 `NULL`, `INTEGER`, `REAL`, `TEXT`, `BLOB`
 
 ```sql
-select typeof(ID), typeof(First) from Customers where ID=1;
+sqlite> select typeof(ID), typeof(First) from Customers where ID=1;
 integer|text
 ```
 
@@ -165,7 +166,7 @@ sqlite> select typeof(x) from T;
 sqlite> insert into T values ('2014-10-10');
 sqlite> select typeof(x) from T;
 text
-sqlite> drop table T; create table T (x VARCHAR(10));
+sqlite> drop table T; create table T (x TEXT);
 sqlite> insert into T values ('hi');
 sqlite> select typeof(x) from T;
 text
@@ -188,7 +189,7 @@ Retrieving or sorting records by `rowid` or primary key is fast.
 
 In SQLLite, `INT` primary keys become aliases for `rowid`.
 
-Without a `DEFAULT` value, and insert that does not specify a value gets `NULL`. some very useful default values: `CURRENT_TIME`, `CURRENT_DATE` or `CURRENT_TIMESTAMP`.
+Without a `DEFAULT` value, an insert that does not specify a value gets `NULL`. Some very useful default values: `CURRENT_TIME`, `CURRENT_DATE` or `CURRENT_TIMESTAMP`.
 
 ## Data Constraints
 
@@ -202,8 +203,8 @@ Let's redo the customers table above with primary key:
 drop table Customers;
 CREATE TABLE Customers(
 	ID INT PRIMARY KEY NOT NULL,
-	First VARCHAR(45),
-	Last VARCHAR (45) NOT NULL
+	First TEXT,
+	Last TEXT NOT NULL
 );
 ```
 
@@ -258,6 +259,7 @@ Error: constraint failed
 We've already seen some basic queries and here is its most commonly used structure:
 
 `SELECT` *columns* `FROM` *table* `;`
+
 `SELECT` *columns* `FROM` *table* `WHERE` *expression* `;`
 
 ```sql
@@ -320,7 +322,8 @@ The `as` clause will be more useful later when we do joins for multiple tables.
 
 You can alias a table too, `select * from Orders as O;`, which will help out when you have queries with long table names or subqueries that have no name.
 
- you can create new columns by concatenating other columns
+You can create new columns by concatenating other columns:
+
 ```sql
 sqlite> select rowid, FirstName||' '||LastName from Orders;
 1           William Smith           
@@ -385,7 +388,7 @@ sqlite> select name,datetime(x) from T;
 bob         2014-10-10 00:00:00
 ```
 
-You can convert of value in one format to another format using the [`cast()`](https://www.sqlite.org/lang_expr.html#castexpr) function.
+You can convert a value in one format to another format using the [`cast()`](https://www.sqlite.org/lang_expr.html#castexpr) function.
 
 ```sql
 select cast(QuantityPurchased as real) from orders;
@@ -487,7 +490,7 @@ The Rolling Stones    Let It Bleed
 The Rolling Stones    Flowers             
 ```
 
-`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`
+Useful functions: `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`. But first, let's get some data in there:
 
 ```sql
 CREATE TABLE Fees(
@@ -616,7 +619,9 @@ With a single group column, you get N rows for N unique values for that column. 
 Does `WHERE` in a select statement with groups applied to the rows or the groups? It applies to the rows. `HAVING` is like a `WHERE` but for groups. For example, here's how to get the list of quiz grades over 70:
 
 ```sql
-sqlite> SELECT Student,GradeType,Grade FROM Grades where gradetype='Quiz' and grade>=70 order by Student,Grade;
+sqlite> SELECT Student,GradeType,Grade
+	FROM Grades where gradetype='Quiz' and grade>=70
+	order by Student,Grade;
 Student               GradeType             Grade               
 --------------------  --------------------  --------------------
 Alec                  Quiz                  74                  
