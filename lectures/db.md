@@ -631,7 +631,8 @@ If you want to get average quiz grades greater than 70, we need to make a compar
 
 ```sql
 sqlite> SELECT Student,Avg(Grade) as A FROM Grades
-	WHERE gradetype='Quiz' group by student
+	WHERE gradetype='Quiz'
+	GROUP by student
 	HAVING A>=70 order by Student;
 Student               A                   
 --------------------  --------------------
@@ -639,12 +640,26 @@ Kathy                 71.5
 Susan                 93.5                
 ```
 
+We can also just test for the average across all grade types:
+
+```sql
+sqlite> SELECT Student,Avg(Grade) as A FROM Grades
+	GROUP by student
+	HAVING A>=70 order by Student;
+Alec        73.3333333333333
+Kathy       71.5            
+Susan       90.3333333333333
+```
+
 # Joins
+
+## Foreign keys
 
 [SQLite Foreign keys](http://www.sqlite.org/foreignkeys.html).
 
+```sql
 CREATE TABLE Books(BookId INTEGER PRIMARY KEY, Title TEXT, AuthorId INTEGER, 
     FOREIGN KEY(AuthorId) REFERENCES Authors(AuthorId));
-
+```
 
 http://en.wikipedia.org/wiki/Relational_algebra
