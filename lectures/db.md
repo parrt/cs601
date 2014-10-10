@@ -668,3 +668,35 @@ CREATE TABLE Books(BookId INTEGER PRIMARY KEY, Title TEXT, AuthorId INTEGER,
 ```
 
 http://en.wikipedia.org/wiki/Relational_algebra
+
+# Developer Topics
+
+## Transactions
+
+* Desirable Properties of Transactions / ACID vs. CRUD
+* Commit, Rollback
+
+
+## Speed and Index Types
+
+* Cover types of indeces: B-tree, partitions, etc. 
+* Size of indexes
+
+
+## Multi-user issues:
+
+* Models of concurrent users and setting isolation levels
+* Dirty Reads, Phantom Reads, etc.
+
+
+## Distribution Issues:
+
+* CAP Theorem
+* http://ksat.me/a-plain-english-introduction-to-cap-theorem/
+* Banks vs. Google
+
+
+
+
+
+
