@@ -668,3 +668,10 @@ CREATE TABLE Books(BookId INTEGER PRIMARY KEY, Title TEXT, AuthorId INTEGER,
 ```
 
 http://en.wikipedia.org/wiki/Relational_algebra
+
+# Developer Topics
+
+## Transaction
+
+Desirable Properties of Transactions / ACID vs. CRUD
+
