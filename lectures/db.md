@@ -94,7 +94,7 @@ Nope. Ok, let's do an import of some comma-separated data that has no header row
 ```
 -- stuff that starts with a dot is peculiar to SQLite
 .separator ','
-.import sample.csv data
+.import sample.csv customers
 ```
 
 ```bash
@@ -332,7 +332,7 @@ sqlite> select rowid, FirstName||' '||LastName from Orders;
 4           Janet Smith             
 ```
 
-## Sorting and grouping
+## Sorting
 
 ```sql
 sqlite> select * from orders order by LastName;
