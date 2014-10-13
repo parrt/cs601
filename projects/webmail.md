@@ -7,9 +7,9 @@ In this project you will build a website that acts as a web-based email client s
 
 To give you an idea what a successful project looks like, here are the videos Jean Bovet made of his project from years ago:
 
+* [main presentation](movies/webmail/presentation.mov)
 * [filter](movies/webmail/filter.mov)
 * [move_delete](movies/webmail/html_move_delete.mov)
-* [presentation](movies/webmail/presentation.mov)
 * [search](movies/webmail/search.mov)
 * [smartfolders](movies/webmail/smartfolders.mov)
 * [spellchecker](movies/webmail/spellchecker.mov)
@@ -48,7 +48,8 @@ The following is a list of features and the associated points you can acquire wh
 |Required| Points | Feature |
 |--------|--------|--------|
 | x |4 | User registration. You must support multiple users, each with their own POP server to pull mail from and SMTP server to send email out of. Users are stored in the database. Passwords are not stored in the clear in the database.|
-| x |3 | User log in/out |
+| x |2 | User log in/out |
+| x | 1| Log each page request and also create log files, such as with `java.util.Logger`, for errors or other things you want to write to a log file. Store these logs in `/var/log/webmail` on your Linux server (see requirements below).|
 | x |5 | Pull email from POP servers via your own POP protocol handler and display on website. Requires SSL connection to Gmail or similar.|
 | x|2 | Mail pulled from POP is stored in the database. |
 |x |3 | Obviously, you must have an `Inbox` folder/tag where incoming mail is displayed. |
@@ -83,50 +84,78 @@ In addition, your project will be evaluated on the following more subjective fea
 
 Notice that these subjective scores cover 15% of the project. Screwing these up means the most you can achieve is 85% on the entire project.
 
+I have provided a [basic github repository](https://github.com/parrt/cs601-webmail-skeleton) that you can look at to learn more about using that website with releases and someone.
+
 # Requirements
 
-You must do your project in Java and use the Jetty server as an embedded server. If you want to use a search engine, you must use Lucene.
+Among other things that I hope will be obvious or that we discussed in class, please make note of the following special requirements:
 
-You are required to build functionality and design documents via github's wiki to complement your project.
+* You must do your project in Java and use the Jetty server as an embedded server. If you want to use a search engine, you must use Lucene.
 
-You must demonstrate your server running via a Linux server posted at https://www.digitalocean.com. You can get a free account as a student. You must learn to deploy software on a Linux machine. In our case it's fairly easy because you can bundle jetty, your software, and any other libraries like Lucene as a single jar and ship it to the remote server. You must run the server as a root and have it at Port 80.
+* You are required to build functionality and design documents via github's wiki to complement your project.
 
-**Final submission of your project requires that you send instructor the public URL of your website.**
+* You must demonstrate your server running via a Linux server hosted at https://www.digitalocean.com. Naturally, you want to test it locally during development for quick turnaround time when you make a change, but ultimately it must work smoothly on a remote server. You can get a free account as a student. You must learn to deploy software on a Linux machine. In our case it's fairly easy because you can bundle jetty, your software, and any other libraries like Lucene as a single jar and ship it to the remote server. 
 
-I have provided a [basic github repository](https://github.com/parrt/cs601-webmail-skeleton) that you can look at to learn more about using that website.
+* You must run your server as `root` and have it listen at Port 80.
+
+* Deploy your server software by putting your jar in the `/opt/webmail` directory.
+
+* **Final submission of your project requires that you send instructor the public URL of your website.**
 
 
 ## Project management
 
-### Releases
+You will make extensive use of github's features to manage and track your project.
 
-[Releases](https://github.com/parrt/cs601-webmail-skeleton/releases). For each milestone, you will do a release, which involves creating a tag in git and then creating a release on github itself associated with that tag. Anytime you want, you can go back to that release by checking out that tag in git.
-
-![milestones](figures/webmail-milestones.png)
-
-v0.1, ...:
-https://github.com/parrt/cs601-webmail-skeleton/milestones
 
 ### Tracking progress
 
-![labels](figures/webmail-labels.png)
+Before you begin your project, go to github and add three [milestones](https://github.com/parrt/cs601-webmail-skeleton/milestones) such as I have done in the webmail skeleton:
 
-![labels](figures/webmail-issue-1.png)
+<center>
+<img src="figures/webmail-milestones.png" width=500>
+</center>
 
-<img src="figures/webmail-wiki.png" width=500>
+Then you need to start adding formal [github issues](https://github.com/parrt/cs601-webmail-skeleton/issues) that coincide with features, tasks, and problems associated with your project. For example, here is an issue I created:
 
-https://guides.github.com/features/issues/
+<center>
+<img src="figures/webmail-issue-1.png" width=520>
+</center>
 
-[Issue to create a map of your website pages](https://github.com/parrt/cs601-webmail-skeleton/issues/1). You will also note that I've attached it to the [first milestone](https://github.com/parrt/cs601-webmail-skeleton/milestones/v0.1).
+As you complete these, make sure you reference them with "`Fixes #n`" for issue n in your `git commit` messages and github will automatically close them for you and associate them with the current commit. It's important to keep issues and commits linked.
+
+You can make a rich set of tags to help you organize your issues, as you can see I've done with mine:
+
+<center>
+<img src="figures/webmail-labels.png" width=270>
+</center>
+
+My first issue is a `task` associated with milestone `v0.1`. As I complete issues associated with a milestone a progress bar will start to fill up when I look at my milestones at github.
+
+### Releases
+
+For each release, you will create a formal [github release](https://github.com/parrt/cs601-webmail-skeleton/releases), which involves creating a `git tag` and then creating a release on github itself associated with that tag. Tags are useful because you can reset your software to the state of a previous tag with a simple check out.
+
+When you have created the release, then mark the milestone as closed. There might be a way to have github do this automatically (not sure).
+
+### Documentation
+
+An important part of any project's documentation about the design, architecture, and implementation of the software. These documents are much more important than user manuals; you do **not** have to make user manuals. Writing these design documents not only make it possible to bring other developers onto a project (or have them take over if you get hit by a bus), but it's a great way to organize your own thoughts. I have found that writing things down is invaluable because we can't keep everything in our head at once and later we will forget what we were thinking about.
+
+You will also notice that there is a to do list on one of the wiki pages that I have:
+
+<center>
+<img src="figures/webmail-wiki.png" width=420>
+</center>
+
+There are lots and lots of little things to fix and implement as you build software. Unless you write them down, you will forget. The key is to write things down when you remember them.
 
 # Grading
 
-**The authors of the best 2 projects in the class will be excused from exam II.**
+*The authors of the best 2 projects, as determined by instructor one week beforehand, will be excused from exam II.*
 
 **You must complete the required level to pass the entire class.**
 
-The evaluation of "quality" is necessarily a subjective measure, but I will do my best to quantify what I'm looking for and rate you all according to the same measure.  Each feature will be rated at each release (if it is complete).
+*By definition, there is no late project*--your last working release will be considered in lieu of any unfinished project. At each release, I will look through your github repository and give you feedback on your progress.
 
-*By definition, there is no late project*--your last working release will be considered in lieu of any unfinished project.  Missing a release in order is not acceptable.
-
-The instructor will review your work for 10 or 15 minutes at each release.
+You will make an appointment after the third release to sit with me into a code review and demo your project. Your project grade will be a function of instructor evaluation as determined by the point system above.
