@@ -5,14 +5,11 @@ Webmail Project
 
 In this project you will build a website that acts as a web-based email client server like gmail or hotmail.   There will be three releases, v0.1-v0.3, with the last one due December 3rd, the last day of class.
 
-To give you an idea what a successful project looks like, here are the videos Jean Bovet made of his project from years ago:
+To give you an idea what a successful project looks like, here are the videos Jean Bovet made of his project from years ago: [main presentation](movies/webmail/presentation.mov), [filter](movies/webmail/filter.mov), [move_delete](movies/webmail/html_move_delete.mov), [search](movies/webmail/search.mov), [smartfolders](movies/webmail/smartfolders.mov), [spellchecker](movies/webmail/spellchecker.mov).
 
-* [main presentation](movies/webmail/presentation.mov)
-* [filter](movies/webmail/filter.mov)
-* [move_delete](movies/webmail/html_move_delete.mov)
-* [search](movies/webmail/search.mov)
-* [smartfolders](movies/webmail/smartfolders.mov)
-* [spellchecker](movies/webmail/spellchecker.mov)
+<center>
+<a href="movies/webmail/presentation.mov"><img align=top src="figures/bovet-inbox.png" width=280></a> <a href="movies/webmail/presentation.mov"><img src="figures/bovet-attach.png" width=280></a>
+</center>
 
 You will make an appointment to demo and do a code review with the instructor at the last release. You will not receive a formal grade for the first two releases, but I will comment on your project to give you an idea of where I think you are and whether you are on track.
 
