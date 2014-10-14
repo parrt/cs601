@@ -42,6 +42,14 @@ The following is a list of features and the associated points you can acquire wh
 
 **You must complete all features marked with an x in the required column in order to pass the entire class.**
 
+The breakdown is as follows:
+
+* Required: 40 points
+* Main functionality beyond required: 30 points
+* Advanced feature: 5-10 points
+* Quality: 15 points
+
+
 |Required| Points | Feature |
 |--------|--------|--------|
 | x |4 | User registration. You must support multiple users, each with their own POP server to pull mail from and SMTP server to send email out of. Users are stored in the database. Passwords are not stored in the clear in the database.|
@@ -55,23 +63,28 @@ The following is a list of features and the associated points you can acquire wh
 |x|3| A compose message page. |
 |x |4 | Send/reply to email using your own SMTP client. Use `smtp.usfca.edu` as the outgoing mail server.  You can also set it up to use SSL to connect to gmail's or any other if you want. |
 | x|3 | Forward email feature.|
-|x|3 | User is able to delete mail (sends to hardcoded or user-defined `Trash` folder/tag and then have a "empty trash button"). |
+|x|5 | User is able to delete mail (sends to hardcoded or user-defined `Trash` folder/tag and then have a "empty trash button"). |
 |x|2| Support HTTPS connections to your website not just HTTP.|
-| |3 | An indication for messages and message lists (mailboxes) whether a message has been read or not. An ability to toggle read/unread.|
-| |3| Mailbox view pagination so user can select page of multipage view. |
-| |2 | Sent mail goes to hardcoded or user-defined `Sent` folder/tag. |
-| |2 | Edit user account to change password etc... |
+| |2 | An indication for messages and message lists (mailboxes) whether a message has been read or not. An ability to toggle read/unread.|
+| |5| Mailbox view pagination so user can select page of multipage view. |
+| |3 | Sent mail goes to hardcoded or user-defined `Sent` folder/tag. |
+| |3 | Edit user account to change password etc... |
 | |5 | Support user-defined "folders" or "tags" so users can direct incoming email to various folders manually. Users can move mail between folders by changing tags.|
 | |3 | Support viewing of in-line email images. |
-| |3 | User is able to search all of their mail for keywords; use a simple linear walk of the data via the database or FOR loop (rather than a sophisticed search engine like Lucene). The user should be able to pick the field such as "from" or "subject" to search in. |
-| |5 | Use of Lucene to search through email. The user should be able to pick the field such as "from" or "subject" to search in.|
-| |3 | Sort mail folder display by various fields/columns such as sender's email, subject, ... |
-| |5 | Support attachments (send/receive) |
-| |3 | Spell checking that highlights words not found in a large dictionary when the user clicks a button on the compose message page; or, more sophisticated functionality. |
-| |5 | A contact list feature that allows users to add, delete, and view contacts. It should also allow selection or auto completion or some other mechanism to make it easy to email those contacts.|
-| |5 | SPAM filtering using something like a Naive Bayes classifier. You can use a library for this feature; i.e., don't build your own classifier.  User should be able to identify which messages are spam and which are not.|
+| |4 | User is able to search all of their mail for keywords; use a simple linear walk of the data via the database or FOR loop (rather than a sophisticed search engine like Lucene). The user should be able to pick the field such as "from" or "subject" to search in. |
+| |5 | Sort mail folder display by various fields/columns such as sender's email, subject, ... |
 
-In addition, your project will be evaluated on the following more subjective features:
+Choose from *one* the following list of advanced features:
+
+|Required| Points | Feature |
+|--------|--------|--------|
+| |5 | Spell checking that highlights words not found in a large dictionary when the user clicks a button on the compose message page; or, more sophisticated functionality. |
+| |7 | Use of Lucene to search through email. The user should be able to pick the field such as "from" or "subject" to search in.|
+| |7 | A contact list feature that allows users to add, delete, and view contacts. It should also allow selection or auto completion or some other mechanism to make it easy to email those contacts.|
+| |10 | Support attachments (send/receive) |
+| |10 | SPAM filtering using something like a Naive Bayes classifier. You can use a library for this feature; i.e., don't build your own classifier.  User should be able to identify which messages are spam and which are not.|
+
+In addition, your project will be evaluated on the following more subjective criteria:
 
 | Points | Feature|
 |--------|--------|
