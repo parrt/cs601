@@ -76,13 +76,13 @@ The breakdown is as follows:
 
 Choose from *one* the following list of advanced features:
 
-|Required| Points | Feature |
-|--------|--------|--------|
-| |5 | Spell checking that highlights words not found in a large dictionary when the user clicks a button on the compose message page; or, more sophisticated functionality. |
-| |7 | Use of Lucene to search through email. The user should be able to pick the field such as "from" or "subject" to search in.|
-| |7 | A contact list feature that allows users to add, delete, and view contacts. It should also allow selection or auto completion or some other mechanism to make it easy to email those contacts.|
-| |10 | Support attachments (send/receive) |
-| |10 | SPAM filtering using something like a Naive Bayes classifier. You can use a library for this feature; i.e., don't build your own classifier.  User should be able to identify which messages are spam and which are not.|
+| Points | Feature |
+|--------|--------|
+|5 | Spell checking that highlights words not found in a large dictionary when the user clicks a button on the compose message page; or, more sophisticated functionality. |
+|7 | Use of Lucene to search through email. The user should be able to pick the field such as "from" or "subject" to search in.|
+|7 | A contact list feature that allows users to add, delete, and view contacts. It should also allow selection or auto completion or some other mechanism to make it easy to email those contacts.|
+|10 | Support attachments (send/receive) |
+|10 | SPAM filtering using something like a Naive Bayes classifier. You can use a library for this feature; i.e., don't build your own classifier.  User should be able to identify which messages are spam and which are not.|
 
 In addition, your project will be evaluated on the following more subjective criteria:
 
