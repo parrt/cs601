@@ -800,7 +800,7 @@ OrderID     CustomerID  Quantity    PricePerItem  CustomerID  FirstName   LastNa
 
 Unlike inner joins, outer joins yield tables with records even when columns of those records don't match up or have `NULL` values. There are three kinds of outer joins: left, right, and full (or just "outer join"). SQLite can only do `left outer join` but let's define them all. From http://www.w3schools.com/sql/sql_join.asp (images by parrt):
 
-* `LEFT JOIN`: Return all rows from the left table, and the matched rows from the right table
+* `LEFT JOIN`: Return all rows from the left table, and the matched rows from the right table<br>
 ![left join](figures/left-join.png)
 * `RIGHT JOIN`: Return all rows from the right table, and the matched rows from the left table<br>
 ![right join](figures/right-join.png)
@@ -892,7 +892,8 @@ The problem is that it does a cross product, replicating data, and creating reco
 To solve this problem for real, we need to use an outer join, but let's start with a simpler problem. Let's say we want to see a record for all people, even if they've never had an order. This will do the trick:
 
 ```sql
-select FirstName,LastName,OrderAmount from Customers left outer join orders on  customers.customerid=orders.customerid;
+select FirstName,LastName,OrderAmount
+from Customers left outer join orders on customers.customerid=orders.customerid;
 FirstName   LastName    OrderAmount
 ----------  ----------  -----------
 William     Smith       10.0       
@@ -992,7 +993,7 @@ FROM employee FULL OUTER JOIN department
  ```
 
 |LastName|DepartmentID|DepartmentName|DepartmentID|
-|--|--|--|
+|--|--|--|--|
 |Smith	|34	|Clerical	|34|
 |Jones	|33	|Engineering|	33|
 |Robinson|	34|	Clerical|	34|
