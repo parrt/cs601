@@ -802,14 +802,14 @@ Unlike inner joins, outer joins yield tables with records even when columns of t
 
 * `LEFT JOIN`: Return all rows from the left table, and the matched rows from the right table
 ![left join](figures/left-join.png)
-* `RIGHT JOIN`: Return all rows from the right table, and the matched rows from the left table
+* `RIGHT JOIN`: Return all rows from the right table, and the matched rows from the left table<br>
 ![right join](figures/right-join.png)
-* `FULL JOIN`: Return all rows when there is a match in ONE of the tables
+* `FULL JOIN`: Return all rows when there is a match in ONE of the tables<br>
 ![full outer join](figures/outer-join.png)
 
 For comparison to the inner join, let's include that:
 
-* `INNER JOIN`: Returns all rows when there is at least one match in BOTH tables
+* `INNER JOIN`: Returns all rows when there is at least one match in BOTH tables<br>
 ![](figures/inner-join.png)
 
 The only detail missing is that the left and right outer joins fill in `NULL` column values when there is no predicate match.
