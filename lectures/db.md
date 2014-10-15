@@ -660,14 +660,348 @@ Susan       90.3333333333333
 
 ## Foreign keys
 
-[SQLite Foreign keys](http://www.sqlite.org/foreignkeys.html).
+In many database schemas, you will not see an explicit relationship between columns of different tables but it's a good idea to formalize the foreign key relationship. See [SQLite Foreign keys](http://www.sqlite.org/foreignkeys.html). At the end of your list of fields in your table definition, specify one or more key relationships:
 
 ```sql
-CREATE TABLE Books(BookId INTEGER PRIMARY KEY, Title TEXT, AuthorId INTEGER, 
-    FOREIGN KEY(AuthorId) REFERENCES Authors(AuthorId));
+create table A(
+	...,
+	FID INTEGER,
+	FOREIGN KEY(FID) REFERENCES B(ID)
+);
 ```
 
-http://en.wikipedia.org/wiki/Relational_algebra
+This means that column `FID` in this table refers to column `ID` in table B.
+
+To force SQLite to enforce the references, you must use the command:
+
+```sql
+sqlite> PRAGMA foreign_keys = ON;
+```
+
+The `ID` within foreign table `B` must be a `PRIMARY KEY` (or maybe just unique and not `NULL`). If you try to reference a column that can't be used uniquely, you'll get an error:
+
+```sql
+Error: foreign key mismatch - "A" referencing "B"
+```
+
+## Inner joins
+
+I think of inner joins as lining up the records from both tables that match a predicate, stripping away the other records. Then create the joined table with the union of columns from both. The predicate consists of two things: an `ON` clause and potentially a `WHERE` condition. There must be records with matching columns for the join to produce results.
+
+Implicit join notation just lists the table names (don't do this).
+
+Inner join is the intersection of two sets in set theory:
+
+![](figures/inner-join.png)
+
+*The goal is to get a list of orders that contains real names not customer numbers.* This is the use case for inner joins.
+
+The overlap is where the predicate is true; for the most part this will be when a foreign key in `Orders` matches up with something in `Customers`.
+
+Here are two tables from Rockoff:
+
+
+```sql
+CREATE TABLE Customers(
+	CustomerID INT PRIMARY KEY NOT NULL, -- needed for FOREIGN KEY reference
+	FirstName TEXT NOT NULL,
+	LastName TEXT NULL
+);
+
+INSERT INTO Customers VALUES (1, 'William', 'Smith');
+INSERT INTO Customers VALUES (2, 'Natalie', 'Lopez');
+INSERT INTO Customers VALUES (3, 'Brenda', 'Harper');
+INSERT INTO Customers VALUES (4, 'Adam', 'Petrie');
+```
+
+```sql
+CREATE TABLE Orders(
+	OrderID INT NOT NULL,
+	CustomerID INT NULL,
+	Quantity INT NULL,
+	PricePerItem DOUBLE NULL
+);
+```
+
+But, let's get fancy and add the foreign key constraints:
+
+```sql
+CREATE TABLE Orders(
+	OrderID INT NOT NULL,
+	CustomerID INT NULL,
+	Quantity INT NULL,
+	PricePerItem DOUBLE NULL,
+	FOREIGN KEY(CustomerID) REFERENCES Customers(CustomerID)
+);
+```
+
+Then let's insert some data:
+
+```sql
+INSERT INTO Orders VALUES (1, 1, 4, 2.50);
+INSERT INTO Orders VALUES (2, 2, 10, 1.25);
+INSERT INTO Orders VALUES (3, 2, 12, 1.50);
+INSERT INTO Orders VALUES (4, 3, 5, 4);
+```
+
+If we add data that violates the constraints of the foreign key specification, we will get an error. Here I am trying to add a customer with ID 99 that does not exist:
+
+```sql
+sqlite> PRAGMA foreign_keys = ON;
+sqlite> INSERT INTO Orders VALUES (4, 99, 5, 4);
+Error: FOREIGN KEY constraint failed
+sqlite> 
+```
+
+Now, let's join the customers and orders together, lining up the records based upon the `CustomerID`:
+
+```sql
+.headers on
+.mode columns
+SELECT * FROM Customers INNER JOIN Orders
+	ON Customers.CustomerID = Orders.CustomerID;
+CustomerID  FirstName   LastName    OrderID     CustomerID  Quantity    PricePerItem
+----------  ----------  ----------  ----------  ----------  ----------  ------------
+1           William     Smith       1           1           4           2.5         
+2           Natalie     Lopez       2           2           10          1.25        
+2           Natalie     Lopez       3           2           12          1.5         
+3           Brenda      Harper      4           3           5           4.0         
+```
+
+Notice how it lists all columns from both tables, even if they have the same name, such as `CustomerID`.
+
+Notice also how customer `Adam Petrie` is not represented in the joined table because he does not have a record in the `Orders` table.
+
+The `ON` clause specifies which column values must match for two rows to line up. The column name is fully qualified using the table name as well because they have the same name in both tables: `Customers.CustomerID = Orders.CustomerID`. If the customers table had used simply `ID`, then we could do `Customers.ID = Orders.CustomerID`. That's usually what I do.
+
+`Natalie Lopez` has 2 records in the joined table because she has to orders  in the `Orders` table.
+
+We can also use table aliases to shorten queries. The above query could be rewritten using aliases:
+
+```sql
+SELECT * FROM Customers as C INNER JOIN Orders as O
+	ON C.CustomerID = O.CustomerID;
+```
+
+If we reverse the order of the table names in the join, we get the same table except the columns are reordered:
+ 
+```sql
+SELECT * FROM Orders INNER JOIN Customers
+	ON Orders.CustomerID = Customers.CustomerID;
+OrderID     CustomerID  Quantity    PricePerItem  CustomerID  FirstName   LastName  
+----------  ----------  ----------  ------------  ----------  ----------  ----------
+1           1           4           2.5           1           William     Smith     
+2           2           10          1.25          2           Natalie     Lopez     
+3           2           12          1.5           2           Natalie     Lopez     
+4           3           5           4.0           3           Brenda      Harper    
+```
+
+## Outer joins
+
+Unlike inner joins, outer joins yield tables with records even when columns of those records don't match up or have `NULL` values. There are three kinds of outer joins: left, right, and full (or just "outer join"). SQLite can only do `left outer join` but let's define them all. From http://www.w3schools.com/sql/sql_join.asp (images by parrt):
+
+* `LEFT JOIN`: Return all rows from the left table, and the matched rows from the right table
+![left join](figures/left-join.png)
+* `RIGHT JOIN`: Return all rows from the right table, and the matched rows from the left table
+![right join](figures/right-join.png)
+* `FULL JOIN`: Return all rows when there is a match in ONE of the tables
+![full outer join](figures/outer-join.png)
+
+For comparison to the inner join, let's include that:
+
+* `INNER JOIN`: Returns all rows when there is at least one match in BOTH tables
+![](figures/inner-join.png)
+
+The only detail missing is that the left and right outer joins fill in `NULL` column values when there is no predicate match.
+
+The joined table has all records from both tables.
+
+###  Customers, Orders, Refunds
+
+Again from Rockoff, let's add in a new version of `Orders`, keep `Customers` the way it is, and then add a `Refunds` table:
+
+```sql
+DROP TABLE IF EXISTS Orders; -- awesome new command for you
+CREATE TABLE Orders(
+	OrderID INT PRIMARY KEY NOT NULL,
+	CustomerID INT NULL,
+	OrderDate DATE NULL,
+	OrderAmount DOUBLE NULL,
+	FOREIGN KEY(CustomerID) REFERENCES Customers(CustomerID)
+);
+INSERT INTO Orders VALUES (1, 1, '2009-09-01', 10);
+INSERT INTO Orders VALUES (2, 2, '2009-09-02', 12.5);
+INSERT INTO Orders VALUES (3, 2, '2009-10-03', 18);
+INSERT INTO Orders VALUES (4, 3, '2009-09-15', 20);
+```
+
+```sql
+DROP TABLE IF EXISTS Refunds;
+CREATE TABLE Refunds(
+	RefundID INT PRIMARY KEY NOT NULL,
+	OrderID INT NULL,
+	RefundDate DATE NULL,
+	RefundAmount DOUBLE NULL,
+	FOREIGN KEY(OrderID) REFERENCES Orders(OrderID)
+);
+INSERT INTO Refunds VALUES (1, 1, '2009-09-02', 5);
+INSERT INTO Refunds VALUES (2, 3, '2009-10-12', 18);
+```
+
+I have added the foreign key relationships explicitly. Using the [MySQL Workbench](http://www.mysql.com/products/workbench/), the schema looks like this:
+
+![3 table schema](figures/3table-schema.png)
+
+(I'm not really sure why it doesn't point at the right fields, but whatever.)
+
+Let's start out with a simple inner join between the refunds in the orders. We might do this to ensure that the refund amount is the same as the order amount.
+
+```sql
+select Orders.OrderID,OrderAmount,RefundAmount
+	from Orders inner join Refunds on orders.orderid=refunds.orderid;
+OrderID     OrderAmount  RefundAmount
+----------  -----------  ------------
+1           10.0         5.0         
+3           18.0         18.0        
+```
+
+Interesting. I guess we only refunded 5 of the $10 on order #1. But wait, who ordered that?  Our first thought is that we can join this result with the `Customers` table to include that data:
+
+```sql
+select FirstName,LastName,OrderAmount,RefundAmount from
+	(select * from Orders inner join Refunds on orders.orderid=refunds.orderid)
+	inner join customers;
+FirstName   LastName    OrderAmount  RefundAmount
+----------  ----------  -----------  ------------
+William     Smith       10.0         5.0         
+Natalie     Lopez       10.0         5.0         
+Brenda      Harper      10.0         5.0         
+Adam        Petrie      10.0         5.0         
+William     Smith       18.0         18.0        
+Natalie     Lopez       18.0         18.0        
+Brenda      Harper      18.0         18.0        
+Adam        Petrie      18.0         18.0        
+```
+
+That uses a fancy subquery that we will get to later but shows how inner joins are used. I view them as simply converting identifiers into symbolic names like customer names.
+
+The problem is that it does a cross product, replicating data, and creating records that just don't exist in reality.  The two records in the refunds table got replicated, once per customer. Ooops. There are for customers and so we got eight records.  For example, `Adam Petrie` has no orders or refunds but he got included
+
+### Left outer join
+
+To solve this problem for real, we need to use an outer join, but let's start with a simpler problem. Let's say we want to see a record for all people, even if they've never had an order. This will do the trick:
+
+```sql
+select FirstName,LastName,OrderAmount from Customers left outer join orders on  customers.customerid=orders.customerid;
+FirstName   LastName    OrderAmount
+----------  ----------  -----------
+William     Smith       10.0       
+Natalie     Lopez       12.5       
+Natalie     Lopez       18.0       
+Brenda      Harper      20.0       
+Adam        Petrie   
+```
+
+The `left outer join` will include a row from the customers table no matter what and then will match up the customer IDs to identify the amount `OrderAmount` values.
+
+If we want to include refund information as well, we need to include a second outer join to pull in the refunds:
+
+```sql
+SELECT
+	Customers.FirstName AS 'First Name',
+	Customers.LastName AS 'Last Name',
+	Orders.OrderDate AS 'Order Date',
+	Orders.OrderAmount AS 'Order Amt',
+	Refunds.RefundDate AS 'Refund Date',
+	Refunds.RefundAmount AS 'Refund Amt'
+FROM Customers
+	LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+	LEFT JOIN Refunds ON Orders.OrderID = Refunds.OrderID
+ORDER BY Customers.CustomerID, Orders.OrderID, RefundID;
+First Name  Last Name   Order Date  Order Amt   Refund Date  Refund Amt
+----------  ----------  ----------  ----------  -----------  ----------
+William     Smith       2009-09-01  10.0        2009-09-02   5.0       
+Natalie     Lopez       2009-09-02  12.5                               
+Natalie     Lopez       2009-10-03  18.0        2009-10-12   18.0      
+Brenda      Harper      2009-09-15  20.0                               
+Adam        Petrie                                                     
+```
+
+Because we used an outer join, we can see order amounts even for those without refunds. And inner join which owes nothing because there was no matching records.
+
+To get a list of customers that received no refund, we can just add a simple condition:
+ 
+```sql
+SELECT
+	Customers.FirstName AS 'First Name',
+	Customers.LastName AS 'Last Name',
+	Orders.OrderDate AS 'Order Date',
+	Orders.OrderAmount AS 'Order Amt',
+	Refunds.RefundDate AS 'Refund Date',
+	Refunds.RefundAmount AS 'Refund Amt'
+FROM Customers
+	LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+	LEFT JOIN Refunds ON Orders.OrderID = Refunds.OrderID
+where refundID is null;
+First Name  Last Name   Order Date  Order Amt   Refund Date  Refund Amt
+----------  ----------  ----------  ----------  -----------  ----------
+Natalie     Lopez       2009-09-02  12.5                               
+Brenda      Harper      2009-09-15  20.0                               
+Adam        Petrie        
+```
+
+Ooops, that includes people that also had no order so we need to extend slightly:
+
+```sql
+SELECT
+	Customers.FirstName AS 'First Name',
+	Customers.LastName AS 'Last Name',
+	Orders.OrderDate AS 'Order Date',
+	Orders.OrderAmount AS 'Order Amt',
+	Refunds.RefundDate AS 'Refund Date',
+	Refunds.RefundAmount AS 'Refund Amt'
+FROM Customers
+	LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+	LEFT JOIN Refunds ON Orders.OrderID = Refunds.OrderID
+where refundID is null and orders.orderid is not null;
+First Name  Last Name   Order Date  Order Amt   Refund Date  Refund Amt
+----------  ----------  ----------  ----------  -----------  ----------
+Natalie     Lopez       2009-09-02  12.5                               
+Brenda      Harper      2009-09-15  20.0                               
+```
+
+### Right outer join
+
+SQLite does not support right outer joins, but we can use the left outer join and just flip the order of the operations.
+
+### Full outer join
+
+SQLite doesn't support full outer join either but an explanation of what it does is useful. Basically it merges records from both tables so that there are a maximum of N+M records if N and M are the number of records in the left and right tables. There are fewer when there is a match according to the predicate. There will be a record in the outer join table for ever unique value in the predicate column. If there is no match between records on the predicate column, the outer join just fills in null and puts in the data it has.
+
+Rockoff shows two tables: movie titles and ratings. Both tables have a column called `Rating`, which can be used as the column to match on when performing an outer join on these two tables.
+
+Wikipedia has an example [full outer join](http://en.wikipedia.org/wiki/Join_(SQL)#Full_outer_join):
+
+<blockquote>For example, this allows us to see each employee who is in a department and each department that has an employee, but also see each employee who is not part of a department and each department which doesn't have an employee.
+</blockquote>
+
+```sql
+SELECT *
+FROM employee FULL OUTER JOIN department
+  ON employee.DepartmentID = department.DepartmentID;
+ ```
+
+|LastName|DepartmentID|DepartmentName|DepartmentID|
+|--|--|--|
+|Smith	|34	|Clerical	|34|
+|Jones	|33	|Engineering|	33|
+|Robinson|	34|	Clerical|	34|
+|Williams|	NULL|	NULL|	NULL|
+|Heisenberg|	33|	Engineering	|33|
+|Rafferty	|31	|Sales	|31|
+|NULL	|NULL|	Marketing|	35|
+
+# Using SQLite from Java
 
 # Developer Topics
 
