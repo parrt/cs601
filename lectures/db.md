@@ -992,8 +992,12 @@ FROM employee FULL OUTER JOIN department
   ON employee.DepartmentID = department.DepartmentID;
  ```
 
+| column | column |
+|--------|--------|
+|        |        |
+
 |LastName|DepartmentID|DepartmentName|DepartmentID|
-|--|--|--|--|
+|--------|--------|--------|--------|
 |Smith	|34	|Clerical	|34|
 |Jones	|33	|Engineering|	33|
 |Robinson|	34|	Clerical|	34|
