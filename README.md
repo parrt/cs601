@@ -29,7 +29,7 @@ I consider an "A" grade to be above and beyond what most students have achieved.
 
 Projects that do not run exactly as specified will lose 10% of the total points. Make sure that you do not have hardcoded files/directories in your code, remember that UNIX is case-sensitive as is Java, file names and class names must be correct, specified method signatures must be correct, etc...
 
-I will be very strict and set a high standard in my grading, but I will work hard to help you if you are having trouble. You some of you may not get the grade you were hoping for in this class, but I will do everything I can to make sure you learn a lot and have a satisfying educational experience!
+I will be very strict and set a high standard in my grading, but I will work hard to help you if you are having trouble. Some of you may not get the grade you were hoping for in this class, but I will do everything I can to make sure you learn a lot and have a satisfying educational experience!
 
 Unless you are sick or have a family emergency, I will not change deadlines for projects nor exam times. For example, I will not give you a special final exam just because you want to fly home early. Consult the university academic calendar before making travel plans.
 
@@ -39,7 +39,7 @@ There is no formal book for this class, though you will be asked to read article
 
 ### SOFTWARE
 
-Students can use any Java development environment they want, but I will be testing projects under OS X (or Linux) so make sure that your projects work on a UNIX box.  The community addition of Intellij is the best Java development environment in my opinion. Projects will be submitted through github.com.
+Students can use any Java development environment they want, but I will be testing projects under OS X (or Linux) so make sure that your projects work on a UNIX box.  The community edition of Intellij is the best Java development environment in my opinion. Projects will be submitted through github.com.
 
 For help with git, I suggest you download [sourcetree](http://www.sourcetreeapp.com/). Intellij knows how to deal with git directly as well. You might also find the [Google Chrome extension Github Tree](https://chrome.google.com/webstore/detail/github-tree/ljoidanknjnfhcefkjbhjpmpccgmnobo) useful.
 
