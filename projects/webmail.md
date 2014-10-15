@@ -162,6 +162,8 @@ There are lots and lots of little things to fix and implement as you build softw
 
 # Grading
 
+There is sufficient work in this project that only the best students will get near 100 points. An average graduate student will get in the mid-80s. This project provides enough room for the best programmers to strut their stuff.
+
 *The authors of the best 2 projects, as determined by instructor one week beforehand, will be excused from exam II.*
 
 **You must complete the required level to pass the entire class.**
