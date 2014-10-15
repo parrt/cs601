@@ -518,7 +518,7 @@ INSERT INTO Grades VALUES (2, 'Susan', 'Quiz', 95);
 INSERT INTO Grades VALUES (3, 'Susan', 'Homework', 84);
 INSERT INTO Grades VALUES (4, 'Kathy', 'Quiz', 62);
 INSERT INTO Grades VALUES (5, 'Kathy', 'Quiz', 81);
-INSERT INTO Grades VALUES (6, 'Kathy', 'Homework', 90);
+INSERT INTO Grades VALUES (6, 'Kathy', 'Homework', NULL);
 INSERT INTO Grades VALUES (7, 'Alec', 'Quiz', 58);
 INSERT INTO Grades VALUES (8, 'Alec', 'Quiz', 74);
 INSERT INTO Grades VALUES (9, 'Alec', 'Homework', 88);
