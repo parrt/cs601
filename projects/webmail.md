@@ -112,6 +112,18 @@ Among other things that I hope will be obvious or that we discussed in class, pl
 
 * **Final submission of your project requires that you send instructor the public URL of your website.**
 
+## External libraries
+
+Bootstrap and UIKit and jquery are all okay for the webmail project.
+
+Please stay away from angularjs, emberjs or any other full frameworks. Your JavaScript should only be for UI purposes and asynchronous pulling of data from the server.
+
+If you do server-side page generation, I strongly suggest you use StringTemplate but you can use print statements if you want. I believe Velocity would also be another perfectly fine page template mechanism. Still be careful not to introduce libraries or use code in jetty, for example, that circumvent the goals of this project, such as to build your own SMTP and POP clients. 
+
+Note that you will in fact have to use jetty for SSL connections to pop and SMTP servers, but you must still use your own software to implement protocols.
+
+When in doubt, please ask me about a library or function. Always remember that the goal is to be as raw as possible, while still getting the project done in 7 weeks.
+
 
 ## Project management
 
