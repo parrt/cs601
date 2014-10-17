@@ -869,23 +869,15 @@ Interesting. I guess we only refunded 5 of the $10 on order #1. But wait, who or
 
 ```sql
 select FirstName,LastName,OrderAmount,RefundAmount from
-	(select * from Orders inner join Refunds on orders.orderid=refunds.orderid)
-	inner join customers;
+    (select * from Orders inner join Refunds on orders.orderid=refunds.orderid) as A
+    inner join customers on A.customerid=customers.customerid;
 FirstName   LastName    OrderAmount  RefundAmount
 ----------  ----------  -----------  ------------
 William     Smith       10.0         5.0         
-Natalie     Lopez       10.0         5.0         
-Brenda      Harper      10.0         5.0         
-Adam        Petrie      10.0         5.0         
-William     Smith       18.0         18.0        
 Natalie     Lopez       18.0         18.0        
-Brenda      Harper      18.0         18.0        
-Adam        Petrie      18.0         18.0        
 ```
 
 That uses a fancy subquery that we will get to later but shows how inner joins are used. I view them as simply converting identifiers into symbolic names like customer names.
-
-The problem is that it does a cross product, replicating data, and creating records that just don't exist in reality.  The two records in the refunds table got replicated, once per customer. Ooops. There are for customers and so we got eight records.  For example, `Adam Petrie` has no orders or refunds but he got included
 
 ### Left outer join
 
