@@ -996,7 +996,135 @@ FROM employee FULL OUTER JOIN department
 
 # Using SQLite from Java
 
-[Use this driver](https://bitbucket.org/xerial/sqlite-jdbc).
+[Use this driver](https://bitbucket.org/xerial/sqlite-jdbc).  
+
+I suggest you put the library here:
+
+```
+/usr/local/lib/sqlite-jdbc-3.8.6.jar
+```
+
+and then just add it to your CLASSPATH. Here is my basic framework to open a connection to a database and perform an operation then close it:
+
+```java
+String dbFile = "/var/data/mydata.db";
+Connection db = null;
+long start = System.currentTimeMillis();
+try {
+	Class.forName("org.sqlite.JDBC"); // force load of driver
+	db = DriverManager.getConnection("jdbc:sqlite:"+dbFile);
+
+    // DO SOMETHINE WITH db to read/write
+
+    long stop = System.currentTimeMillis();
+	System.out.printf("SQL exe time %1.1f minutes\n", (stop-start)/1000.0/60.0);
+}
+finally {
+	if ( db!=null ) {
+		db.close();
+	}
+}
+```
+
+## Insert/update/delete
+
+```java
+Statement statement = connection.createStatement();
+statement.executeUpdate("create table person (id integer, name string)");
+statement.executeUpdate("insert into person values(1, 'leo')");
+statement.close();
+```
+
+### Prepared statements
+
+Most of the time you should use a prepared statement. It avoids SQL injection attacks and also makes it easier to build the SQL query itself. It is also more efficient.
+
+```java
+String updateString =
+	"update " + dbName + ".COFFEES " +
+	"set SALES = ? where COF_NAME = ?";
+```
+
+```java
+PreparedStatement insert = db.prepareStatement("insert into payments values (?,?,?)");
+insert.setInt(1, 35);
+insert.setString(2, 'parrt');
+insert.setDate(3, '2014-10-11');
+// OR...
+java.sql.Date now = new java.sql.Date(System.currentTimeMillis());
+insert.setDate(3, now);
+int n = insert.executeUpdate();
+if ( n!=1 ) {
+	System.err.println("Bad update");
+}
+insert.close(); // make sure to close your statements; releases resources etc.
+```
+
+For queries, it's `executeQuery()`.
+
+## Select
+
+```java
+ResultSet rs = statement.executeQuery("select * from person");
+while( rs.next() ) {
+	// read the result set
+	System.out.println("name = " + rs.getString("name"));
+	System.out.println("id = " + rs.getInt("id"));
+}
+```
+
+print in table like format with headers:
+
+```java
+ResultSetMetaData metaData = rs.getMetaData();
+int numberOfColumns = metaData.getColumnCount();
+for (int i = 1; i <= numberOfColumns; i++) {
+	if (i > 1) System.out.print(", ");
+	String columnName = metaData.getColumnName(i);
+	System.out.print(columnName);
+}
+System.out.println();
+
+while (rs.next()) {
+	for (int i = 1; i <= numberOfColumns; i++) {
+		if (i > 1) System.out.print(", ");
+		String columnValue = rs.getString(i);
+		System.out.print(columnValue);
+	}
+	System.out.println();
+}
+```
+
+## Transactions
+
+See [JDBC Transactions](http://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html).
+
+By default, every update done by JDBC is done "with feeling"; i.e., it commits the results but often you need to update more than one table such as taking from the inventory and adding to the sales tables. You want this done in both tables or none. For that you need a transaction. To turn off the automatic commit, we use
+
+```java
+con.setAutoCommit(false);
+```
+
+
+```java
+con.setAutoCommit(false);
+try {
+	... updates ...
+	con.commit(); // commit the changes here
+}
+catch (SQLException e ) {
+	try {
+		con.rollback(); // oops; error: roll back the changes like nothing happened
+	}
+	catch (SQLException e ) {
+		// process serious problem.
+	}
+}
+finally {
+	... close statements you used etc. ...
+	con.setAutoCommit(true); // back to the usual default mode
+}
+```
 
 # Developer Topics
 
