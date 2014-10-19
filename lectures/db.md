@@ -996,6 +996,8 @@ FROM employee FULL OUTER JOIN department
 
 # Using SQLite from Java
 
+[Use this driver](https://bitbucket.org/xerial/sqlite-jdbc).
+
 # Developer Topics
 
 ## Transactions
