@@ -9,10 +9,10 @@ For a bit of advice, you can also check out my [Little Nybbles of Development Wi
 
 # Ooops
 
-A modern example, [Software glitches leave Navy Smart Ship dead in the water](http://gcn.com/Articles/1998/07/13/Software-glitches-leave-Navy-Smart-Ship-dead-in-the-water.aspx). *The ship had to be towed into the Naval base at Norfolk, VA, because a database overflow caused its propulsion system to fail* [snicker].
+A modern example, [Software glitches leave Navy Smart Ship dead in the water](http://gcn.com/Articles/1998/07/13/Software-glitches-leave-Navy-Smart-Ship-dead-in-the-water.aspx). *The ship had to be towed into the Naval base at Norfolk, VA, because a database overflow caused its propulsion system to fail* [snicker].<br>
 <img src="http://upload.wikimedia.org/wikipedia/commons/a/a1/USS_Yorktown_%28CG-48%29%3B04014806.jpg" width=220>.
 
-And [How an ancient shipbuilding project failed](http://vimeo.com/95284690).
+And [How an ancient shipbuilding project failed](http://vimeo.com/95284690).<br>
 <img src="figures/dasboot.png" width=220>
 
 For more examples of roadkill, see [The Long, Dismal History of Software Project Failure](http://blog.codinghorror.com/the-long-dismal-history-of-software-project-failure/)
@@ -25,7 +25,7 @@ For more examples of roadkill, see [The Long, Dismal History of Software Project
 size is easily the most significant determinant of effort, cost, and schedule. The kind of software you're developing comes in second, and personnel factors are a close third. The programming language and environment you use are not first-tier influences on project outcome, but they are a first-tier influence on the estimate.
 </blockquote>
 
-So, in order of importance to project "difficulty" or probability of success:
+So, in order of importance to project "difficulty" or probability of failure:
 
 1. **size** (smaller is better obviously)
 2. **type of software** (xray machine? space probe? crappy website you and your little buddies make?)
@@ -45,7 +45,7 @@ Do not rely on anybody else's software for your core application unless you real
 In that same article, I point out:
 
 <blockquote>
-Programmers are curious beasts, which is normally a good thing. However, watch out that they don't find new technology X and demand to use it because "it's so cool." At the same time, don't let management force X on you to make your software buzzword compliant.
+Programmers are curious beasts, which is normally a good thing. However, watch out that they don't find new technology X and demand to use it because "it's so cool." At the same time, don't let management force X on you to make your software buzzword compliant. [give epicentric story.]
 </blockquote>
 
 Zef's advice: *go and build amazing applications. Build them with the most boring technology you can find. The stuff that has been in use for years and years.*
@@ -81,7 +81,9 @@ Another way to look at that is:
 1. Use the simplest possible thing that would work
 1. Don't design, implement, or include anything you don't need right now
 
-But that's not enough for most developers; why? Let's begin by looking at what kind of developers there are.
+I'd also add: **Use as few machines and system components as possible.**
+
+But that's not enough structure for most developers; why? Let's begin by looking at what kind of developers there are.
 
 # Categorizing developers
 
@@ -132,10 +134,14 @@ Ok, so what is the relationship between methodologies and skill level? [Level 5 
 I am not trying to encourage the level 5 means never having to say you're sorry attitude. "No rules" isn't shorthand for an air of smug superiority, although there's certainly no shortage of that in our profession. "No rules" means that we should actively seek out challenging development opportunities with lots of unknowns, work that takes considerable experience and skill. **The kind of work that cannot be done by beginners slavishly following a big-Em methodology**.
 </blockquote>
 
-[Why is it that some of the biggest IT consulting companies in the world do the worst work?](http://www.joelonsoftware.com/articles/fog0000000024.html):
+From Joel Spolsky, [Why is it that some of the biggest IT consulting companies in the world do the worst work?](http://www.joelonsoftware.com/articles/fog0000000024.html):
 <blockquote>
 Beware of Methodologies. They are a great way to bring everyone up to a dismal, but passable, level of performance, but at the same time, they are aggravating to more talented people who chafe at the restrictions that are placed on them. 
 </blockquote>
+
+Joel says that the higher you go up the levels and developerland, the lower the value of methodologies/rigid-rules.
+
+How not to be outsourced/downsized?  Don't be in a job that is governed by rules, because those are the easiest kinds of jobs to give to the lowest, i.e. cheapest, programmers.
 
 ## Us versus them
 
@@ -153,9 +159,21 @@ In [Mort, Elvis, Einstein, and You](http://blog.codinghorror.com/mort-elvis-eins
 
 "***The other eighty percent are not actively thinking about the craft of software development.***"
 
-# Let's trying to control software development
+Many programmers I see are obsessed with learning "best practices", memorizing the gang of four patterns book, closely following development strategies. *All this comes down to reading a bunch of bullshit instead of doing your job.* It reminds me of a friend that I had in college. He would spend all of his time getting pencils and paper and other things together in order so that he could start the homework, but he never started the homework.
+
+If you're not thinking about the process by which you develop software, the subject of this course, your part of the 80% not 20%. Don't just write software. Think about how you write software or even write software to help you write software.
+
+# Trying to control software development
 
 [Parrt's control theory](http://parrt.cs.usfca.edu/doc/devnybbles.html): *You cannot control anybody or anything. You can only nudge or influence.*
+
+We are all panicked about risk and failing when developing large pieces of software, with good reason. In order to control the process, we come up with all kinds of measurements. Then we try to go the other way and control the process by coming up with rules or formulas based upon these measurements that must be satisfied. Hahahaha.
+
+Remember that just because a metric is good, "improving" it too far is a bad thing. Your resting heartrate is considered a good proxy for overall health. Improving it down to zero is not recommended.
+
+Also remember: **Precision does not equal accuracy!**
+
+Tom DeMarco in [Software Engineering: An Idea Whose Time Has Come and Gone?](http://www2.computer.org/cms/Computer.org/ComputingNow/homepage/2009/0709/rW_SO_Viewpoints.pdf) makes the analogy between controlling software development and controlling a teenager. Just because you can measure their height, grades, how many friends they have and so on doesn't mean that you can control them. Coming up with a rule that says: my child will have 10 good friends and get good grades is meaningless towards controlling that child.
 
 ## Rules? We don't need no stinkin' rules!
 
@@ -177,10 +195,29 @@ and
 Rules, guidelines, and principles are gems of distilled experience that should be studied and respected. But they're never a substute for thinking critically about your work.
 </blockquote>
 
-## Software development artifacts / tools
+# Software development artifacts / tools
 
 Bill de hÓra' [3 pillars](http://www.dehora.net/journal/2007/01/3_pillars.html):
 
 <blockquote>
 ...the **version control system** is a first order effect on software, along with two others--the **build system** and the **bugtracker**. Those choices impact absolutely everything else. Things like IDEs, by comparison, don't matter at all. Even choice of methodology might matter less. Although I'm betting there are plenty of software and management teams out there that see version control, build systems and bugtrackers as being incidental to the work, not mission critical tools.
 </blockquote>
+
+## My thoughts on UML
+
+I certainly create lots of diagrams and write copious notes when designing software, but they are super informal. Why? Well, what is the difference between writing something out by hand and using a word processor? Speed vs precision. Precision at the UML diagram level provides a false sense of control over reality. **Precision does not imply accuracy.** It usually just means you are more precisely wrong. Ha! Besides we already have precision: it's called code.
+
+Why formalize? I often use a graphics tool, but why bother with some ugly diagrams specified by committee? Just draw something that gets the idea across.
+
+Large programming/IT shops for low-tech companies like phone companies and accounting firms often try to manage large software development by having so-called analysts design an application with UML down the object level and then have programmers simply translate the design to code and implement it like machines. This doesn't work for two reasons:
+
+1. there is no job satisfaction being the programmer, hence, you will not be able to hire good programmers
+1. when you actually try to code something, you often have to make radical changes in the design. Usually these programmers are largely ignored by the upper echelon of the hiearchy.
+
+UML can create some pretty pictures and humans like to make these diagrams, but they are super fragile. Changes at the method and field variable name occur constantly forcing constant changes in the UML diagram. You've just created another full time job; that costs money and adds a serious parallel-update dependency.
+
+When you have a huge UML diagram, people will often post this on a large wall so you can see how everything fits together and so on. Turns out that finding your classes and their relationships without a computer is pretty tough as you need to put fingers down at lots of different locations to "hold your place" kind of like a twister game.
+
+One of the reasons I get away with not using lots of formal diagrams is that I go to great lengths to write code that is very easy to understand from the overall level and the very specific.
+
+In summary, diagrams should be as high level as possible given their intended use. Precision should be relegated to the code level. This isolates the design more from implementation detail changes. A semi-formal diagram is often useful, however, for communication with fellow programmers or dumbing things down for management. You can get totally caught up building pretty pictures rather than actually building something.
