@@ -226,42 +226,29 @@ In summary, diagrams should be as high level as possible given their intended us
 
 ### Class Hierarchy
 
-Draw Employee, Coder, Manager, CEO
+![](http://finalizedotcom.files.wordpress.com/2012/12/uikit_classes.jpg)
 
 ### Package Grouping
 
 StoreItems: {Book, Map, Paper, Pen, Stapler}
 
-### Object Diagram
-
-Car:Honda or Professor:Terence
+![](http://pic.dhe.ibm.com/infocenter/rsarthlp/v9/topic/com.ibm.xtools.modeler.doc/images/package.gif)
 
 ### Association
 
-Book &rarrow;->\*Chapter or Person->+address or Person->Employer
+Book ->\* Chapter or Person ->+ address or Person->Employer
 
-### Data flow (use case?)
+![](http://bpi.erikdebruijn.nl/img/big-picture-big.png)
 
-DBManager -Books,Pens,...-> Store --> WebServer -| |->clientbrowser
+### Data flow
+
+![](http://agilemodeling.com/images/models/dataFlowDiagram.JPG)
 
 ### State diagrams
 
 Really great example is a state diagram for HTML web pages:
 
-```
-     |------| next page
-     v      |
-[FAQ List] -|
-     |      |
-     | edit |
-     v      |cancel
-[edit faq] -|
-     |      |
-     |verify|
-[verify faq]|
-     |      |
-     |------|submit
-```
+![](figures/webmail.png)
 
 ### Data structure diagrams
 
