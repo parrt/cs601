@@ -221,3 +221,61 @@ When you have a huge UML diagram, people will often post this on a large wall so
 One of the reasons I get away with not using lots of formal diagrams is that I go to great lengths to write code that is very easy to understand from the overall level and the very specific.
 
 In summary, diagrams should be as high level as possible given their intended use. Precision should be relegated to the code level. This isolates the design more from implementation detail changes. A semi-formal diagram is often useful, however, for communication with fellow programmers or dumbing things down for management. You can get totally caught up building pretty pictures rather than actually building something.
+
+## Some useful diagrams
+
+### Class Hierarchy
+
+Draw Employee, Coder, Manager, CEO
+
+### Package Grouping
+
+StoreItems: {Book, Map, Paper, Pen, Stapler}
+
+### Object Diagram
+
+Car:Honda or Professor:Terence
+
+### Association
+
+Book &rarrow;->\*Chapter or Person->+address or Person->Employer
+
+### Data flow (use case?)
+
+DBManager -Books,Pens,...-> Store --> WebServer -| |->clientbrowser
+
+### State diagrams
+
+Really great example is a state diagram for HTML web pages:
+
+```
+     |------| next page
+     v      |
+[FAQ List] -|
+     |      |
+     | edit |
+     v      |cancel
+[edit faq] -|
+     |      |
+     |verify|
+[verify faq]|
+     |      |
+     |------|submit
+```
+
+### Data structure diagrams
+
+Similar to assocation diagrams, but specifically designed to show a formal data structure like List of List or Hashtable of Hashtable (useful for example, to do insertion sort; can alter a value and place in new location in constant time; kinda like radix sort).
+
+```
+a=2, b=0, c=1, d=1
+
+|3|
+|2| -> [a]
+|1| -> [c,d]
+|0| -> [b]
+```
+
+It helps to design algorithms if you can see the structure; you can say "ok, I'm here and I decide to walk here based on this" etc...
+
+People doing research on software engineering seem to ignore the importance of specific algorithm design.  jGuru has some fairly hairy algorithms for doing document analysis etc... that had to be designed with data structure diagrams.  Tied into overall diagram then with words like "compute histogram", "Lexicon", etc...
