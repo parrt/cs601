@@ -226,42 +226,35 @@ In summary, diagrams should be as high level as possible given their intended us
 
 ### Class Hierarchy
 
-![](http://finalizedotcom.files.wordpress.com/2012/12/uikit_classes.jpg)
+<img src=http://finalizedotcom.files.wordpress.com/2012/12/uikit_classes.jpg width=400>
 
 ### Package Grouping
 
 StoreItems: {Book, Map, Paper, Pen, Stapler}
 
-![](http://pic.dhe.ibm.com/infocenter/rsarthlp/v9/topic/com.ibm.xtools.modeler.doc/images/package.gif)
+<img src=http://pic.dhe.ibm.com/infocenter/rsarthlp/v9/topic/com.ibm.xtools.modeler.doc/images/package.gif width=80>
 
 ### Association
 
 Book ->\* Chapter or Person ->+ address or Person->Employer
 
-![](http://bpi.erikdebruijn.nl/img/big-picture-big.png)
+<img src=http://bpi.erikdebruijn.nl/img/big-picture-big.png width=400>
 
 ### Data flow
 
-![](http://agilemodeling.com/images/models/dataFlowDiagram.JPG)
+<img src=http://agilemodeling.com/images/models/dataFlowDiagram.JPG width=400>
 
 ### State diagrams
 
 Really great example is a state diagram for HTML web pages:
 
-![](figures/webmail.png)
+<img src=figures/webmail.png width=400>
 
 ### Data structure diagrams
 
 Similar to assocation diagrams, but specifically designed to show a formal data structure like List of List or Hashtable of Hashtable (useful for example, to do insertion sort; can alter a value and place in new location in constant time; kinda like radix sort).
 
-```
-a=2, b=0, c=1, d=1
-
-|3|
-|2| -> [a]
-|1| -> [c,d]
-|0| -> [b]
-```
+<img src=http://math.hws.edu/eck/cs124/javanotes6/c10/hashTable.png width=300>
 
 It helps to design algorithms if you can see the structure; you can say "ok, I'm here and I decide to walk here based on this" etc...
 
