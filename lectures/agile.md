@@ -39,16 +39,37 @@ Common ones:
 * **evolutionary prototyping**: build an initial small requirement spec, code it, then "evolve" the spec and code as needed
 * **staged delivery**: build initial requirement specs for several releases, then design-and-code each in sequence.
 
+## Suitability
 
-#### In a nutshell
+[Balancing Agility and Discipline: A Guide for the Perplexed](http://www.amazon.com/Balancing-Agility-Discipline-Guide-Perplexed/dp/0321186125)
+
+Agile home ground:
+
+* Low criticality
+* Senior developers
+* Requirements change very often
+* Small number of developers
+* Culture that thrives on chaos
+
+Plan-driven home ground:
+
+* High criticality
+* Junior developers
+* Requirements don't change too often
+* Large number of developers
+* Culture that demands order
+
+# Agile in a nutshell
 
 [Agile development](http://en.wikipedia.org/wiki/Agile_software_development) describes a number of lightweight development processes such as [SCRUM](http://en.wikipedia.org/wiki/Scrum_(development%29) and [Extreme Programming XP](http://www.extremeprogramming.org) that have the following common goals:
 
-* focused on the needs of the customer
+* Focused on the needs of the customer, collaborating with them
 
-* short and frequent release iterations
+* Short and frequent release iterations with **working** software
 
-* change friendly
+* Individuals and interactions over processes and tools
+
+* Responding to change not slavishly following a plan
 
 and usually has the following key elements in its mechanism:
 
@@ -73,7 +94,7 @@ and usually has the following key elements in its mechanism:
 
 [Ian MacFarland's XP slides from talk at USF](SLS-XP-Presentation.pdf).
 
-#### Agile Manifesto
+# Agile Manifesto
 
 Here are some fundamental principles to guide development.
 
@@ -103,27 +124,7 @@ Quoting from [Principles behind the Agile Manifesto](http://www.agilemanifesto.o
 
 * At regular intervals, the team reflects on how to become more effective, then tunes and adjusts its behavior accordingly.
 
-#### Suitability
-
-[Balancing Agility and Discipline: A Guide for the Perplexed](http://www.amazon.com/Balancing-Agility-Discipline-Guide-Perplexed/dp/0321186125)
-
-Agile home ground:
-
-* Low criticality
-* Senior developers
-* Requirements change very often
-* Small number of developers
-* Culture that thrives on chaos
-
-Plan-driven home ground:
-
-* High criticality
-* Junior developers
-* Requirements don't change too often
-* Large number of developers
-* Culture that demands order
-
-#### A case study
+# A case study
 
 I had a conversation with a friend of mine, Mark Sambrooke, who is a product manager for a large software company here in the Bay Area. I made a number of notes as he described how agile development works in his team. Then, in the summer of 2007, I visited the company for a day to watch scrums in action and to interview developers.
 
@@ -161,7 +162,7 @@ How then do you build a large project? You have multiple teams working on differ
 
 Overall time estimation: In the waterfall method, you make a wild ass guess (a "WAG") or simply say "yes" when the CEO asks you if you can have the product done by September 1. ;) With the agile method, your initial answer is "I don't know", but as time progresses you get a good sense of your team's velocity which makes it possible for you to start projecting when you might finish.  The closer you get to finishing, the more accurate your answer.  With the waterfall method, you actually have no idea up until you are actually totally done when it will be finished.  This is primarily because software development progresses at an unknown pace and even when you finish you need to do quality assurance, which could kick it back to development for an unknown amount of time.
 
-#### XP
+# XP
 
 I summarize @(http://www.amazon.com/Extreme-Programming-Explained-Embrace-Change/dp/0201616416, Extreme Programming Explained) by Kent Beck in this section and pepper it with experience I gained from building jGuru.com.
 
@@ -177,7 +178,7 @@ The four XP Values
 
 It takes courage to fix a fundamental design flaw or make a huge simplification in an existing system.  Try it out!  TJP: Tom/me in France building Karel language debugger.  Listen to others and try out huge simplifications.  I had to throw out my design and I wasted all that meeting time.
 
-### Erich Gamma's summary:
+## Erich Gamma's summary:
 
 * Code is the key activity
 
@@ -197,7 +198,7 @@ It takes courage to fix a fundamental design flaw or make a huge simplification 
 
 Does not imply that just start "daredevil" hacking.  You must be disciplined.
 
-### Kent Beck's Summary:
+## Kent Beck's Summary:
 
 * Review code all the time (pair programming)
 
@@ -213,11 +214,11 @@ Does not imply that just start "daredevil" hacking.  You must be disciplined.
 
 "Extreme" implies "what is good, do to the extreme."
 
-*Paradox*: What would you do if you had lots of time to build a project?  You'd build lots of tests, you'd restructure a lot, and you'd talk with the customer and other programmers a lot.  The normal mentality is that you never have enough time.  XP says that if you operate in this counterintuitive manner, you'll get done faster and with better software.
+**Paradox**: What would you do if you had lots of time to build a project?  You'd build lots of tests, you'd restructure a lot, and you'd talk with the customer and other programmers a lot.  The normal mentality is that you never have enough time.  XP says that if you operate in this counterintuitive manner, you'll get done faster and with better software.
 
 Designed for 2-10 programmers.  (TJP: note similarity with the 10-person surgical team suggested by Frederick Brooks in "The Mythical Man Month").
 
-### What's the difference from other methodologies?
+## What's the difference from other methodologies?
 
 * Early and continuing feedback from short cycles
 
@@ -233,7 +234,7 @@ Designed for 2-10 programmers.  (TJP: note similarity with the 10-person surgica
 
 * Reliance on practices that work with both short-term programmer instincts and long-term project interests
 
-### Overcoming Software Problems
+## Overcoming Software Problems
 
 * Schedule slips.  XP has short release cycles so slip is limited. Lots of feedback during dev with interim releases.  Do the highest priority item first so if you slip, you are missing just the low priority stuff.  TJP: project examples: some didn't do the required stuff first and some tried to build all at the same time.
 
@@ -251,13 +252,13 @@ Designed for 2-10 programmers.  (TJP: note similarity with the 10-person surgica
 
 * Staff turnover.  XP gives programmers lots of responsibility for their own work and gives them lots of feedback.  Less chance a programmer will become frustrated by being asked to do the impossible.
 
-### Important XP Philosophy
+## Important XP Philosophy
 
 * **Focus on quality**.  You can actually go faster in the long run if you build more reliable software.  Making boatloads of tests give you the confidence to write faster and with less stress knowing that you are not going to break something.  Everybody wants to work on a good system.  If you don't focus on quality, the system will decay and no one will want to work on it.
 
 * **Focus on scope**.  Just as when you write software, having to care about less is a big help.  By figuring out the minimum workable requirements and sticking to it, you will get better software and on time.  "Customers can't tell us what they want.  When we give them what they say they want, they don't like it."  This is always true.  Customer doesn't know what they want at first.  Only seeing some actual software can they refine and limit the scope etc...  **Use the softness of requirements as an opportunity, not a problem.**
 
-#### Cost estimation and planning
+# Cost estimation and planning
 
 _This information is derived from Ian McFarland's slides from above and by talking to a number of my colleagues that use agile development commercially.  This stuff really works!   I also note that it is very similar to how Tom Burns and I built the jGuru.com server._
 
