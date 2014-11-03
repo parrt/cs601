@@ -5,7 +5,7 @@ _Updated Dec 3, 2007_
 
 Writing software is a big fat mess and is usually tangled up with bureaucracy and Human collaboration issues.  As development progresses, software typically becomes more and more fragile and more and more buggy.  As we've discussed, it's rare that a system is delivered that actual does what the customer wants (let alone on time).
 
-To fix the problem, people tried to apply engineering principles to the problem.  That "analyze, design, implement, test" sequence is what I was taught as an undergraduate in the early 80's.  That _waterfall method_ produces software that is inflexible, late, and most importantly doesn't do what the user wants.  Apparently it's not the solution.
+To fix the problem, people have tried to apply engineering principles to the problem.  That "analyze, design, implement, test" sequence is what I was taught as an undergraduate in the early 80's.  That _waterfall method_ produces software that is inflexible, late, and most importantly doesn't do what the user wants.  Apparently it's not the solution.
 
 The problem is that users don't know what they want until you start showing them something.  Quoting Tom Burns:
 
@@ -16,6 +16,29 @@ You know the least about a problem at the start of a project--that is why it doe
 The *single biggest lesson* I learned, and a point emphasized by _Agile Development_, the subject of this lecture, was that requirements never stay the same for even a few days.  You had better get used to it, or better yet, take advantage of it lest you drown.  Interestingly, there is a close relationship between what XP espouses and between what I ended up following at jGuru, most of which I learned on the job or by listening to Tom Burns, our CEO.
 
 You should read this excellent blog entry by Erik Swan, CTO and cofounder of Splunk, describing [how software development is like managing the furniture in your living room](http://dev.splunk.com/2007/09/17/the-feature-magpie-phenomenon).
+
+# Lifecycle stages
+
+[UW course slides](http://courses.cs.washington.edu/courses/cse403/14sp/lectures/lecture02-lifecycle.pdf):
+
+* Problem definition
+* Requirements specification
+* Design
+* Coding
+* Integration
+* Testing
+* Deployment
+* Maintenance
+
+Mix-and-match and loop to create your own methodology
+
+Common ones:
+
+* **code-and-fix**: write some code, debug it, repeat (i.e., ad-hoc)
+* **waterfall**: standard phases (req., design, code, test) in order
+* **evolutionary prototyping**: build an initial small requirement spec, code it, then "evolve" the spec and code as needed
+* **staged delivery**: build initial requirement specs for several releases, then design-and-code each in sequence.
+
 
 #### In a nutshell
 
@@ -33,9 +56,9 @@ and usually has the following key elements in its mechanism:
 
 * Cost estimation is done by estimating difficulty not the number of hours. After awhile, the number of units of work done by a team per unit time stabilizes and forecasting and becomes more accurate.
 
-* Develop software in short development cycles called _sprints_.  1-4 weeks usually. Iterations include everything from requirements analysis through coding and testing and documentation. The key is that the software the end is releasable. Can be internal or extra release. The deadline on a sprint is firm, but you can change the scope (number of stories were goals to be completed). Team members should announce early when they must drop tasks in order to meet the sprint deadline.
+* Develop software in short development cycles called _sprints_.  1-4 weeks usually. Iterations include everything from requirements analysis through coding and testing and documentation. The key is that the software the end is releasable. Can be internal or extra release. The deadline on a sprint is firm, but you can change the scope (number of stories or goals to be completed). Team members should announce early when they must drop tasks in order to meet the sprint deadline.
 
-* All team members must be in the same place; no virtual development. They have daily _stand up meetings_ with all team members getting up *briefly* to say what they did yesterday and what they plan to do today.  *Transparency*is a key issue: the peer pressure helps increase velocity and quality.  This is also called a _scrum_. This is where the team decides on development priorities, how to add new stories, etc.  The team negotiates with each other about what to do now and what to do later.  The product/project managers provides influence from the customer. Some groups use a _ScrumMaster_ who is really just a facilitator for the meeting.  Here is the ScrumMaster from @(http://www.splunk.com, Splunk, Inc) who dons a rugby helmet for fun:
+* All team members must be in the same place; no virtual development. They have daily _stand up meetings_ with all team members getting up *briefly* to say what they did yesterday and what they plan to do today.  *Transparency* is a key issue: the peer pressure helps increase velocity and quality.  This is also called a _scrum_. This is where the team decides on development priorities, how to add new stories, etc.  The team negotiates with each other about what to do now and what to do later.  The product/project managers provides influence from the customer. Some groups use a _ScrumMaster_ who is really just a facilitator for the meeting.  Here is the ScrumMaster from @(http://www.splunk.com, Splunk, Inc) who dons a rugby helmet for fun:
 <img src=figures/david-scrum-leader.jpg width=150>
 
 * _Scrum of scrums_. The managers meet with other managers once a week so that there can be communication between groups. This group discusses the status graph and open stories and dependencies between these stories.  Which tasks have been completed and which have been started. Bug metrics are displayed.
@@ -44,7 +67,7 @@ and usually has the following key elements in its mechanism:
 
 [Martin Fowler (of refactoring fame) says](http://www.martinfowler.com/articles/newMethodology.html#FromNothingToMonumentalToAgile):
 
-* _Agile methods are adaptive rather than predictive_. Engineering methods tend to try to plan out a large part of the software process in great detail for a long span of time, this works well until things change. So their nature is to resist change. The agile methods, however, welcome change. They try to be processes that adapt and thrive on change, even to the point of changing themselves.
+* _Agile methods are adaptive rather than predictive_. Engineering methods tend to try to plan out a large part of the software process in great detail for a long span of time, this works well until things change. So their nature is to resist change. The agile methods, however, welcome change. They try to use processes that adapt and thrive on change, even to the point of changing themselves.
 
 * _Agile methods are people-oriented rather than process-oriented_. The goal of engineering methods is to define a process that will work well whoever happens to be using it. Agile methods assert that no process will ever make up the skill of the development team, so the role of a process is to support the development team in their work.
 

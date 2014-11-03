@@ -1,5 +1,4 @@
-[Lifecycle Stages](From:
-http://courses.cs.washington.edu/courses/cse403/14sp/lectures/lecture02-lifecycle.pdf
+[Lifecycle Stages](http://courses.cs.washington.edu/courses/cse403/14sp/lectures/lecture02-lifecycle.pdf
 )
 
 * Problem definition
@@ -35,7 +34,7 @@ But,
 Sequential methods when... (From Code Complete second edition)
 
 * Requirements are fairly stable
-* Design a straightforward and fairly well understood
+* Design is straightforward and fairly well understood
 * Development team familiar with application area
 * Project contains little risk
 * Cost of changing requirements design and code downstream is high
