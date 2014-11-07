@@ -83,10 +83,7 @@ class Student extends Human {
 Student s = new Student("Madonna","111-22-3333");
 Human h = s;
 ```
-What does s.getName() return?
-What does h.getName() return?
-What does s.getInfo() return?
-What does h.getInfo() return?
+What does s.getName() return? What does h.getName() return? What does s.getInfo() return? What does h.getInfo() return?
 
 8. Which of the following assignments result in compile-time errors? Will any assignments compile properly, but eventually lead to run-time errors (ClassCastException)?
 ```java
