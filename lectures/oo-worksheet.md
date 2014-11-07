@@ -8,12 +8,15 @@ abstract class Animal {
   ...
   public abstract void speak();
 }
+```
 Will the following definition of Tiger compile without error?
+```java
 class Tiger extends Animal {
   public void scratch() {;}
   public String getName() { return "tigger"; }
 }
 ```
+
 2. Considering Tiger and the Animal class, which class is the subclass and which is the superclass? 
 
 3. What is the difference between an instance of Tiger and the class Tiger? Does
