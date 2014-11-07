@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/web" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cookies" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/sessions" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/http" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
