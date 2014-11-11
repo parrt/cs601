@@ -84,4 +84,33 @@ public class ClientHandler implements Runnable {
 			}
 		}
 	}
+	void foo() {
+		Airplane a = null;
+		Bird b = null;
+		FlyingSquirrel s = new FlyingSquirrel();
+
+		CanFly f;
+
+		f = a; // 1
+		f = b; // 2
+		f = s; // 3
+		f = (CanFly)s; // 4
+		a = b; // 5
+	}
+}
+
+interface CanFly {
+  public void fly();
+}
+
+class Airplane implements CanFly {
+  public void fly() {}
+}
+
+class Bird implements CanFly {
+  public void fly() {}
+}
+
+class FlyingSquirrel {
+  public void fly() {}
 }
