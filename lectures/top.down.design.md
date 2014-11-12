@@ -5,7 +5,7 @@ Top Down Design
 
 1. If your code has a large average method size, you may not be breaking down your functionality into manageable pieces.
 
-1. If your method names don't indicate a specific task and are things like {step2()} or {do_it()} you may not be properly breaking down your functionality into recognizable tasks or conceptual operations.
+1. If your method names don't indicate a specific task and are things like `step2()` or `do_it()` you may not be properly breaking down your functionality into recognizable tasks or conceptual operations.
 
 1. If your code has a very shallow functional decomposition tree, you may not have broken down your tasks into fine-grained chunks.
 
