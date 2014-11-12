@@ -200,14 +200,6 @@ ClientHandler.dumpFile
 	read it all in and write to output stream to client
 	flush output stream
 	close file stream
-
-ClientHandler.execJava
-	obtain Class object for class name
-	get a new instance of that class
-	if instance of ServerSideJava then
-		exec its service method
-	else
-		send note to browser saying invalid
 ```
 
 Note that I don't worry about details like object constructors at this point.  That's an implementation detail.
