@@ -176,9 +176,9 @@ My text only functional decomposition (*across objects*) looks like:
 ```java
 Server.main:
 	check args (server root, log dir root, ...)
-	create and launch Dispatch.accept()
+	create and launch Server.accept()
 
-Dispatch.accept:
+Server.accept:
 	forever do {
 		wait for a socket connection
 		create a new ClientHandler attached to socket
