@@ -159,12 +159,11 @@ Let's design the HTTP server because it's familiar to you.
 
 First, my basic understanding of the actors at work:
 
-![](figures/http.object.diag.gif)
+Server ->* ClientHandler
 
-From this, I conclude that I need the following objects:
+From this,  it looks like we need two classes:
 
 1. {Server.java}
-1. {Dispatcher.java}
 1. {ClientHandler.java}
 
 But this does not tell me how they implement these inter-object messages.  For that, I will provide a top-down design for the major methods.
