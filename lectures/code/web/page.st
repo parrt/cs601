@@ -1,6 +1,13 @@
-page(users) ::= <<
-<! a comment !>
-<header(title="foo")>
-<users:{u| <u.name> <u.parkingSpot>}; separator="\n">
+page(users,phones) ::= <<
+<! <header(title="foo")> !>
+
+parrt's phone is <phones.("parrt")>
+
+<phones,users:{p |
+    <p>: <phones.(p)>
+}>
+
+<users:{u | <phones.(u.name)>}>
+
 <users:showuser(); separator=", ">
 >>

@@ -1,1 +1,1 @@
-showuser(u) ::= "<u.name> <u.id>"
+showuser(u) ::= "<u.name>"
