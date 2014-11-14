@@ -13,7 +13,7 @@ Thanks to the [Wayback machine](http://www.archive.org) at the Internet Archive,
 
 |Date | Preview | Archive Link|
 |--------|--------|--------|
-|Dec 06, 1998 | <img src="figures/jguru/1998-12-06.gif" width=200> | [archive](http://web.archive.org/web/19981206172412/http://www.jguru.com")|
+|Dec 06, 1998 | <img src="figures/jguru/1998-12-06.gif" width=200> | [archive](http://web.archive.org/web/19981206172412/http://www.jguru.com)|
 |Jan 25, 1999 | <img src="figures/jguru/1999-01-25.gif" width=200> | [archive](http://web.archive.org/web/19990125101001/www.magelang.com)|
 |Nov 9, 1999 | <img src="figures/jguru/1999-11-09.gif" width=200> | [archive](http://web.archive.org/web/19991109003940/http://www.jguru.com)|
 |March, 2000 | <img src="figures/jguru/2000-02-29.gif" width=200> | [archive](http://web.archive.org/web/20000303093944/http://www.jguru.com/portal/index.jsp)|
@@ -38,7 +38,7 @@ Note that the premium site has one gutter.  BEA has two on the left.  webGAIN ha
 
 We had a random collection of dissimilar boxes running various flavors of linux (redhat).
 
-<img src="figures/jguru/big.picture.gif" width=100>
+<img src="figures/jguru/big.picture.gif" width=500>
 
 ## Software
 
@@ -47,7 +47,7 @@ We had loads of various pieces of software:
 * apache
 * jserv
 * gnujsp 0.9.10
-* epicentric (a portal server purchases for big $$$)
+* epicentric (a portal server purchased for big $$$)
 * mysql 3.22.25
 * solid (2 of them), one for apidb and one for data
 * solid jdbc driver
