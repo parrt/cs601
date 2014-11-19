@@ -221,7 +221,7 @@ public void processGet(OutputStream out, String filePath) throws IOException { }
 ```
 25. Run optimize imports on the files.
 
-Okay, I think it looks pretty good now. The end result files are [HttpClientHandler.java](https://github.com/parrt/cs601/blob/master/lectures/code/refactoring/HttpClientHandler.java) and [FileAndJavaHttpHandler](https://github.com/parrt/cs601/blob/master/lectures/code/refactoring/FileAndJavaHttpHandler.java).
+Okay, I think it looks pretty good now. The end result files are [HttpClientHandler.java](https://github.com/parrt/cs601/blob/master/lectures/code/refactoring/HttpClientHandler.java) and [FileAndJavaHttpHandler](https://github.com/parrt/cs601/blob/master/lectures/code/refactoring/FileAndJavaHttpHandler.java) and [ServerSideJava.java](https://github.com/parrt/cs601/blob/master/lectures/code/refactoring/ServerSideJava.java).
 
 
 # Thoughts on IDEs vs emacs (TJP)
@@ -231,8 +231,8 @@ Coding/refactoring is part
 1. thinking
 1. text editing using well-established idioms and patterns
 1. questioning (searching, jumping to a class def, finding implementations of methods etc...)
-1. cutting-n-pasting
+1. cutting-n-pasting / re-factoring / implementing changes
 
 Emacs really only does a good job of 2, which is not a huge percentage of coding.  It is much better to treat your program like a database of code not just plain text.  Being able to quickly see the class hierarchy or find implementors or references of a method is very useful.
 
-After switching to Intellij's IDEA dev environment (still the best IDE on any platform in my opinion) I became MUCH more productive.  Without code completion of method names and variables, i'd have worse tendonitus i can tell you.
+After switching to Intellij's IDE (still the best IDE on any platform in my opinion) I became MUCH more productive.  Without code completion of method names and variables, I'd have worse tendonitus i can tell you.
