@@ -5,6 +5,13 @@ Until you've had to live with the same piece of code for a while, you will not e
 
 These lecture notes paraphrase or quote much content from [Martin Fowler's Refactoring Book](http://www.amazon.com/exec/obidos/ASIN/0201485672/002-9330989-7896037).
 
+Fowler:
+
+<blockquote>
+  "Any fool can write code that a computer can understand.  Good programmers write code that humans can understand."
+</blockquote>
+
+
 # Refactoring?
 
 ## What?
@@ -109,37 +116,113 @@ TJP: Locally-inoptimal refactoring-detours generally lead to a more optimal glob
 
 *Example 3*: An employee built a prototype forum manager.  It had evolved over months and had naturally decayed in code beauty.  I rewrote (since I was only coder employee then) to be better designed and fast etc...  Boy was the new thing beautiful.  Well, as we added more features and so on, it got uglier and uglier.  Still I left it.  Then we realized it was taking forever at start up because it loaded all forum messages up front.  Ok, so I finally redesigned it to load last 3 months worth and do others dynamically.  Actually I knew that I would eventually have this "popularity" problem and it was hanging over me all the time.  Now I don't worry about it. :)
 
-# Patterns TJP used on jGuru
+# Re-factoring Patterns TJP likes
 
-Fowler:
+I use [Intellij's re-factoring tool](https://www.jetbrains.com/idea/features/refactoring.html).
 
-<blockquote>
-  "Any fool can write code that a computer can understand.  Good programmers write code that humans can understand."
-</blockquote>
 
-I did lots of refactoring at jGuru to continuously "groom" the code as I called it.  In terms of Fowler, I did some of the following in order of most common to least.
+* [Extract Method](http://www.refactoring.com/catalog/extractMethod.html)
+* [Pull up method](http://www.refactoring.com/catalog/pullUpMethod.html)
+* [Pull up field](http://refactoring.com/catalog/pullUpField.html)
+* Inline method
+* Change method signature
+* Rename variable, method, class, etc..
+* Introduce constant
+* Introduce variable
+* Move method, static field, class, interface
+* [Extract interface](http://refactoring.com/catalog/extractInterface.html)
 
-* @(http://www.refactoring.com/catalog/extractMethod.html,"Extract Method")
-* @(http://www.refactoring.com/catalog/pullUpMethod.html,"Pull up method")
-* @(http://www.refactoring.com/catalog/addParameter.html, "Add parameter")
-* @(http://www.refactoring.com/catalog/renameMethod.html,"Rename method")
-* @(http://www.refactoring.com/catalog/replaceTempWithQuery.html,"Replace temp with query")
-* @(http://www.refactoring.com/catalog/introduceAController.html,"Introduce a controller") TJP calls this a _service_ like {LogManager}
+Useful code generation templates:
 
-_Renaming_ is a great idea because code should communicate clearly and variable names are super important (imagine a program where everything is {v1}, {v2}, ...; that is what obfuscaters do).
-
-The features of Intellij's IDEA refactoring tool I used:
-
-* extract method (does all the flow analysis)
-* rename
-* change method signature
-* extract interface
 * implement methods from interface/superclass
+* override method
 * generate getter/setters for instance variables
+* generate constructor
+* generate toString
 
-I also introduced lots of classes to factor out common behavior, but I did this manually.
+_Renaming_ is a great idea because code should communicate clearly and variable names are super important (imagine a program where everything is `v1`, `v2`, ...; that is what obfuscaters do).
 
 My first impression was that all of this was not very useful (coming from emacs), but I have come to really rely on the power of these operations.  For example, change method signature changes every reference to that method even for messages to all subclasses of the method's class you change etc...
+
+# Example re-factoring
+
+Refers to [Sample Http Client code](https://github.com/parrt/cs601/blob/master/lectures/code/refactoring/MyClient.java).
+
+Kind of a stream of consciousness as I sniff the code:
+
+Copy MyClient to FooClient or something like that.
+
+1. Rename to HttpClient
+2. Move ServerSideJava to a non-nested interface (pull up)
+3. Select all, then adjust indentation
+4. Rename ErrorManager() to errPage
+5. Simplify expression in indexFileHandler() the checks equal to true; there are actually a bunch of those. a simple replace "== true" with "" would work.
+6. Rename parameter contentIn in the page methods to message or msg.
+7. Extract method: getContentTypeHeader from downloadFile.
+8. Notice that `FileInputStream inFile` is not closed; and `try-finally`.
+9. Think about moving closeAll() out of download file because it is not a method that does the open. Use "find all references" and noticed that there are about eight or nine. This is a prime example of unstructured programming. Ideally there should be one spot to open and another spot to close socket connections, preferably symmetrically in the same method. Obviously everybody goes all the way back to run() so let's move it there is a `finally` clause.  Yep, now only one is necessary.
+10. This makes me start thinking about those fields. `p` is not a very good name; at least we can change it to `pout`.
+11. Whoa, I see an element in the stream pipeline that will not be closed because there's no reference to it. Likely this is not a problem as closing the outermost pipe element will close all the intermediary pipes, but for cleanliness let's introduce a variable here:
+```java
+buf = new BufferedReader(new InputStreamReader(in));
+```
+becomes
+```java
+InputStreamReader isr = new InputStreamReader(in);
+buf = new BufferedReader(isr);
+```
+12. This creates a local variable and then we notice that not all of the fields are needed. Whoops.  All of the methods reference `pout`, after renaming, except the download file references `out`, which will jump directly into the middle of an IO stream pipeline. In the end, this code should not be using PrintStream. Rather than do a string replace, which might make me miss one, I'm going to remove that variable so that the compiler tells me where the issues are. All of those `pout.writeln(s)` become `out.write(s.getBytes())`. This removes a lot of cruft and, as we know from our proxy project, we should be using raw bytes to communicate anyway.
+13. Of all of these fields:
+```java
+	Socket socket;
+	String docRoot;
+	String fileLocation;
+	OutputStream out = null;
+	InputStream in = null;
+	BufferedReader buf;
+```
+Only the `socket` and `docRoot` make sense and, in this case, only `out` is actually used among the methods. I manually move all but those three locals into `run()`. That means we need to move some things out of the `closeAll` method and into our try finally of `run`:
+```java
+if ( in!=null ) in.close();
+if ( buf!=null ) buf.close();
+closeAll();
+```
+14. At this point, we might as well inline method `closeAll`. (add `if ( out!=null )` to the `close`).
+15. It bugs me to have that `out` field as it is totally unnecessary; we can pass that around as a parameter, which then as a side effect makes our functions more reusable. Use "change signature" to add a `OutputStream out` parameter with a default value of out. Do this for both functions that use `out`.
+16. Hmm...BufferedReader doesn't make sense because that would assume an encoding and might mess up the byte stream.  We want to replace this line:
+```java
+InputStreamReader isr = new InputStreamReader(in);
+```
+with
+```java
+din = new DataInputStream(in);
+```
+17. Ok, I changed my mind. Let's only close the outermost IO stream element:
+```java
+din = new DataInputStream(new BufferedInputStream(in));
+```
+which means we replace something in the finally:
+```java
+if ( din!=null ) din.close();
+```
+18. Local variable `fileLocation` is at the highest level but only used at inner level so let's move it closer to its usage.
+19. Local `get` is a bad name because it's a general command perhaps not a get.
+20. put this line together:
+```java
+String[] requestPart;
+requestPart = headerLine.split(" ");
+```
+21. It might be worth extracting a method called `processGet`, that grabs the job and file processing code.  It cleans up the main functionality of `run`, which is really too open the sockets, process, and close up shop.
+22. Method `execJava` doesn't use his return value so let's get rid of it, which gets rid of four or five return statements.
+23. It seems that the message is the same for all exceptions coming from the server-side Java; They don't track null pointers and so on but we might as well wrap that all up into one exception catcher. We can print the actual type of exception.
+24. Since it's easy to do, it looks like we might be able to create a nice superclass from this that is reusable. In preparation, let's rename the class to the specific functionality: `FileAndJavaHttpHandler`. Then, extract superclass and call it `HttpClientHandler`, pulling up the socket, fileLocation, run, and the error page methods. (I had to manually move the fields as they didn't have the right visibility and intellij didn't move them.) We have to make a superclass constructor and also add this default implementation:
+```java
+public void processGet(OutputStream out, String filePath) throws IOException { }
+```
+25. Run optimize imports on the files.
+
+Okay, I think it looks pretty good now. The end result files are:
+
 
 # Thoughts on IDEs vs emacs (TJP)
 
