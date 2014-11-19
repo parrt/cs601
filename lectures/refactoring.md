@@ -221,7 +221,7 @@ public void processGet(OutputStream out, String filePath) throws IOException { }
 ```
 25. Run optimize imports on the files.
 
-Okay, I think it looks pretty good now. The end result files are:
+Okay, I think it looks pretty good now. The end result files are [HttpClientHandler.java](https://github.com/parrt/cs601/blob/master/lectures/code/refactoring/HttpClientHandler.java) and [FileAndJavaHttpHandler](https://github.com/parrt/cs601/blob/master/lectures/code/refactoring/FileAndJavaHttpHandler.java).
 
 
 # Thoughts on IDEs vs emacs (TJP)
