@@ -50,47 +50,47 @@ The breakdown is as follows:
 * Quality: 15 points
 
 
-|Required| Points | Feature |
-|--------|--------|--------|
-| x |4 | User registration. You must support multiple users, each with their own POP server to pull mail from and SMTP server to send email out of. Users are stored in the database. Passwords are not stored in the clear in the database.|
-| x |2 | User log in/out |
-| x | 1| Log each page request and also create log files, such as with `java.util.Logger`, for errors or other things you want to write to a log file. Store these logs in `/var/log/webmail` on your Linux server (see requirements below).|
-| x |5 | Pull email from POP servers via your own POP protocol handler and display on website. Requires SSL connection to Gmail or similar.|
-| x|2 | Mail pulled from POP is stored in the database. |
-|x |3 | Obviously, you must have an `Inbox` folder/tag where incoming mail is displayed. |
-|x|3 | View mail message page. |
-|x|3 | Have a functional "check mail" button. |
-|x|3| A compose message page. |
-|x |4 | Send/reply to email using your own SMTP client. Use `smtp.usfca.edu` as the outgoing mail server.  You can also set it up to use SSL to connect to gmail's or any other if you want. |
-| x|3 | Forward email feature.|
-|x|5 | User is able to delete mail (sends to hardcoded or user-defined `Trash` folder/tag and then have a "empty trash button"). |
-|x|2| Support HTTPS connections to your website not just HTTP.|
-| |2 | An indication for messages and message lists (mailboxes) whether a message has been read or not. An ability to toggle read/unread.|
-| |5| Mailbox view pagination so user can select page of multipage view. |
-| |3 | Sent mail goes to hardcoded or user-defined `Sent` folder/tag. |
-| |3 | Edit user account to change password etc... |
-| |5 | Support user-defined "folders" or "tags" so users can direct incoming email to various folders manually. Users can move mail between folders by changing tags.|
-| |3 | Support viewing of in-line email images. |
-| |4 | User is able to search all of their mail for keywords; use a simple linear walk of the data via the database or FOR loop (rather than a sophisticed search engine like Lucene). The user should be able to pick the field such as "from" or "subject" to search in. |
-| |5 | Sort mail folder display by various fields/columns such as sender's email, subject, ... |
+|#|Required| Points | Feature |
+|---|--------|--------|--------|
+|1| x |4 | User registration. You must support multiple users, each with their own POP server to pull mail from and SMTP server to send email out of. Users are stored in the database. Passwords are not stored in the clear in the database.|
+|2| x |2 | User log in/out |
+|3| x | 1| Log each page request and also create log files, such as with `java.util.Logger`, for errors or other things you want to write to a log file. Store these logs in `/var/log/webmail` on your Linux server (see requirements below).|
+|4| x |5 | Pull email from POP servers via your own POP protocol handler and display on website. Requires SSL connection to Gmail or similar.|
+|5| x|2 | Mail pulled from POP is stored in the database. |
+|6|x |3 | Obviously, you must have an `Inbox` folder/tag where incoming mail is displayed. |
+|7|x|3 | View mail message page. |
+|8|x|3 | Have a functional "check mail" button. |
+|9|x|3| A compose message page. |
+|10|x |4 | Send/reply to email using your own SMTP client. Use `smtp.usfca.edu` as the outgoing mail server.  You can also set it up to use SSL to connect to gmail's or any other if you want. |
+|11| x|3 | Forward email feature.|
+|12|x|5 | User is able to delete mail (sends to hardcoded or user-defined `Trash` folder/tag and then have a "empty trash button"). |
+|13|x|2| Support HTTPS connections to your website not just HTTP.|
+|14| |2 | An indication for messages and message lists (mailboxes) whether a message has been read or not. An ability to toggle read/unread.|
+|15| |5| Mailbox view pagination so user can select page of multipage view. |
+|16| |3 | Sent mail goes to hardcoded or user-defined `Sent` folder/tag. |
+|17| |3 | Edit user account to change password etc... |
+|18| |5 | Support user-defined "folders" or "tags" so users can direct incoming email to various folders manually. Users can move mail between folders by changing tags.|
+|19| |3 | Support viewing of in-line email images. |
+|20| |4 | User is able to search all of their mail for keywords; use a simple linear walk of the data via the database or FOR loop (rather than a sophisticed search engine like Lucene). The user should be able to pick the field such as "from" or "subject" to search in. |
+|21| |5 | Sort mail folder display by various fields/columns such as sender's email, subject, ... |
 
 Choose from *one* the following list of advanced features:
 
-| Points | Feature |
-|--------|--------|
-|5 | Spell checking that highlights words not found in a large dictionary when the user clicks a button on the compose message page; or, more sophisticated functionality. |
-|7 | Use of Lucene to search through email. The user should be able to pick the field such as "from" or "subject" to search in.|
-|7 | A contact list feature that allows users to add, delete, and view contacts. It should also allow selection or auto completion or some other mechanism to make it easy to email those contacts.|
-|10 | Support attachments (send/receive) |
-|10 | SPAM filtering using something like a Naive Bayes classifier. You can use a library for this feature; i.e., don't build your own classifier.  User should be able to identify which messages are spam and which are not.|
+| # | Points | Feature |
+|---|--------|--------|
+|22|5 | Spell checking that highlights words not found in a large dictionary when the user clicks a button on the compose message page; or, more sophisticated functionality. |
+|23|7 | Use of Lucene to search through email. The user should be able to pick the field such as "from" or "subject" to search in.|
+|24|7 | A contact list feature that allows users to add, delete, and view contacts. It should also allow selection or auto completion or some other mechanism to make it easy to email those contacts.|
+|25|10 | Support attachments (send/receive) |
+|26|10 | SPAM filtering using something like a Naive Bayes classifier. You can use a library for this feature; i.e., don't build your own classifier.  User should be able to identify which messages are spam and which are not.|
 
 In addition, your project will be evaluated on the following more subjective criteria:
 
-| Points | Feature|
-|--------|--------|
-| 5 | Code quality as measured by instructor.|
-| 5 | Overall aesthetic and design quality of the website.|
-| 5 | Overall management of the project, including your prioritization of features and task completion. Includes how well you use git and github mechanisms such as releases, issues, and git commits etc...|
+| # | Points | Feature|
+|---|--------|--------|
+|27| 5 | Code quality as measured by instructor.|
+|28| 5 | Overall aesthetic and design quality of the website.|
+|29| 5 | Overall management of the project, including your prioritization of features and task completion. Includes how well you use git and github mechanisms such as releases, issues, and git commits etc...|
 
 Notice that these subjective scores cover 15% of the project. Screwing these up means the most you can achieve is 85% on the entire project.
 
