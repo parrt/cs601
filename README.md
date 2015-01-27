@@ -81,12 +81,15 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 
 # Syllabus
 
-Introduction	
+Introduction
 
 ## Tools
 [Compiling and Running Simple Java Code](https://github.com/parrt/cs601/blob/master/lectures/javac-jar.md)
+
 UNIX command line
+
 [Git on command-line](https://github.com/parrt/cs601/blob/master/lectures/git-basics.md) (See https://github.com/USF-CS601-S15/parrt-doublekey)
+
 Java I/O, unicode	
 Sockets, protocols	
 github.com guest lecture	
