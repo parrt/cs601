@@ -57,13 +57,13 @@ You should test your library extensively. I have provided an initial unit test f
 
 You will clone your student repository to your local disk and develop in that directory, committing files and changes as necessary. Your repository will be something like:
 
-https://github.com/USF-CS601-F14/userid-doublekey
+https://github.com/USF-CS601-S15/userid-doublekey
 
 You can use ```git``` from the command-line, from within your IDE (such as [Intellij](http://www.jetbrains.com/idea/download/)), or using the free [SourceTree](http://www.sourcetreeapp.com/) app.  Here is a sample session from the command line:
 
 ```
 $ cd ~/cs601/projects # or whatever
-$ git clone git@github.com:USF-CS601-F14/userid-doublekey.git
+$ git clone git@github.com:USF-CS601-S15/userid-doublekey.git
 Cloning into 'userid-doublekey'...
 remote: Counting objects: 21, done.
 remote: Compressing objects: 100% (9/9), done.
@@ -98,7 +98,7 @@ Until you create ``DoubleKeyHashMap.java``, the continuous integration server wi
 
 ```
 ...
-/home/travis/build/USF-CS601-F14/parrt-doublekey/test/cs601/collections/TestMapSimple.java:11: error: cannot find symbol
+/home/travis/build/USF-CS601-S15/parrt-doublekey/test/cs601/collections/TestMapSimple.java:11: error: cannot find symbol
 			new DoubleKeyHashMap<String, Integer, Double>();
 			    ^
   symbol:   class DoubleKeyHashMap
