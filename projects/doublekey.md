@@ -45,13 +45,37 @@ Your implementation class must define a constructor with no arguments and one wi
 
 All of your classes must be in the ``cs601.collections`` package. When you clone your repo, it should look like to start:
 
-![map project hierarchy](figures/map-hier.png)
+```
+├── .travis.yml
+├── README.md
+├── bild.py
+├── lib
+│   └── doublekey-tests.jar
+├── src
+│   └── cs601
+│       └── collections
+│           ├── DoubleKeyHashMap.java
+│           └── DoubleKeyMap.java
+└── test
+    └── cs601
+        └── collections
+            └── TestMapSimple.java
+```
 
 You are creating a library, NOT a main program.
 
 Do not generate any output from your library. Only test rigs should generate output. In other words, do not leave any debugging println statements around. Do not print error messages upon invalid keys and so on. Upon error, you will be throwing exceptions per the interface.
 
-You should test your library extensively. I have provided an initial unit test for you in [TestMapSimple.java](resources/TestMapSimple.java).  You will need [``junit-4.10.jar``](http://sourceforge.net/projects/junit/files/junit/4.10/junit-4.10.jar/download).  Committing to your repository will trigger a test with a rigorous set of my own tests via the [continuous integration server](http://www.travis-ci.com).
+You should test your library extensively. I have provided an initial unit test for you in [TestMapSimple.java](resources/TestMapSimple.java).  You will need [``junit-4.10.jar``](http://sourceforge.net/projects/junit/files/junit/4.10/junit-4.10.jar/download).  Committing to your repository will trigger a test with a rigorous set of my own tests via the [continuous integration server](http://www.travis-ci.com). If you look at (hidden) file `.travis.yml`:
+
+```bash
+language: java
+jdk:
+  - oraclejdk7
+script: "./bild.py test"
+```
+
+you will see that it runs the Python script `bild.py` that sits in your directory. That script will download a library file called `bilder.py` automatically the first time it is run to support its testing. It will use the jar in `lib` to run my tests.
 
 ## Submission
 
