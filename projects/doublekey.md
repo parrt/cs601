@@ -77,6 +77,16 @@ script: "./bild.py test"
 
 you will see that it runs the Python script `bild.py` that sits in your directory. That script will download a library file called `bilder.py` automatically the first time it is run to support its testing. It will use the jar in `lib` to run my tests.
 
+Please note:
+
+1. You must go to your repository page at Travis and give Travis permission to access your github account:
+```
+https://magnum.travis-ci.com/USF-CS601-F14/YOURUSERID-doublekey
+```
+The first time you go there it will ask  you to authenticate via github.
+1. Make sure that you have **provided a valid email address to github** and that they have authenticated that email address at github. Otherwise they will not get email upon commit.
+1. By default, email is not sent upon successful build. Email is sent only upon build failure.
+
 ## Submission
 
 You will clone your student repository to your local disk and develop in that directory, committing files and changes as necessary. Your repository will be something like:
