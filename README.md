@@ -86,15 +86,14 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 Introduction
 
 ## Tools
-[Compiling and Running Simple Java Code](https://github.com/parrt/cs601/blob/master/lectures/javac-jar.md)
 
-* UNIX command line
+* [Compiling and Running Simple Java Code](https://github.com/parrt/cs601/blob/master/lectures/javac-jar.md)
+* [UNIX command line](https://github.com/parrt/cs601/raw/master/lectures/linux.pdf)
 * [Git on command-line](https://github.com/parrt/cs601/blob/master/lectures/git-basics.md) (See https://github.com/USF-CS601-S15/parrt-doublekey)
 * [Team collaboration tools](https://github.com/parrt/cs601/blob/master/lectures/github-dev.md)
-* Java I/O, unicode	
-* Sockets, protocols	
-* github.com guest lecture	
-* software licensing lecture	
+* [Java I/O, unicode](https://github.com/parrt/cs601/blob/master/lectures/javaio.md)
+* [Sockets, protocols](https://github.com/parrt/cs601/blob/master/lectures/sockets.md)
+* [Software licensing lecture](https://github.com/parrt/cs601/blob/master/lectures/software-licensing.md)
 
 ## Network programming
 DNS	
