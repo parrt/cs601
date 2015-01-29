@@ -83,7 +83,8 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 
 # Syllabus
 
-Introduction
+[Administrative details](https://github.com/parrt/cs601/blob/master/lectures/admin.pdf)
+[Introduction](https://github.com/parrt/cs601/blob/master/lectures/intro.pdf)
 
 ## Tools
 
