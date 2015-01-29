@@ -139,9 +139,13 @@ $ vi *.java
 
 Where, with your editor, you have added
 
+```java
 package foo;
+```
+
 as the first line of every file. Also add "foo: " to the strings so that we can tell which version of our code is executing. So Hello.java looks like:
 
+```java
 package foo;
 
 public class Hello {
@@ -149,6 +153,8 @@ public class Hello {
         System.out.println("foo: hello");
     }
 }
+```
+
 Note the obvious correlation between package and directory: if your class T is in package a.b.c then it must be in file a/b/c/T.java.
 
 Compile as before (except you are in the foo) subdirectory:
