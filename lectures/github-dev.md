@@ -26,20 +26,51 @@ Then to freshen, do this:
 ```bash
 $ cd ~/projects/webmail
 $ git pull origin master
-...
+... make changes ...
 $ git commit -a -m 'my change msg'
 $ git push origin master
+```
+
+## Undoing a pushed commit
+
+See [Revert to a previous Git commit](http://stackoverflow.com/questions/4114095/revert-to-a-previous-git-commit/4114122#4114122)
+
+One thing to consider is whether or not another developer has pulled down that commit. *You really should not delete a commit that is been pushed.*
+
+You can either fix this problem by making a new commit that undoes the change or you can ask git to revert to any previous commit. It will actually create a new commit that undoes the changes.
+
+Or, if you really know what you're doing, you can actually delete that commit by resetting the `HEAD`. And then pushing those changes to the remote repository. To remove the last commit to the master branch on a remote server, say, `origin` do this
+
+```bash
+$ git reset origin +xxxxxxxx^:master
+```
+
+where `xxxxxxxx` is the last commit number and `xxxxxxxx^` is the parent of the last commit. We want to reset the `HEAD` to the parent of the commit we want to delete. The `+` tells it to force a fast-forward movement, which just means it does the reset without a commit record in this case.
+
+As that article linked above mentions, you can also do the following, which I prefer because it is more explicit:
+
+```bash
+$ git reset HEAD^ --hard     # reset to previous commit ignoring any changes
+$ git push origin master -f  # force a push of HEAD to origin
+```
+
+(Wow. I had the `-f` before the master and it silently didn't do anything. awesome.)
+
+Naturally, if you have not pushed anything to the remote server, you can simply change things locally as if it never happened:
+
+```bash
+$ git reset --hard HEAD^
 ```
 
 # Single developer
 
 ## Branching
 
-Each branch is tracking one train of thought, with the **master** branch considered the latest stable version of the source code.
+Each branch is tracking one train of thought, with the **master** branch considered the latest stable version of the source code. Here is a good general rule so your fellow programmers don't punch you in the nose:
 
 *The master branch always compiles and runs at least the majority of the tests.*
 
-We also use branches for bug fixes, releases, features, and possibly general development depending on whether you are working alone or in a team. 
+We also use branches for bug fixes, releases, features, and possibly general development depending on whether you are working alone or in a team.
 
 <img src=figures/single-dev.png width=500>
 
@@ -110,8 +141,7 @@ To merge changes from one branch back into the master, follow this procedure:
 1. test
 1. `git commit -a -m 'pulling changes from master into mybranch'`
 1. `git checkout master`
-1. `git merge mybranch` pulling your changes from that branch
-1. as you are the only developer, there shouldn't be any changes so no need to resolve.
+1. `git merge mybranch` pulling your changes from that branch; as you are the only developer, there shouldn't be any changes so no need to resolve.
 1. `git push origin master`
 
 At this point your `mybranch` and `master` should be identical.
@@ -150,7 +180,7 @@ I can then pull things from `clair` or `origin`.
 
 ## Forking from main repo
 
-Perhaps a safer mechanism is for each developer to have a fork of the original repository. This way a specific *pull request* must occur to get changes into the original. Each developer then has their own complete sandbox and can push and pull from multiple computers without worrying about messing up the original repository. It looks like this:
+Perhaps a safer mechanism is for each developer to have a fork of the original repository. This way a specific *pull request* must occur to get changes into the original. A *pull request* is a specific feature of github, though others are copying it now. Each developer then has their own complete sandbox and can push and pull from multiple computers without worrying about messing up the original repository. It looks like this:
 
 <img src=figures/fork-clone.png width=400>
 
@@ -162,8 +192,6 @@ origin	git@github.com:parrt/antlr4.git (fetch)
 origin	git@github.com:parrt/antlr4.git (push)
 upstream	git@github.com:antlr/antlr4.git (fetch)
 upstream	git@github.com:antlr/antlr4.git (push)
-ericvergnaud	https://github.com/ericvergnaud/antlr4.git (fetch)
-ericvergnaud	https://github.com/ericvergnaud/antlr4.git (push)
 ```
 
 To bring changes from the original into your forked version you do this:
@@ -173,6 +201,8 @@ $ git checkout master
 $ git pull upstream master # pull original to, say, laptop
 $ git push origin master   # push back to my fork on github
 ```
+
+A `pull` is the same as a fetch and merge.
 
 ## Pull requests
 
