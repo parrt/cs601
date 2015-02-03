@@ -37,27 +37,29 @@ Git is the assembly language of revision control systems and is very hard to use
 
 ## "Gitting down to business in CS601, project #1"
 
-Let's start out by looking at how you will work on the first project by cloning from your github repository within the [CS601 organization](https://github.com/USF-CS601-F14).
+Let's start out by looking at how you will work on the first project by cloning from your github repository within the [CS601 organization](https://github.com/USF-CS601-S15).
 
 ### Cloning a repository
 
 Go to github and locate the repository of interest, such as your first project:
 
-https://github.com/USF-CS601-F14/parrt-doublekey
+https://github.com/USF-CS601-starterkits/parrt-graph
+
+(The pattern is USF-CS601-Fxx or USF-CS601-Sxx) where xx is the last two digits of the year and so you might have to modify it depending on the year.)
 
 Then locate the SSH URL on the right-hand gutter of the webpage and click the clipboard icon to get it into your paste buffer:
 
 ![github ssh url](figures/github-ssh-url.png)
 
-the URL is actually something like ``git@github.com:USF-CS601-F14/parrt-doublekey.git`` and, to get it onto your local disk, you clone it:
+the URL is actually something like ``git@github.com:USF-CS601-S15/parrt-graph.git`` and, to get it onto your local disk, you clone it:
 
 ```
 $ cd ~/cs601/projects
-$ git clone git@github.com:USF-CS601-F14/parrt-doublekey.git
+$ git clone git@github.com:USF-CS601-S15/parrt-graph.git
 $
 ```
 
-This makes a ``parrt-doublekey`` directory in the current directory, which in this case is ``~/cs601/projects``. The ``parrt-doublekey`` directory should look like this:
+This makes a ``parrt-graph`` directory in the current directory, which in this case is ``~/cs601/projects``. The ``parrt-graph`` directory should look like this:
 
 ![](../projects/figures/map-hier.png)
 
@@ -80,19 +82,19 @@ Similarly, if you ever want to throw this copy of the repository out with all th
 To add a file, such as your hash table, just create the file and notify ``git``:
 
 ```
-$ cd ~/cs601/projects/parrt-doublekey/src/cs601/collections
-$ ... created DoubleKeyHashMap.java ...
-$ git add DoubleKeyHashMap.java
+$ cd ~/cs601/projects/parrt-graph/src/cs601/collections
+$ ... create UnweightGraph.java ...
+$ git add UnweightGraph.java
 $
 ```
 
 To commit the "change" (the addition of a file) to the repository, we ``commit``:
 
 ```
-$ git commit -a -m 'add start of my hashtable'
-[master abd47d9] add start of my hashtable
+$ git commit -a -m 'add start of my graph'
+[master abd47d9] add start of my graph
  1 file changed, 1 insertion(+)
- create mode 100644 src/cs601/collections/DoubleKeyHashMap.java
+ create mode 100644 src/cs601/collections/UnweightGraph.java
 $
 ```
 
@@ -110,9 +112,9 @@ The ``-a`` means "all changes" and ``-m`` means message. From ``git help commit`
 If you want to make a change to one of the files, just do so and do another commit:
 
 ```
-$ ... alter DoubleKeyHashMap.java ...
-$ git commit -a -m 'tweak my hashtable'
-[master 7624de2] tweak my hashtable
+$ ... alter UnweightGraph.java ...
+$ git commit -a -m 'tweak my graph'
+[master 7624de2] tweak my graph
  1 file changed, 2 insertions(+)
 ```
 
@@ -156,7 +158,7 @@ If everything is up to date, you will see the followng:
 
 ```
 $ git pull origin master
-From github.com:USF-CS601-F14/parrt-doublekey
+From github.com:USF-CS601-S15/parrt-graph
  * branch            master     -> FETCH_HEAD
 Already up-to-date.
 $
@@ -178,11 +180,11 @@ It's often the case that I decide to abandon some changes and want to revert bac
 
 There are often multiple versions of a single product that you have to maintain. Keeping all versions synchronized just by comparing directories is a nightmare.
 
-Whether your IDE does it or a revision control system doesn't, I find it very important to look back at recent changes to see what changes have introduced a bug. Or I decide to abandon a small piece of what's going on and flip a file back to an old version.
+Whether your IDE does it or a revision control system does it, I find it very important to look back at recent changes to see what changes have introduced a bug. Or I decide to abandon a small piece of what's going on and flip a file back to an old version.
 
 ### Solo programmer, sharing across machines
 
-In order to work on that software from your home machine and a laptop for example, you have to make copies. That introduces the possibility that you will overwrite the good version of your software. Or, you will forget that you had made changes on your laptop but have now made a budget changes on your desktop.  Resolving things can be tricky and error-prone.
+In order to work on that software from your home machine and a laptop for example, you have to make copies. That introduces the possibility that you will overwrite the good version of your software. Or, you will forget that you had made changes on your laptop but have now made a  bunch of changes on your desktop.  Resolving things can be tricky and error-prone.
 
 As a side benefit, pushing your repository to a remote server gives you a backup automatically.
 
@@ -194,11 +196,11 @@ In my experience, no matter how you try to fake multiple states of the source co
 
 Once in a while I go back and I look at the history of changes. Sometimes I want to know who screwed this up or I want to see the sequence of changes that I made or that were made by somebody else.
 
-Although I do know a single outlier company with two programmers in it that do not use revision control, I believe that every company you will encounter uses it. For that reason alone, you need to learn revision control to be functional in a commercial setting.
+Every single commercial developer I know uses revision control at work. Every company you will encounter uses it. For that reason alone, you need to learn revision control to be functional in a commercial setting.
 
 ## Central versus distributed repositories
 
-The [git-scm book](http://git-scm.com/book/en/Getting-Started-About-Version-Control) has a good description an illustration of how multiple computers can share a central repository of code. If you are only going to do things locally, I suppose you could get away with the original RCS (By Walter Tichy, who was a professor of mine at Purdue University!). I have also used a central repository mechanism: CSV, SVN, and perforce (p4). That is cool, but its main weakness is that losing the server means you lose all history. The central server record the database of all changes. Git and mercurial lowly clone the entire repository there is no central control. On the other hand, we can pretend that there is a central control; i.e., github. We use it like a central repository but it does not have the single point of failure of previous systems.
+The [git-scm book](http://git-scm.com/book/en/Getting-Started-About-Version-Control) has a good description and illustration of how multiple computers can share a central repository of code. If you are only going to do things locally, I suppose you could get away with the original RCS (By Walter Tichy, who was a professor of mine at Purdue University!). I have also used a central repository mechanism: CSV, SVN, and perforce (p4). That is cool, but its main weakness is that losing the server means you lose all history. The central server records the database of all changes. Git and mercurial copy the entire repository and database when they clone. There is no central control. On the other hand, most of us pretend that there is a central control; i.e., github. We use it like a central repository but it does not have the single point of failure of previous systems. And with *forks*, the distributed model works extremely well. Other developers can work totally independently on a complete clone of the repository and then send *pull requests* to the original owners.
 
 ## Why git?
 
@@ -212,11 +214,11 @@ A git repository instance is just a directory on your disk that also happens to 
 
 If you want to throw out the repository, just remove the entire subtree. There is no central server to notify. Every repository instance is a complete copy so you could have, for example, 10 versions of the repository cloned from an original sitting on the same disk.
 
-After you create a repository, you can add all sorts of files but git ignores them until you ``add`` them. When you add files or modify files already known to git, they are in the so-called *staging area* (this used to be called the *index*).  You can have whatever other files you want laying around, such as development environment preference files. Git will simply ignore them unless you add them. This is different than other revision control systems that insist upon knowing about and managing everything under a particular subtree.
+After you create a repository, you can add all sorts of files but git ignores them until you ``add`` them. When you add files or modify files already known to git, they are in the so-called *staging area* (this used to be called the *index*).  You can have whatever other files you want laying around, such as development environment preference files. Git will simply ignore them unless you add them. This is different than other revision control systems that insist upon knowing about and managing everything under a particular subtree. I like that feature.
 
 ### Commits
 
-In concept, a commit is a snapshot of your entire repository directory subtree on the disk. In reality, repository store only the difference of the current stuff from the previous stuff. For binaries that change, it copies the whole thing.  The most recent commit is called the ``HEAD``.
+In concept, a commit is a snapshot of your entire repository directory subtree on the disk. In reality, the repository stores only the difference of the current stuff from the previous stuff. For binaries that changes, (likely) copying the whole thing.  The most recent commit is called the `HEAD`.
 
 Having a complete list of changes is extremely useful. For example, here is a chunk taken out of the middle of my commits on the ANTLR repository as shown by SourceTree:
 
@@ -228,7 +230,7 @@ That should look very much like Time Machine on OS X to you. You can go back and
 
 ![tag diff](figures/tagdiff.png)
 
-You should commit only logical chunks like feature additions, bug fixes, or comment updates across the project, etc.
+You should commit only logical chunks like feature additions, bug fixes, or comment updates across the project, etc. 
 
 ### Commit messages
 
@@ -244,23 +246,56 @@ Alter MyFile.java
 ...
 ```
 
+I have even seen git commit messages: `one`, `two`, `three`. Nothing spells laziness or academic dishonesty than that.
+
 In rare cases, when I'm working alone, I sometimes use a private repository as a means of sharing files across multiple computers like dropbox. In this case, my commits are just to take a snapshot to pull it down on another machine. The commit message doesn't matter (though I might still look back through the changes at some point). When doing this for a real project, it's best to use ``stash`` per the next section.
 
 ### Stash vs commit
 
-To save everything you've done in the working directory, even for files you have not added to the repository with ``add``, you can stash things:
+To save everything you've done in the working directory to files git is aware of, you can stash things:
 
 ```
 $ git stash
 ```
 
-Which will take a snapshot of your current working directory and reset the working directory to look like the most recent commit (HEAD). Then on another machine you can do
+Which will take a snapshot of your current working directory and reset the working directory to look like the most recent commit (HEAD).  You can jump around to different branches and do whatever you like then do the following to restore the state of your working directory:
 
 ```
 $ git stash pop
 ```
 
 to get the most recent stashed working directory. These are not committed changes. It's a temporary stack of snapshots.
+
+Unless you really know what you're doing, make sure you are on your original branch when you `pop` or `apply` a stash. It's really just applying a series of patches so you can technically apply a stash to any branch, not just the one in which you created it.
+
+#### Interrupted workflow
+
+From `git help stash`:
+
+"When you are in the middle of something, your boss comes in and demands that you fix something immediately. Traditionally, you would make a commit to a temporary branch to store your changes away, and return to your original branch to make the emergency fix, like this:"
+
+```bash
+# ... hack hack hack ...
+$ git checkout -b my_wip
+$ git commit -a -m "WIP"
+$ git checkout master
+$ edit emergency fix
+$ git commit -a -m "Fix in a hurry"
+$ git checkout my_wip
+$ git reset --soft HEAD^
+# ... continue hacking ...
+```
+
+You can use git stash to simplify the above, like this:
+
+```bash
+# ... hack hack hack ...
+$ git stash
+$ edit emergency fix
+$ git commit -a -m "Fix in a hurry"
+$ git stash pop
+# ... continue hacking ...
+```
 
 ## "Git 'er done"
 
@@ -293,7 +328,7 @@ $ git diff t.c
 ...
 ```
 
-**Reverting.** If you screw up and want to toss out everything from the last commit, to a reset and make sure you use the hard option:
+**Reverting.** If you screw up and want to toss out everything from the last commit, do a reset and make sure you use the hard option:
 
 ```
 $ ... tweak whatever you want ...
@@ -370,14 +405,14 @@ To look at the remote system alias(es), we use:
 
 ```
 $ git remote -v
-origin	https://github.com/parrt/bild.git (fetch)
-origin	https://github.com/parrt/bild.git (push)
+origin	git@github.com:parrt/bild.git (fetch)
+origin	git@github.com:parrt/bild.git (push)
 $
 ```
 
 ## Common operations
 
-After ``grep``ing through much my bash history (I use git from command-line often), I see the following commands / operations: ``add``, ``branch``, ``checkout``, ``commit``, ``config``, ``diff``, ``fetch``, ``log``, ``merge``, ``pull``, ``push``, ``remote``, ``reset``, ``rm``, ``stash``, ``status``. A histogram shows different things depending on what I'm doing. When I'm working on course materials like this, I see almost exclusively ``commit``, ``push``, ``add``, and ``pull`` as I tweak things, push them to github from work, and then pull them in from home.
+After ``grep``ing through much of my bash history (I use git from command-line often), I see the following commands / operations: ``add``, ``branch``, ``checkout``, ``commit``, ``config``, ``diff``, ``fetch``, ``log``, ``merge``, ``pull``, ``push``, ``remote``, ``reset``, ``rm``, ``stash``, ``status``. A histogram shows different things depending on what I'm doing. When I'm working on course materials like this, I see almost exclusively ``commit``, ``push``, ``add``, and ``pull`` as I tweak things, push them to github from work, and then pull them in from home.
 
 When developing code, I primarily ``push``, ``pull``, ``branch`` (asking what branch I am in), ``commit``, ``add``, ``checkout`` (switch branches), ``remote`` (check which server I am talking to), and then a few ``fetch`` and ``reset`` commands. I do a lot of ``diff`` but usually from within my development environment so that is not shown in the commandline history.
 
