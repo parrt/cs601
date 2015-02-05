@@ -1,0 +1,26 @@
+digraph expr {
+  node [shape=plaintext, fixedsize=true, fontsize=11, fontname="Courier",
+        width=.4, height=.2];
+  ranksep=.4
+  edge [arrowsize=.5]
+  ordering=out
+
+110 -> 112
+112 -> 210
+110 -> 220
+112 -> 245
+210 -> 315
+245 -> 315
+210 -> 326
+220 -> 326
+245 -> 326
+112 -> 336
+245 -> 336
+245 -> 342
+112 -> 345
+245 -> 345
+210 -> 414
+245 -> 414
+342 -> 490
+498
+}
