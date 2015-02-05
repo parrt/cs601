@@ -128,38 +128,38 @@ You will implement `UnweightedGraph`, which is a set of `Node` objects. You must
 
 The exact external behavior of your classes should follow the javadoc comments in the interface definition. 
 
-You can use Java 8 or below.
+* You can use Java 8 or below.
+*  You must maintain the order in which the edges are specified so use `LinkedHashMap`.
+* All of your classes must be in the ``cs601.graph`` package. When you clone your repo, it should look like this to start:
+* Do not generate any output from your library.  In other words, do not leave any debugging println statements around. Do not print error messages upon invalid nodes etc...
+* You may discuss this project in its generality with anybody you want and may look at any code on the internet except for a classmate's code. You should physically code this project completely yourself but can use all the help you find other than cutting-n-pasting or looking at code from a classmate, the web, or other Human being.
+* *I will deduct 10% if your program is not executable exactly in the fashion mentioned in the project*; that is, class name, methods, lack-of-package, and jar must be exactly right. For you PC folks, note that case is significant for class names and file names on UNIX! All projects must run properly under UNIX.  That means it's a good idea to test it there yourself.
 
-```
-Math.abs(key1.hashCode() * 37 + key2.hashCode())
-```
-
-Your implementation class must define a constructor with no arguments and one with an argument specifying the (``int``) number of buckets.
-
-All of your classes must be in the ``cs601.graph`` package. When you clone your repo, it should look like to start:
+## Starter kit
 
 ```
 ├── .travis.yml
-├── README.md
+├── LICENSE
 ├── bild.py
-├── lib
-│   └── doublekey-tests.jar
 ├── src
 │   └── cs601
-│       └── collections
-│           ├── DoubleKeyHashMap.java
-│           └── DoubleKeyMap.java
+│       └── graph
+│           ├── Graph.java
+│           ├── Lexer.java
+│           ├── NamedNode.java
+│           ├── Node.java
+│           ├── Parser.java
+│           ├── Token.java
+│           └── UnweightedGraph.java
 └── test
     └── cs601
-        └── collections
-            └── TestMapSimple.java
+        └── graph
+            └── TestGraph.java
 ```
 
-You are creating a library, NOT a main program.
+You are creating a library, NOT a main program. The parser that I have provided makes calls to a `Graph` implementation object.
 
-Do not generate any output from your library. Only test rigs should generate output. In other words, do not leave any debugging println statements around. Do not print error messages upon invalid keys and so on. Upon error, you will be throwing exceptions per the interface.
-
-You should test your library extensively. I have provided an initial unit test for you in [TestMapSimple.java](resources/TestMapSimple.java).  You will need [``junit-4.10.jar``](http://sourceforge.net/projects/junit/files/junit/4.10/junit-4.10.jar/download).  Committing to your repository will trigger a test with a rigorous set of my own tests via the [continuous integration server](http://www.travis-ci.com). If you look at (hidden) file `.travis.yml`:
+You should test your library extensively. I have provided an initial unit test set for you in [TestGraph.java](https://github.com/USF-CS601-starterkits/parrt-graph/blob/master/test/cs601/graph/TestGraph.java).  You will need [``junit-4.10.jar``](http://sourceforge.net/projects/junit/files/junit/4.10/junit-4.10.jar/download).  Committing to your repository will trigger a test via the [continuous integration server](http://www.travis-ci.com). If you look at (hidden) file `.travis.yml`:
 
 ```bash
 language: java
@@ -168,13 +168,28 @@ jdk:
 script: "./bild.py test"
 ```
 
-you will see that it runs the Python script `bild.py` that sits in your directory. That script will download a library file called `bilder.py` automatically the first time it is run to support its testing. It will use the jar in `lib` to run my tests.
+you will see that it runs the Python script `bild.py` that sits in your directory. That script will download a library file called `bilder.py` automatically the first time it is run to support its testing:
+
+```bash
+$ ./bild.py test
+bootstrapping; downloading bilder.py
+target test
+require mkjar
+require compile
+require init
+build compile
+build mkjar
+build test
+cs601.graph.TestGraph: 5 tests, 0 failures
+Tests complete
+bild succeeded
+```
 
 Please note:
 
 1. You must go to your repository page at Travis and give Travis permission to access your github account:
 ```
-https://magnum.travis-ci.com/USF-CS601-F14/YOURUSERID-doublekey
+https://magnum.travis-ci.com/USF-CS601-S15/YOURUSERID-graph
 ```
 The first time you go there it will ask  you to authenticate via github.
 1. Make sure that you have **provided a valid email address to github** and that they have authenticated that email address at github. Otherwise they will not get email upon commit.
@@ -184,73 +199,36 @@ The first time you go there it will ask  you to authenticate via github.
 
 You will clone your student repository to your local disk and develop in that directory, committing files and changes as necessary. Your repository will be something like:
 
-https://github.com/USF-CS601-S15/userid-doublekey
+https://github.com/USF-CS601-S15/userid-graph
 
 You can use ```git``` from the command-line, from within your IDE (such as [Intellij](http://www.jetbrains.com/idea/download/)), or using the free [SourceTree](http://www.sourcetreeapp.com/) app.  Here is a sample session from the command line:
 
 ```
 $ cd ~/cs601/projects # or whatever
-$ git clone git@github.com:USF-CS601-S15/userid-doublekey.git
-Cloning into 'userid-doublekey'...
+$ git clone git@github.com:USF-CS601-S15/userid-graph.git
+Cloning into 'userid-graph'...
 remote: Counting objects: 21, done.
 remote: Compressing objects: 100% (9/9), done.
 remote: Total 21 (delta 3), reused 17 (delta 2)
 Receiving objects: 100% (21/21), done.
 Resolving deltas: 100% (3/3), done.
 Checking connectivity... done.
-$ cd userid-doublekey
-$ cd src/cs601.graph
-... create DoubleKeyHashMap.java ...
-$ cd ~/cs601/projects/test/cs601.graph
-... add unit tests to TestMapSimple.java ...
+$ cd userid-graph
+$ cd src/cs601/graph
+... update UnweightedGraph.java ...
 $ git commit -a -m 'your comments'
 [master 21c0593] your comments
- 2 files changed, 27 insertions(+), 6 deletions(-)
- create mode 100644 projects/resources/TestMapSimple.java
- ...
+...
 $ git push origin master
 Counting objects: 10, done.
 Delta compression using up to 12 threads.
 Compressing objects: 100% (6/6), done.
 Writing objects: 100% (6/6), 1.08 KiB | 0 bytes/s, done.
 Total 6 (delta 2), reused 0 (delta 0)
-To git@github.com:parrt/cs601.git
-   65ed6db..21c0593  master -> master
+...
 $
 ```
 
 You can keep on changing and adding files as you wish. Just make sure to commit and push everything to github. The state of your repo at github will be what is graded at the due date/time.
 
-Until you create ``DoubleKeyHashMap.java``, the continuous integration server will show you a compilation error:
-
-```
-...
-/home/travis/build/USF-CS601-S15/parrt-doublekey/test/cs601.graph/TestMapSimple.java:11: error: cannot find symbol
-			new DoubleKeyHashMap<String, Integer, Double>();
-			    ^
-  symbol:   class DoubleKeyHashMap
-  location: class TestMapSimple
-...
-```
-
-## Grading
-
-A continuous integration build server will run your program by cloning your repo, building it, and running some unit tests.
-
-Here's an example of how to use the new map interface:
-
-```
-import cs601.graph.*;
-...
-DoubleKeyMap<String,Integer,Double> m =
-    new DoubleKeyHashMap<String, Integer, Double>();
-m.put("hi",32,99.2);
-double d = m.get("hi",32);
-System.out.println(d); // should be 99.2
-System.out.println(m.containsKey("hi",32)); // should be true
-System.out.println(m.containsKey("hy",3));  // should be false
-```
-
-You may discuss this project in its generality with anybody you want and may look at any code on the internet except for a classmate's code. You should physically code this project completely yourself but can use all the help you find other than cutting-n-pasting or looking at code from a classmate, the web, or other Human being.
-
-*I will deduct 10% if your program is not executable exactly in the fashion mentioned in the project*; that is, class name, methods, lack-of-package, and jar must be exactly right. For you PC folks, note that case is significant for class names and file names on UNIX! All projects must run properly under UNIX.  That means it's a good idea to test it there yourself.
+Until you create the appropriate functions, the continuous integration server will show you compilation errors.
