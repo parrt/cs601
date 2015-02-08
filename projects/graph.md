@@ -75,12 +75,20 @@ public class UnweightedGraph<ID extends Comparable, N extends Node<ID>>
 After the graph edge list, you can type in a series of commands:
 
 * `print`
-Prints list of edges in the order they were specified, one per line. I.e., if you see:
+Prints edges for each node in the order that the nodes were encountered in the input. Print them one per line. For example, this input
 ```
 110 -> 112
 112 -> 210
+110 -> 212
 ```
-in the input, you should send it back out in the same order when you are printing the graph. That is to normalize things so all of our output looks the same. The way to handle this is to create a `LinkedHashMap` that records the order in which you add things to the map. You will be performing a `map(“110”, “112”)` operation for example and then `map(“112”, “210”)`. When you want to print the graph back out, the iterator over that `LinkedHashMap` will give you the same order of keys as you entered them.
+yields
+```
+110 -> 112
+110 -> 212
+112 -> 210
+```
+
+That is to normalize things so all of our output looks the same. The way to handle this is to create a `LinkedHashMap` that records the order in which you add things to the node map. When you want to print the graph back out, iterator over the values of that map and print all edges before moving on to the next node.
 * `len start stop`
 Prints the **minimum** number of edges traversed to go from start to stop. If stop == start, print 0.
 * `nodes start stop` 
