@@ -4,7 +4,7 @@
 
 This project tests your programming ability, your ability to code in Java, your knowledge of simple data structures, and how well you can read and follow instructions. This project is a typical undergraduate project, but with a shorter deadline. If this project is not easy for you, this course may overwhelm you. This project is a good way for us to get to know each other. :)
 
-Your  task is to produce a simple Java implementation of a graph with interfaces called `Graph` and `Node`. Your work will be in a package called ```cs601.graph```. Your implementation must be called `UnweightedGraph` and must also be in package ```cs601.graph```.  For example, your software will need to answer such questions as:
+Your  task is to produce a simple Java implementation of a directed, possibly cyclic, graph with interfaces called `Graph` and `Node`. Your work will be in a package called ```cs601.graph```. Your implementation must be called `UnweightedGraph` and must also be in package ```cs601.graph```.  For example, your software will need to answer such questions as:
 
 * Which courses are needed before you can take 490
 * How fast in terms of number of semesters can you finish 490?
