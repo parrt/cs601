@@ -36,7 +36,7 @@ There is no textbook for this class.
 
 | Artifact | Grade Weight | Due date |
 |--------|--------|--------|
-|DoubleKeyMap| 5%| Feb 3|
+|Graph| 5%| Feb 15|
 |Proxy| 10%| ? |
 |RingBuffer | 5%| ? |
 |Webmail | 25%| ? |
