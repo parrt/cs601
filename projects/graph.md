@@ -142,7 +142,7 @@ You will implement `UnweightedGraph`, which is a set of `Node` objects. You must
 The exact external behavior of your classes should follow the javadoc comments in the interface definition. 
 
 * You can use Java 8 or below.
-*  You must maintain the order in which the edges are specified so use `LinkedHashMap`.
+*  You must maintain the order in which the nodes are specified so use `LinkedHashMap`.
 * All of your classes must be in the ``cs601.graph`` package. When you clone your repo, it should look like this to start:
 * Do not generate any output from your library.  In other words, do not leave any debugging println statements around. Do not print error messages upon invalid nodes etc...
 * You may discuss this project in its generality with anybody you want and may look at any code on the internet except for a classmate's code. You should physically code this project completely yourself but can use all the help you find other than cutting-n-pasting or looking at code from a classmate, the web, or other Human being.
