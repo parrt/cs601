@@ -49,6 +49,6 @@ Our [socket lecture](https://github.com/parrt/cs601/blob/master/lectures/sockets
 ## Tasks
 
 1.  Create a server program called `Echo` that has a `main` program that creates a `ServerSocket` listening at port 9000. This will be similar to [the server we discussed in class](https://github.com/parrt/cs601/blob/master/lectures/code/sockets/Server.java).
-2.  Create a client program called `Client` that has a `main` program that opens a `Socket` to the server at port 9000. This will be similar to [the client we discussed in class](https://github.com/parrt/cs601/blob/master/lectures/code/sockets/Client.java).
+2.  Create a client program called `Client` that has a `main` program that opens a `Socket` to the server on your partner's computer (i.e., use their IP address, not `localhost`) at port 9000. This will be similar to [the client we discussed in class](https://github.com/parrt/cs601/blob/master/lectures/code/sockets/Client.java).
 
 Each program will have a loop that reads input from the socket and writes output to the socket. The client will have an additional bit of code that reads from standard input to get user text.  Put `server> ` prefix on stuff you get from the server; the server should prefix lines it gets in the client with: `client> `.
