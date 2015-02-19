@@ -23,9 +23,9 @@ To make this work we will have to launch client handlers in separate threads, on
 |  |read line, call `registerClient(user,out)` on `ChatServer`, which sends welcome to client, print msg to stdout.|
 | | wait for a line of input from the client |
 | type first msg line | |
-| | call `broadcast(user,line)` on `ChatServer` |
+| | read line, call `broadcast(user,line)` on `ChatServer` |
 | type msg line | |
-| | call `broadcast(user,line)` on `ChatServer` |
+| | read line, call `broadcast(user,line)` on `ChatServer` |
 | ... | ... |
 | client disconnects | |
 | | call `disconnect()` |
@@ -37,7 +37,7 @@ I've provided two skeleton classes, [ChatServer.java](https://github.com/parrt/c
 In order to launch a client handler in a thread, we need a preview of our [threading lecture](https://github.com/parrt/cs601/blob/master/lectures%2Fthreads.md):
 
 1. Create class implementing `Runnable`.
-1. Define `public void run()` method. Thread dies when it exits.
+1. Define `public void run()` method. Thread dies when `run` returns/exits.
 1. Elsewhere, create instance of class, `r`.
 1. Create `new Thread(r)`, `t`, attached to `r`.
 1. `t.start()`. Our program continues past this call, but another thread exists in the system for this program.
