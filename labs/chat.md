@@ -32,4 +32,4 @@ To make this work we will have to launch client handlers in separate threads, on
 
 The client handler reads until `line` is `null`, indicating that the client (`telnet`) has hung up.
 
-I've provided two skeleton classes for you with comments indicating what the code should be.
+I've provided two skeleton classes, [ChatServer.java](https://github.com/parrt/cs601/blob/master/labs/resources/ChatServer.java) and [ChatClientHandler.java](https://github.com/parrt/cs601/blob/master/labs/resources/ChatClientHandler.java), for you with comments indicating what the code should be.
