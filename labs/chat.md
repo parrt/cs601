@@ -33,3 +33,12 @@ To make this work we will have to launch client handlers in separate threads, on
 The client handler reads until `line` is `null`, indicating that the client (`telnet`) has hung up.
 
 I've provided two skeleton classes, [ChatServer.java](https://github.com/parrt/cs601/blob/master/labs/resources/ChatServer.java) and [ChatClientHandler.java](https://github.com/parrt/cs601/blob/master/labs/resources/ChatClientHandler.java), for you with comments indicating what the code should be.
+
+In order to launch a client handler in a thread, we need a preview of our [threading lecture](https://github.com/parrt/cs601/blob/master/lectures%2Fthreads.md):
+
+1. Create class implementing `Runnable`.
+1. Define `public void run()` method. Thread dies when it exits.
+1. Elsewhere, create instance of class, `r`.
+1. Create `new Thread(r)`, `t`, attached to `r`.
+1. `t.start()`. Our program continues past this call, but another thread exists in the system for this program.
+
