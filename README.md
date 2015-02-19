@@ -83,8 +83,9 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 
 # Syllabus
 
-[Administrative details](https://github.com/parrt/cs601/blob/master/lectures/admin.pdf)
-[Introduction](https://github.com/parrt/cs601/blob/master/lectures/intro.pdf)
+* [Administrative details](https://github.com/parrt/cs601/blob/master/lectures/admin.pdf)
+* [Introduction](https://github.com/parrt/cs601/blob/master/lectures/intro.pdf)
+* [Software licensing lecture](https://github.com/parrt/cs601/blob/master/lectures/software-licensing.md)
 
 ## Tools
 
@@ -94,11 +95,10 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 * [Team collaboration tools](https://github.com/parrt/cs601/blob/master/lectures/github-dev.md)
 * [Java I/O, unicode](https://github.com/parrt/cs601/blob/master/lectures/javaio.md)
 * [Sockets, protocols](https://github.com/parrt/cs601/blob/master/lectures/sockets.md)
-* [Software licensing lecture](https://github.com/parrt/cs601/blob/master/lectures/software-licensing.md)
 
 ## Network programming
-DNS	
-POP/SMTP
+[DNS](https://github.com/parrt/cs601/blob/master/lectures/dns.md)
+[POP/SMTP](https://github.com/parrt/cs601/blob/master/lectures/email.md)
 http protocol	
 proxy servers	
 
