@@ -17,12 +17,12 @@ public class ChatClientHandler implements Runnable {
 		this.socket = socket;
 		in = new DataInputStream(socket.getInputStream());
 		out = new PrintStream(socket.getOutputStream());
-		// read the first line of input and set the user name
-		// register this user,out pair with the server
 	}
 
 	public void run() {
 		try {
+			// read the first line of input and set the user name
+			// register this user,out pair with the server
 			// read a line
 			// while line is not null:
 				// broadcast line
