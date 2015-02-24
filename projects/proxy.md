@@ -133,6 +133,8 @@ HTTP/1.1 302 Moved Temporarily
 * *You must not try to buffer the entire return payload in memory*. In other words, once you establish connection with the upstream server, pull the data over in blocks that you can send back to the client browser.
 * *You must use the raw Java socket library to create your proxy server*. We are trying to build a proxy that must look at the HTTP protocol incoming on the sockets. We cannot do this if you're using a standard Web server that handles all of that stuff for us; such classes simply inform us that a ``GET`` or ``POST`` has occurred. we need something lower-level. You cannot use classes like ``URL`` and ``URLConnection``.
 
+*You should test your software on complicated websites like cnn.com! Don't just try it out on the simple websites I have in bild.py.*
+
 ## Submission
 
 You will follow the usual mechanism of using github. A continuous integration build server will run your program by cloning your repo, building it, and running some unit tests.  Your repo will be ``userid-proxy``.
