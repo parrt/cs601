@@ -97,10 +97,10 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 * [Sockets, protocols](https://github.com/parrt/cs601/blob/master/lectures/sockets.md)
 
 ## Network programming
-[DNS](https://github.com/parrt/cs601/blob/master/lectures/dns.md)
-[POP/SMTP](https://github.com/parrt/cs601/blob/master/lectures/email.md)
-http protocol	
-proxy servers	
+* [DNS](https://github.com/parrt/cs601/blob/master/lectures/dns.md)
+* [POP/SMTP](https://github.com/parrt/cs601/blob/master/lectures/email.md)
+* [http protocol](https://github.com/parrt/cs601/blob/master/lectures/http.md)
+* [proxy servers](https://github.com/parrt/cs601/blob/master/lectures/proxies.md)
 
 ## Concurrent programming in Java	
 Thread synchronization	
