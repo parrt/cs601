@@ -38,13 +38,13 @@ There is no textbook for this class.
 |--------|--------|--------|
 |Graph| 5%| Feb 15|
 |Proxy| 10%| Mar 10 |
-|RingBuffer | 5%| ? |
-|Webmail | 25%| ? |
-|Quizzes | 5%| ? |
-|Exam 1| 25%| ? |
+|RingBuffer | 5%| Mar 26 |
+|Webmail | 25%| May 13 (last day of class) |
+|Quizzes | 5%| sporadic |
+|Exam 1| 25%| Mar 31 |
 |Exam 2| 25%| May 13 |
 
-*No final exam, gmail project counts as the final.*
+*No final exam, gmail project counts as the final but we do have a second exam on the last day of class.*
 
 *I expect to see proper git commit messages and github usage so I can track your development.*
 
