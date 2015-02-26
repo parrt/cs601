@@ -102,10 +102,9 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 * [http protocol](https://github.com/parrt/cs601/blob/master/lectures/http.md)
 * [proxy servers](https://github.com/parrt/cs601/blob/master/lectures/proxies.md)
 
-## Concurrent programming in Java	
-Thread synchronization	
-barriers, thread communication	
-Volatile, AtomicInt, Java's memory model, lockless data structures	
+## Concurrent programming in Java
+
+[Thread synchronization; barriers, thread communication; Volatile, AtomicInt, Java's memory model, lockless data structures](https://github.com/parrt/cs601/blob/master/lectures/threads.md)
 
 ## Web architecture
 Servlets; services/REST	
