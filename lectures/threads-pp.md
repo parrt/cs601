@@ -221,7 +221,7 @@ See also client-side locking below.
  Using an unsynchronized list with threads can cause lots of problems. First, we might interrupt a critical operation within the list such as `add()`. Also, we have to make sure that we guard our own test and set operations:
 
 ```java
-!INCLUDE "code/threads/DemoLock.java"
+!INCLUDE "code/threads/Hazard.java"
 ```
 
 ```bash

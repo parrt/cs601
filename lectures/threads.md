@@ -221,54 +221,46 @@ See also client-side locking below.
  Using an unsynchronized list with threads can cause lots of problems. First, we might interrupt a critical operation within the list such as `add()`. Also, we have to make sure that we guard our own test and set operations:
 
 ```java
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-public class DemoLock {
-	public static final int N = 10000;
-	private static int count = 0;
-	private static Lock lock = new ReentrantLock();
-	private static CyclicBarrier barrier = new CyclicBarrier(3);
-
-	static class Operation implements Runnable {
+public class Hazard {
+	static class Producer implements Runnable {
+		String str;
+		public Producer(String s) { str = s; }
 		public void run() {
-			for (int i=1; i<=N; i++) {
-				increment();
-//				unsafeIncrement();
+			int i = 0;
+			while ( i<5 ) {
+				if ( !data.contains(str) ) {
+					Thread.yield();
+					data.add(str);
+				}
+				i++;
 			}
-			try {barrier.await();}
-			catch (Exception e) {e.printStackTrace();}
-		}
-
-		void increment() {
-			lock.lock();
-			try {
-				count = count + 1;
-			}
-			finally {
-				lock.unlock();
-			}
-		}
-
-		/** results in output like "Count 11148 should be 20000" */
-		void unsafeIncrement() {
-			count = count + 1;
 		}
 	}
 
-	public static void main(String[] args) throws BrokenBarrierException, InterruptedException {
-		Operation op = new Operation();
-		Thread t = new Thread(op);
-		t.start();
+	static class Consumer implements Runnable {
+		public void run() {
+			int i = 0;
+			while ( i<5 ) {
+				System.out.println(data);
+				i++;
+			}
+		}
+	}
 
-		Operation op2 = new Operation();
-		Thread t2 = new Thread(op2);
-		t2.start();
+	public static List<String> data = new ArrayList<String>();
 
-		barrier.await();
-		System.out.printf("Count %d should be %d\n", count, N*2);
+	public static void main(String[] args) {
+		Producer p = new Producer("X");
+		Producer p2 = new Producer("X");
+		Consumer c = new Consumer();
+		new Thread(p).start();
+		new Thread(p2).start();
+		Thread u = new Thread(c);
+		u.start();
 	}
 }
 ```
