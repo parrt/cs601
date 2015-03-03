@@ -225,31 +225,31 @@ See also client-side locking below.
 ```
 
 ```bash
-maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+$ java Hazard
 [X]
 [X]
 [X]
 [X]
 [X]
-maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+$ java Hazard
 [null, X]       <-- we must have interrupted add() here
 [null, X]
 [null, X]
 [null, X]
 [null, X]
-maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+$ java Hazard
 [null, X]
 [null, X]
 [null, X]
 [null, X]
 [null, X]
-maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+$ java Hazard
 [X, X]
 [X, X]
 [X, X]
 [X, X]
 [X, X]
-maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+$ java Hazard
 [X]
 [X]
 [X]
