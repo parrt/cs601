@@ -216,6 +216,96 @@ Note that while A and B operations are themselves atomic, we must declare the en
 
 See also client-side locking below.
 
+## List addition hazard
+
+ Using an unsynchronized list with threads can cause lots of problems. First, we might interrupt a critical operation within the list such as `add()`. Also, we have to make sure that we guard our own test and set operations:
+
+```java
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class DemoLock {
+	public static final int N = 10000;
+	private static int count = 0;
+	private static Lock lock = new ReentrantLock();
+	private static CyclicBarrier barrier = new CyclicBarrier(3);
+
+	static class Operation implements Runnable {
+		public void run() {
+			for (int i=1; i<=N; i++) {
+				increment();
+//				unsafeIncrement();
+			}
+			try {barrier.await();}
+			catch (Exception e) {e.printStackTrace();}
+		}
+
+		void increment() {
+			lock.lock();
+			try {
+				count = count + 1;
+			}
+			finally {
+				lock.unlock();
+			}
+		}
+
+		/** results in output like "Count 11148 should be 20000" */
+		void unsafeIncrement() {
+			count = count + 1;
+		}
+	}
+
+	public static void main(String[] args) throws BrokenBarrierException, InterruptedException {
+		Operation op = new Operation();
+		Thread t = new Thread(op);
+		t.start();
+
+		Operation op2 = new Operation();
+		Thread t2 = new Thread(op2);
+		t2.start();
+
+		barrier.await();
+		System.out.printf("Count %d should be %d\n", count, N*2);
+	}
+}
+```
+
+```bash
+maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+[X]
+[X]
+[X]
+[X]
+[X]
+maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+[null, X]       <-- we must have interrupted add() here
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+[X, X]
+[X, X]
+[X, X]
+[X, X]
+[X, X]
+maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+[X]
+[X]
+[X]
+[X]
+[X]
+```
+
 # Java thread-safe data structures
 
 `java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.

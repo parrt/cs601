@@ -216,6 +216,47 @@ Note that while A and B operations are themselves atomic, we must declare the en
 
 See also client-side locking below.
 
+## List addition hazard
+
+ Using an unsynchronized list with threads can cause lots of problems. First, we might interrupt a critical operation within the list such as `add()`. Also, we have to make sure that we guard our own test and set operations:
+
+```java
+!INCLUDE "code/threads/DemoLock.java"
+```
+
+```bash
+maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+[X]
+[X]
+[X]
+[X]
+[X]
+maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+[null, X]       <-- we must have interrupted add() here
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+[X, X]
+[X, X]
+[X, X]
+[X, X]
+[X, X]
+maniac:master:~/github/cs601/lectures/code/threads $ j Hazard
+[X]
+[X]
+[X]
+[X]
+[X]
+```
+
 # Java thread-safe data structures
 
 `java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
