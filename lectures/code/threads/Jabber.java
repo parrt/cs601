@@ -1,4 +1,4 @@
-class Jabber implements Runnable {
+public class Jabber implements Runnable {
 	String str;
 	public Jabber(String s) { str = s; }
 	public void run() {

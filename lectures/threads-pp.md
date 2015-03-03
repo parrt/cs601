@@ -216,6 +216,47 @@ Note that while A and B operations are themselves atomic, we must declare the en
 
 See also client-side locking below.
 
+## List addition hazard
+
+ Using an unsynchronized list with threads can cause lots of problems. First, we might interrupt a critical operation within the list such as `add()`. Also, we have to make sure that we guard our own test and set operations:
+
+```java
+!INCLUDE "code/threads/Hazard.java"
+```
+
+```bash
+$ java Hazard
+[X]
+[X]
+[X]
+[X]
+[X]
+$ java Hazard
+[null, X]       <-- we must have interrupted add() here
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+$ java Hazard
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+$ java Hazard
+[X, X]
+[X, X]
+[X, X]
+[X, X]
+[X, X]
+$ java Hazard
+[X]
+[X]
+[X]
+[X]
+[X]
+```
+
 # Java thread-safe data structures
 
 `java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
@@ -282,12 +323,6 @@ class HPLaser {
 *Note*: local variables cannot be shared between threads so can't interfere.
 
 Java uses the synchronized keyword not only for thread safety but also for synchronizing the execution of statements across threads and also for passing information between threads.
-
-# Java data structures
-
-`java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
-
-Use `Collections.synchronizedXXX()` factories to make `ArrayList` and `HashMap` and friends thread-safe.
 
 # Conditional synchronization
 

@@ -216,6 +216,88 @@ Note that while A and B operations are themselves atomic, we must declare the en
 
 See also client-side locking below.
 
+## List addition hazard
+
+ Using an unsynchronized list with threads can cause lots of problems. First, we might interrupt a critical operation within the list such as `add()`. Also, we have to make sure that we guard our own test and set operations:
+
+```java
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Hazard {
+	static class Producer implements Runnable {
+		String str;
+		public Producer(String s) { str = s; }
+		public void run() {
+			int i = 0;
+			while ( i<5 ) {
+				if ( !data.contains(str) ) {
+					Thread.yield();
+					data.add(str);
+				}
+				i++;
+			}
+		}
+	}
+
+	static class Consumer implements Runnable {
+		public void run() {
+			int i = 0;
+			while ( i<5 ) {
+				System.out.println(data);
+				i++;
+			}
+		}
+	}
+
+	public static List<String> data = new ArrayList<String>();
+
+	public static void main(String[] args) {
+		Producer p = new Producer("X");
+		Producer p2 = new Producer("X");
+		Consumer c = new Consumer();
+		new Thread(p).start();
+		new Thread(p2).start();
+		Thread u = new Thread(c);
+		u.start();
+	}
+}
+```
+
+```bash
+$ java Hazard
+[X]
+[X]
+[X]
+[X]
+[X]
+$ java Hazard
+[null, X]       <-- we must have interrupted add() here
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+$ java Hazard
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+[null, X]
+$ java Hazard
+[X, X]
+[X, X]
+[X, X]
+[X, X]
+[X, X]
+$ java Hazard
+[X]
+[X]
+[X]
+[X]
+[X]
+```
+
 # Java thread-safe data structures
 
 `java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
@@ -282,12 +364,6 @@ class HPLaser {
 *Note*: local variables cannot be shared between threads so can't interfere.
 
 Java uses the synchronized keyword not only for thread safety but also for synchronizing the execution of statements across threads and also for passing information between threads.
-
-# Java data structures
-
-`java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
-
-Use `Collections.synchronizedXXX()` factories to make `ArrayList` and `HashMap` and friends thread-safe.
 
 # Conditional synchronization
 
