@@ -365,12 +365,6 @@ class HPLaser {
 
 Java uses the synchronized keyword not only for thread safety but also for synchronizing the execution of statements across threads and also for passing information between threads.
 
-# Java data structures
-
-`java.util` classes list `ArrayList` and `HashMap` are not thread safe. Old classes like `Vector` and `Hashtable` are but slower.
-
-Use `Collections.synchronizedXXX()` factories to make `ArrayList` and `HashMap` and friends thread-safe.
-
 # Conditional synchronization
 
 We want this:
