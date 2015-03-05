@@ -3,6 +3,9 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/** Use a lock to protect and increment operation and a barrier
+ *  to wait for all operations to finish.
+ */
 public class DemoLock {
 	public static final int N = 10000;
 	private static int count = 0;
