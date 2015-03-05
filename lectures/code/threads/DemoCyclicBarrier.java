@@ -10,8 +10,8 @@ import java.util.concurrent.CyclicBarrier;
  *  Reduce the results to a single some and print it out.
  */
 public class DemoCyclicBarrier {
-	public static final int N = 1000*1000*10;
-	public static final int SPLITS = 10; // increasing this to 100 takes more time
+	public static final int N = 1000*1000*1000;
+	public static final int SPLITS = 5; // increasing this to 100 takes more time
 	public static final int SPLIT_SIZE = N/SPLITS;
 	static int[] data = new int[N];
 	static long[] partialResults = new long[SPLITS];
@@ -37,7 +37,7 @@ public class DemoCyclicBarrier {
 		// init; make some data
 		for (int i=0; i<N; i++) data[i] = i+1; // 1, 2, 3, 4, ..., N
 
-		long start = System.currentTimeMillis();
+		long start = System.nanoTime();
 		final Thread[] threads = new Thread[SPLITS];
 
 		// create a thread on each split
@@ -55,10 +55,10 @@ public class DemoCyclicBarrier {
 		for (int i=0; i<SPLITS; i++) {
 			sum += partialResults[i];
 		}
-		long stop = System.currentTimeMillis();
+		long stop = System.nanoTime();
 
 		// should be (1 + N)*(N/2) = 500500
 		System.out.println("Sum is "+sum);
-		System.out.printf("time %d ms\n", stop - start);
+		System.out.printf("time %d ns\n", (long) ((stop - start) / 1000.0));
 	}
 }
