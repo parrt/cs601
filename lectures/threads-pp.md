@@ -539,7 +539,7 @@ public void put(E e) throws InterruptedException {
 }
 ```
 
-We have much finer granularity here then with the intrinsic wait and notifyAll(). First, we can awaken just a single thread because we know which queue of threads we are potentially waking up rather than all possible conditions. That is more efficient. Is also easier to understand with two different `Condition` objects. The other choices to have a single intrinsic queue of waiting threads with potentially multiple conditions they are actually waiting on.
+We have much finer granularity here then with the intrinsic wait and notifyAll(). First, we can awaken just a single thread because we know which queue of threads we are potentially waking up rather than all possible conditions. That is more efficient. Is also easier to understand with two different `Condition` objects. The other choice is to have a single intrinsic queue of waiting threads with potentially multiple conditions they are actually waiting on.
 
 # Some recommendations, patterns
 
@@ -547,7 +547,7 @@ You should read [Java concurrency in practice](http://jcip.net.s3-website-us-eas
 
 * Try to avoid threads.
 * Have a single thread that is the only one to access critical data structures. This would be like the GUI event queue. (See more in next item.)
-* Serialize access using a single thread. GUI event threads are the most obvious example. Java's Swing library has the [Event Dispatch Thread](http://docs.oracle.com/javase/tutorial/uiswing/concurrency/dispatch.html) do all of the manipulations on graphics objects. Multiple threads right to an event queue and there is a single thread that pulls work off of that queue. Very convenient in terms of thread safety but makes it slightly inconvenient when you need to react to events. If the event handler is a very expensive, the event thread must launch another thread to process it otherwise the entire GUI will freeze while the event is processed.
+* Serialize access using a single thread. GUI event threads are the most obvious example. Java's Swing library has the [Event Dispatch Thread](http://docs.oracle.com/javase/tutorial/uiswing/concurrency/dispatch.html) do all of the manipulations on graphics objects. Multiple threads write to an event queue and there is a single thread that pulls work off of that queue. Very convenient in terms of thread safety but makes it slightly inconvenient when you need to react to events. If the event handler is a very expensive, the event thread must launch another thread to process it otherwise the entire GUI will freeze while the event is processed.
 * Try to avoid **shared state** between threads
 * If that is not possible, use **immutable objects** if you can:
 ```java
@@ -571,7 +571,6 @@ public class Point {
 * Be careful you **do not publish data** that is not adequately protected by returning a data structure.
 ```java
 class T {
-	static double secret = 99.0; // multiple threads can see this
 	private SomeMutable[] internal = ... ;
 	// synchronize does nothing here as we publish all data
 	public synchronized SomeMutable[] getValues() { return internal; }
@@ -611,7 +610,13 @@ Synchronization is not just about synchronizing threads. It's also about making 
 
 Because ready is volatile, the second thread is guaranteed to print 42. When thread 1 writes to ready and then the second thread reads ready, all data previously written by thread 1 becomes visible to thread 2. Without the volatile, it might be the case that just one of those variables could leak through. For example, if ready leaks through but answer does not, the second thread will print 0!
 
-To make threads operate efficiently on multi-core machines and to allow compiler optimizations that reorder operations, the Java memory model has to allow thread to pretend to execute in its own sandbox (which allows the CPU running the thread to access data from its local cache and not have to go all went back to main memory). [JDK5 and later extends the semantics for volatile so that the system will not allow a write of a volatile to be reordered with respect to any previous read or write, and a read of a volatile cannot be reordered with respect to any following read or write. ](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
+Paraphrasing [What Volatile Means in Java](http://jeremymanson.blogspot.com/2008/11/what-volatile-means-in-java.html):
+
+* Pretend each thread in Java takes place in a separate memory space.
+* Special mechanisms needed to guarantee communication happens between threadsthese threads.
+* Memory writes that happen in one thread can "leak through" and be seen by another thread, but this is by no means guaranteed. Without explicit communication, you can't guarantee which writes get seen by other threads, or even the order in which they get seen.
+
+To make threads operate efficiently on multi-core machines and to allow compiler optimizations that reorder operations, the Java memory model has to allow thread to pretend to execute in its own sandbox (which allows the CPU running the thread to access data from its local cache and not have to go all went back to main memory). [JDK5 and later extends the semantics for volatile so that the system will not allow a write of a volatile to be reordered with respect to any previous read or write, and a read of a volatile cannot be reordered with respect to any following read or write.](http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)
 
 Jeremy Manson's [What Volatile Means in Java](http://jeremymanson.blogspot.com/2008/11/what-volatile-means-in-java.html)
 
@@ -701,6 +706,11 @@ class HelperSingleton {
 
 No matter how many threads reference a class, Java guarantees that a single thread wins the race to load the class, which does the initialization as well.
 
+## Volatile arrays
+
+Finally, a note on [Volatile Arrays in Java](http://jeremymanson.blogspot.com/2009/06/volatile-arrays-in-java.html). For volatile int[] X;, remember that X "is a volatile reference to an array, not a reference to an array of volatile elements! If you write to X[0], you will get none of the ordering or visibility guarantees that you want from a volatile write."
+
+You can use [AtomicIntegerArray](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicIntegerArray.html), which gives "volatile access semantics for its array elements."
 
 # Starvation
 
@@ -719,8 +729,9 @@ Famous *dining philosophers*: think and eat.  2 students with forks.  Must have 
 Explicit locks also allow us to poll locks to avoid potential deadlock situations. See Goetz's [DynamicOrderDeadlock](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/DynamicOrderDeadlock.java). Here is a snippet that shows an attempt to get two locks:
 
 ```java
-synchronized (fromAccount) {
-    synchronized (toAccount) {
+// Warning: deadlock-prone!
+synchronized (fromAccount) {         // lock first
+    synchronized (toAccount) {       // lock second
         if (fromAccount.getBalance().compareTo(amount) < 0)
             throw new InsufficientFundsException();
         else {
@@ -735,7 +746,7 @@ The problem of course is that another thread might have locked one of the other 
 
 This situation differs from our `Amazon` example above with a compound operation because that example uses a single lock for two data structures whereas here we have two different locks, one for each data structure.
 
-The solution is to hold the locks to see if we can get both of them and, if not, hang out for a bit and try again. This is basically what ethernet does to get on the bus. A timed `tryLock` can be used to fail if we can't gain access to the resources soon enough. See Goetz's [DeadlockAvoidance](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/DeadlockAvoidance.java).
+The solution is to poll the locks to see if we can get both of them and, if not, hang out for a bit and try again. This is basically what ethernet does to get on the bus. A timed `tryLock` can be used to fail if we can't gain access to the resources soon enough. See Goetz's [DeadlockAvoidance](http://jcip.net.s3-website-us-east-1.amazonaws.com/listings/DeadlockAvoidance.java).
 
 ```java
 while (true) {
@@ -756,7 +767,7 @@ while (true) {
 
 # Nonblocking algorithms
 
-The idea is to avoid locks for performance reasons but nonblocking algorithms are also immune to deadlock. While a thread is blocked the lock, it can't do anything else and another thread holding the lock could be delayed. Locks also could involve context switches, which are very expensive. Unfortunately nonblocking algorithms are vastly more complicated to think about and design (i.e., get right) than locking algorithms.  Nonblocking algorithms rely on hardware instructions such as compare-and-swap and compare-and-set rather than locking which require operating system intervention:
+The idea is to avoid locks for performance reasons but nonblocking algorithms are also immune to deadlock. While a thread is blocked on a lock, it can't do anything else and another thread holding the lock could be delayed. Locks also could involve context switches, which are very expensive. Unfortunately nonblocking algorithms are vastly more complicated to think about and design (i.e., get right) than locking algorithms.  Nonblocking algorithms rely on hardware instructions such as compare-and-swap and compare-and-set rather than locking which require operating system intervention:
 
 ```java
 boolean compareAndSet(x, expectedValue, newValue);
@@ -770,7 +781,7 @@ The machine instruction looks like:
 CAS addr,old,new
 ```
 
-which atomically updates data at  `addr` to the `new` value only if the value at that address matches the expected `old` value. Multiple competing threads that attempt CAS on `addr` have one winner which updates the value and the rest lose. The losers are notified that they didn't win and should try again. This really helps with liveness because we are not stuck like we would be with a lock.
+which atomically updates data at  `addr` to the `new` value only if the value at that address matches the expected `old` value. Multiple competing threads that attempt CAS on `addr` have one winner which updates the value and the rest lose. The losers are notified that they didn't win and should try again. CAS returns the value that was there prior to CAS instruction. This really helps with liveness because we are not stuck like we would be with a lock.
 
 Here's an example like our bank account that updates an integer without having to do a heavyweight lock:
 
@@ -789,7 +800,7 @@ while ( true ) {
 
 See [DemoConcurrentAtomInt](https://github.com/parrt/cs601/blob/master/lectures/code/threads/DemoConcurrentAtomInt.java).
 
-This is the thread safe equivalent of:
+That code is the thread safe equivalent of:
 
 ```java
 int n = 0;
@@ -814,8 +825,6 @@ public final int getAndIncrement() {
 }
 ```
 
-
-
 Locks are *pessimistic* whereas fine-grained atomic operations are *optimistic*. They assume that contention likelihood is low, which is valid particularly given the small cost of these atomic operations.
 
 ## Nonblocking atomic elements
@@ -830,8 +839,8 @@ These operations significantly outperform locking operations but are obviously m
 
 In order to get atomic floating-point, you have to use unsigned integers and convert from floats to bits. ick.
 
-`Volatile` variables and atomic variables are different. The volatile ones simply guarantee that the value can be properly shared across threads but they do not prevent race conditions during compare and set operations.  For example, incrementing a volatile from multiple threads can lose a few updates, but that's okay if you don't care. If you are creating a pseudo random sequence of numbers, you care about dropping values as it alters the sequence. In that case, you need to hold things in and atomic integer.
+`Volatile` variables and atomic variables are different. The volatile ones simply guarantee that the value can be properly shared across threads but they do not prevent race conditions during compare and set operations.  For example, incrementing a volatile from multiple threads can lose a few updates in between reads, but that's okay if you don't care. If you are creating a pseudo random sequence of numbers, you care about dropping values as it alters the sequence. In that case, you need to hold things in an atomic integer.
 
 ## Lock-less data structures
 
-Java provides a number of lock was data structures that often perform well in the presence of multiple threads accessing them. E.g., [`ConcurrentHashMap`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentHashMap.html). "*Retrieval operations (including get) generally do not block, so may overlap with update operations (including put and remove).*" Also see [`ConcurrentLinkedQueue`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentLinkedQueue.html). Their designs and implementations were done by experts. Such algorithms use lots of tricks such as dividing up data structures into regions and having threads work on different regions. According to Goetz, "*The key to creating nonblocking algorithms is figuring out how to limit the scope of atomic changes to a single *variable* while maintaining data consistency*."
+Java provides a number of lockless data structures that often perform well in the presence of multiple threads accessing them. E.g., [`ConcurrentHashMap`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentHashMap.html). "*Retrieval operations (including get) generally do not block, so may overlap with update operations (including put and remove).*" Also see [`ConcurrentLinkedQueue`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentLinkedQueue.html). Their designs and implementations were done by experts. Such algorithms use lots of tricks such as dividing up data structures into regions and having threads work on different regions. According to Goetz, "*The key to creating nonblocking algorithms is figuring out how to limit the scope of atomic changes to a single variable while maintaining data consistency*."
