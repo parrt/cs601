@@ -107,11 +107,12 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 [Thread synchronization; barriers, thread communication; Volatile, AtomicInt, Java's memory model, lockless data structures](https://github.com/parrt/cs601/blob/master/lectures/threads.md)
 
 ## Web architecture
-Servlets; services/REST	
-cookies, sessions	
-web app architecture	
-web page generation	
-StringTemplate	
+* [web app architecture](https://github.com/parrt/cs601/blob/master/lectures/webapp.md), [old client-server notes](https://github.com/parrt/cs601/blob/master/lectures/client-server.md)
+* [Servlets](https://github.com/parrt/cs601/blob/master/lectures/servlets-pp.md); services/REST
+* [cookies](https://github.com/parrt/cs601/blob/master/lectures/cookies.md)
+* [sessions](https://github.com/parrt/cs601/blob/master/lectures/sessions.md)
+* [web page generation](https://github.com/parrt/cs601/blob/master/lectures/page.generation.md)
+* [StringTemplate](https://github.com/parrt/cs601/blob/master/lectures/stringtemplate.md)
 
 ## Databases
 SQL, schema, sqlite	
