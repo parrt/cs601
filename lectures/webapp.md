@@ -11,7 +11,7 @@ Regardless of the type of presentation layer, HTML or HTML+JavaScript or JavaScr
 
 ## Old-school
 
-cgi-bin accepted requests and generated HTML, which was sent back to the browser. After cgi-bin, came php which was executed code on the server as well and emitted HTML back to the browser. As I understand it, php was also stateless; each request required the loading of any state from a database. It does have sessions however.
+cgi-bin accepted requests and generated HTML, which was sent back to the browser. After cgi-bin, came php which was executed code on the server as well and emitted HTML back to the browser. As I understand it, php was also stateless; each request required the loading of any state from a database. It did have sessions however.
 
 The generated page is more or less static once it gets to the browser.
 
@@ -20,6 +20,8 @@ Each "screen" of the application is a new URL.
 Highly cacheable.
 
 ## Enter Java, Web 1.0
+
+Java *applets.*   Didn't really go anywhere but that was what the excitement was all about when Java came out in June 1995. the idea was that the web was no longer static pages but you could send content that would display or manipulate data as well as just data. In the end, they were very clunky, slow to load at the time, and had very little support in terms of libraries.
 
 With Java servlets in the late 90s, a single running process acts as the server and can maintain state between requests. The Java servlets generated HTML which was then sent back to the browser as before.
 
