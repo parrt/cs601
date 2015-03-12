@@ -3,7 +3,7 @@ Message passing via blocking queues
 
 # Goal
 
-Your goal in this project is to explore the use of blocking queues and message passing between producers and consumers or *actors*. You will build two blocking queues yourself, `SynchronizedBlockingQueue` and `RingBuffer`, then in another case you will use Java's `ArrayBlockingQueue`.
+Your goal in this project is to explore the use of blocking queues and message passing between producers and consumers or *actors*. You will build three blocking queues yourself, `SynchronizedBlockingQueue`, `FastSynchronizedBlockingQueue`, and `RingBuffer`, then in another case you will use Java's `ArrayBlockingQueue`.
 
 In order to test the efficiency of the blocking queues, you will also build a `ThreadObserver` that measures the ratio of time a thread spends block versus running.
 
@@ -34,7 +34,7 @@ You will notice that the message sequence has the notion of an end of file senti
 
 All of the message buffers will be of fixed size (1024). Do not allocate more and more space in the buffers as you get messages. The producer should block when that buffer is full and the consumer should block when that buffer is empty. The consumer finishes when it sees the end of file sentinel object.
 
-The test rig launches `ThreadObserver` objects to track how much of the time our producer and consumers are blocked using a simple *sampling* technique. It's not perfect because, for example, if the computer is busy the overall time taken by the test will be extended. This would artificially reduce the ratio time our threads spent blocked.
+The test rig launches `ThreadObserver` objects to track how much of the time our producer and consumers are blocked using a simple *sampling* technique. It's not perfect because, for example, if the computer is busy the overall time taken by the test will be extended. This would artificially reduce the ratio of time our threads spent blocked.
 
 The first thing you should do is read through all the source code that has been provided so you can fully understand the foundation I have provided. Some of you will have to go read about generic types of learning is part of the development process, as is reading other people's code.
 
@@ -44,7 +44,25 @@ The first thing you should do is read through all the source code that has been 
 
 You will find a skeleton for `SynchronizedBlockingQueue` in your repository.
 
-You must implement `take` and `put` so that they block when the buffer is empty or the buffer is full, respectively.
+You must implement `take` and `put` so that they block when the buffer is empty or the buffer is full, respectively. You must use `wait` and `notifyAll` to make things wait and reawaken.
+
+## Message buffer using fewer notifications
+
+You will find a skeleton for `FastSynchronizedBlockingQueue` in your repository.
+
+You must implement `take` and `put` so that they block when the buffer is empty or the buffer is full, respectively, just as he did for the previous blocking queue. The difference for this version is that you should only `notifyAll` when other threads could potentially awaken do more work.
+
+Calling `notifyAll()` is expensive so we should try to avoid unnecessary calls. A call to `notifyAll` will only result in further progress from other threads when the thread calling `notifyAll` changes wait conditions for the queue from true to false. There are two synchronization conditions:
+
+1. `take` waits when `queue.isEmpty()`
+2. `put` waits when `queue.size() >= size`
+
+The net effect is that we need conditions around the call to `notifyAll`:
+ 
+* `take` needs to call `notifyAll` if and only if it's going to change `put`'s wait condition `queue.size() >= size` from true to false.
+* `put` needs to call `notifyAll` if and only if it's going to change `take`'s wait condition `queue.isEmpty()` from true to false.
+
+I see about a 3x speed improvement, though it is still much lower than the ring buffer.  Interestingly is about the same speed as the built-in `ArrayBlockingQueue` used in the next version you code. That would indicate that `ArrayBlockingQueue` is overly complicated if we can make it safe and efficient with a simple condition around `notifyAll`.
 
 ## Message buffer using `ArrayBlockingQueue`
 
@@ -93,23 +111,19 @@ static boolean isPowerOfTwo(int v) {
 }
 ```
 
-This data structure is straightforward if we don't care about blocking or threads. The key comes down to two methods that I have in my implementation.
+This data structure is straightforward if we don't care about blocking or threads. The key comes down to two spin loops that I have in my implementation. Here are the comments from my implementation:
 
 ```java
 // spin wait instead of lock for low latency store
-void waitForFreeSlotAt(final long writeIndex) {
-	// wait until we have at least one spot, meaning w < r
-	// since circular buffer though we worry about wrapping. We
-	// have to wait if we've got n values in the buffer already.
-}
+// wait until we have at least one spot, meaning w < r
+// since circular buffer though we worry about wrapping. We
+// have to wait if we've got n values in the buffer already.
 ```
 
 ```java
 // spin wait instead of lock for low latency pickup
-void waitForDataAt(final long readIndex) {
-	// wait until w catches up or passes desired read location
-	// repeat until just-wrote-index >= about-to-read-index
-}
+// wait until w catches up or passes desired read location
+// repeat until just-wrote-index >= about-to-read-index
 ```
 
 These methods actually require a bit of a delay in their spins otherwise overall throughput suffers. I suspect this is because the spin loop saturates the data bus because it constantly accesses volatile fields `r` and `w`. In other words, both the reader and the writer threads are constantly pounding away trying to access two 64-bit longs in main memory instead of the cache.

@@ -5,7 +5,7 @@ import java.util.Collections;
 // Demonstrate the use of a random object as a semaphore
 public class PlayCatch {
 	static Object data = null;
-	static Object semaphore = new Object();
+	static final Object semaphore = new Object();
 
 	static class TheThrower implements Runnable {
 		public void run() {
