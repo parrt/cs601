@@ -426,7 +426,7 @@ For simple templates, you may also use "anonymous templates":
 
 ```java
 <ul>
-$names:{<li>$it$</li>`$
+$names:{<li>$it$</li>}$
 </ul>
 ```
 
@@ -434,7 +434,7 @@ Or you can set your own template application iteration variable name:
 
 ```java
 <ul>
-$names:{ n | <li>$n$</li>`$
+$names:{ n | <li>$n$</li> }$
 </ul>
 ```
 
@@ -557,7 +557,7 @@ order to reuse the table row HTML:
 </tr>
 ```
 
-where {it` is the predefined iterator when no parameter is defined.
+where `it` is the predefined iterator when no parameter is defined.
 
 Then the user list template reduces to the more readable:
 
@@ -575,9 +575,9 @@ attributes in the view.  The view only formats data and does no
 interpretation.
 
 Here is a generic page object in my server that has loads templates
-from the {templates` subdirectory (in other words, when you ask for an
-instance of the {"page"` template, it will look for it in file
-{templates/page.st`):
+from the `templates` subdirectory (in other words, when you ask for an
+instance of the `"page"` template, it will look for it in file
+`templates/page.st`):
 
 ```java
 public abstract class Page {
@@ -608,8 +608,8 @@ public abstract class Page {
 }
 ```
 
-A page simply subclasses and overrides getTitle() and generateBody(),
-which returns a {StringTemplate} object.
+A page simply subclasses and overrides `getTitle()` and `generateBody()`,
+which returns a `StringTemplate` object.
 
 ```java
 public class UserListPage extends Page {
@@ -635,15 +635,15 @@ controller pulls the right data from the model.
 Graphically the overall outermost template, {page}, looks like the
 following:
 
-%image(page.overall.jpg)
+![](page.overall.jpg)
 
 where the blank elements represent whitespace found in the template;
 they need to be separated for reasons too detailed to go into here.
 
-Drilling down into the attributes you can see that the {body}
-attribute is set to another template with the {users} attribute etc...
+Drilling down into the attributes you can see that the `body`
+attribute is set to another template with the `users` attribute etc...
 
-%image(page.treeview.jpg)
+![](page.treeview.jpg)
 
 Those graphical debugging windows are pretty handy and are
 conveniently generated via:
@@ -654,7 +654,7 @@ viz.setVisible(true);
 ```
 
 Naturally, you could go one step further and make another component
-for the entire table (putting it in file {table.st}):
+for the entire table (putting it in file `table.st`):
 
 ```java
 <table border=1>
@@ -670,20 +670,20 @@ $table(elements=users)$
 
 Here is the complete source code:
 
-o [](ST/Test.java, Test.java)
-o [](ST/Page.java, Page.java)
-o [](ST/User.java, User.java)
-o [](ST/UserListPage.java, UserListPage.java)
+- [Test.java](ST/Test.java)
+- [Page.java](ST/Page.java)
+- [User.java](ST/User.java)
+- [UserListPage.java](ST/UserListPage.java)
 
 and here are the templates:
 
-o [](ST/templates/page.st, page.st)
-o [](ST/templates/row.st, row.st)
-o [](ST/templates/users_list.st, users_list.st)
+- [page.st](ST/templates/page.st)
+- [row.st](ST/templates/row.st)
+- [users_list.st](ST/templates/users_list.st)
 
 ### StringTemplateGroup
 
-The other important feature is called a {StringTemplateGroup}.
+The other important feature is called a `StringTemplateGroup`.
 StringTemplateGroup is a self-referential group of StringTemplate
 objects kind of like a grammar.  It is very useful for keeping a group
 of templates together.  For example, jGuru.com's premium and guest
@@ -710,7 +710,7 @@ public abstract class Page {
 
 ### StringTemplateErrorListener
 
-{StringTemplateErrorListener} is an interface you can implement to
+`StringTemplateErrorListener` is an interface you can implement to
 specify where StringTemplate reports errors.  Setting the listener
 for a group automatically makes all associated StringTemplate
 objects use the same listener.  For example,
@@ -744,13 +744,13 @@ group.setErrorListener(buf);
 
 #### Using StringTemplate in your Page classes
 
-Ok, let's tie it all together: {StringTemplate} and servlets.  Let's
-reuse the {page.st}, {users_list.st}, and {row.st} templates plus
+Ok, let's tie it all together: `StringTemplate` and servlets.  Let's
+reuse the `page.st`, `users_list.st`, and `row.st` templates plus
 construct the dispatch servlet and some page infrastructure.
 
-We want {http://}_machine_{:8080/mail/users} to yield a list of users.
+We want `http://_machine_:8080/mail/users` to yield a list of users.
 
-Make a {Page} subclass called {UserListPage}:
+Make a `Page` subclass called `UserListPage`:
 
 ```java
 public class UserListPage extends Page {
@@ -774,9 +774,9 @@ public class UserListPage extends Page {
 }
 ```
 
-The page infrastructure, class {Page}, creates the outer page template
+The page infrastructure, class `Page`, creates the outer page template
 (site look) and requests the body.  It fills in the body of the page
-template with the result of the {body} method:
+template with the result of the `body` method:
 
 ```java
 public class Page {
@@ -810,7 +810,7 @@ public class Page {
 ```
 
 We have the same Jetty servlet start up that maps URLs of the form
-{/mail/*} to our {DispatchServlet}:
+`/mail/*` to our `DispatchServlet`:
 
 ```java
 public class DispatchServlet extends HttpServlet {
@@ -840,17 +840,17 @@ does not require a constructor.
 
 Here is the complete source code:
 
-o [](ST/servlet/DispatchServlet.java, DispatchServlet.java)
-o [](ST/servlet/Page.java, Page.java)
-o [](ST/servlet/ServletServer.java, ServletServer.java)
-o [](ST/servlet/User.java, User.java)
-o [](ST/servlet/UserListPage.java, UserListPage.java)
+- [](ST/servlet/DispatchServlet.java, DispatchServlet.java)
+- [](ST/servlet/Page.java, Page.java)
+- [](ST/servlet/ServletServer.java, ServletServer.java)
+- [](ST/servlet/User.java, User.java)
+- [](ST/servlet/UserListPage.java, UserListPage.java)
 
 and here are the templates again:
 
-o [](ST/templates/page.st, page.st)
-o [](ST/templates/row.st, row.st)
-o [](ST/templates/users_list.st, users_list.st)
+- [](ST/templates/page.st, page.st)
+- [](ST/templates/row.st, row.st)
+- [](ST/templates/users_list.st, users_list.st)
 
 *Note:* Make sure to save these in a {templates} subdirectory under
 where you save the Java code.
@@ -859,10 +859,7 @@ where you save the Java code.
 
 CSS is a very nice and flexible style specification for the various
 XML or HTML tags found in a web page.  For example, I use it to alter
-the style of my course notes.  This is what
-[](http://web.archive.org/web/20040307075623/http://www.cs.usfca.edu/~parrt/course/601/lectures/page.generation.html,
-my notes looked like in March of 2004) compared to today.  Literally
-the only difference is that I have added
+the style of my course notes.  This is [what my notes looked like in March of 2004](http://web.archive.org/web/20040307075623/http://www.cs.usfca.edu/~parrt/course/601/lectures/page.generation.html) compared to today.  Literally, the only difference is that I have added
 
 ```java
 <link rel=stylesheet
@@ -884,17 +881,17 @@ ul, ol {
 
 that specify how various tags get formatted.
 
-Sounds great!  Why do I need {StringTemplate} then?!
+Sounds great!  Why do I need `StringTemplate` then?!
 
 The first big reason is that you still need to generate a structured
 document (XML or HTML) from a servlet.  You cannot use print
 statements, right?
 
 Secondly, while CSS does support some content positioning, it does not
-support the wholesale reorganization of the data as {StringTemplate}
+support the wholesale reorganization of the data as `StringTemplate`
 does.  It allows you to say how something appears relative to another
 element on the page or at an absolute position, but it is focused on
-pixels and visual-display-oriented units.  {StringTemplate} allows you
+pixels and visual-display-oriented units.  `StringTemplate` allows you
 to completely reorder data.  Imagine a simple template:
 
 ```html
