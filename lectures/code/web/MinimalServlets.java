@@ -23,7 +23,7 @@ public class MinimalServlets {
 
         // !! This is a raw Servlet, not a servlet that has been configured through a web.xml or anything like that !!
         handler.addServletWithMapping(HelloServlet.class, "/*");
-        handler.addServletWithMapping(SimpleResponseServlet.class, "/login");
+        handler.addServletWithMapping(SimpleResponseServlet.class, "/servlet/SimpleResponse");
 
         // Start things up! By using the server.join() the server thread will join with the current thread.
         // See "http://docs.oracle.com/javase/1.5.0/docs/api/java/lang/Thread.html#join()" for more details.
