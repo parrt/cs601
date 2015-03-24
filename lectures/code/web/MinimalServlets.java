@@ -3,13 +3,6 @@
 // Copyright (c) 1995-2014 Mort Bay Consulting Pty. Ltd.
 // Released under Eclipse Public License v1.0 and Apache License v2.0
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 
@@ -30,6 +23,7 @@ public class MinimalServlets {
 
         // !! This is a raw Servlet, not a servlet that has been configured through a web.xml or anything like that !!
         handler.addServletWithMapping(HelloServlet.class, "/*");
+        handler.addServletWithMapping(SimpleResponseServlet.class, "/login");
 
         // Start things up! By using the server.join() the server thread will join with the current thread.
         // See "http://docs.oracle.com/javase/1.5.0/docs/api/java/lang/Thread.html#join()" for more details.
