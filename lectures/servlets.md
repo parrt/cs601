@@ -310,13 +310,6 @@ Note that the servlet receives a request and response object.  The request objec
 // Copyright (c) 1995-2014 Mort Bay Consulting Pty. Ltd.
 // Released under Eclipse Public License v1.0 and Apache License v2.0
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 
@@ -337,21 +330,12 @@ public class MinimalServlets {
 
         // !! This is a raw Servlet, not a servlet that has been configured through a web.xml or anything like that !!
         handler.addServletWithMapping(HelloServlet.class, "/*");
+        handler.addServletWithMapping(SimpleResponseServlet.class, "/servlet/SimpleResponse");
 
         // Start things up! By using the server.join() the server thread will join with the current thread.
         // See "http://docs.oracle.com/javase/1.5.0/docs/api/java/lang/Thread.html#join()" for more details.
         server.start();
         server.join();
-    }
-
-    public static class HelloServlet extends HttpServlet {
-        @Override
-        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-        {
-            response.setContentType("text/html");
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println("<h1>Hello SimpleServlet</h1>");
-        }
     }
 }
 ```
@@ -413,7 +397,7 @@ context.addServlet(new ServletHolder(new DumpServlet()),"/dump/*");
 The safety issue for servlets with instance variables can be illustrated with the following:
 
 ```java
-class PageServlet extends HttpServer {
+class PageServlet extends HttpServlet {
     String id;
     public void doGet(HttpServletRequest request,
           HttpServletResponse response)
