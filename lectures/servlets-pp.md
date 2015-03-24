@@ -274,7 +274,7 @@ context.addServlet(new ServletHolder(new DumpServlet()),"/dump/*");
 The safety issue for servlets with instance variables can be illustrated with the following:
 
 ```java
-class PageServlet extends HttpServer {
+class PageServlet extends HttpServlet {
     String id;
     public void doGet(HttpServletRequest request,
           HttpServletResponse response)
