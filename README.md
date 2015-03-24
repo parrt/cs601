@@ -108,7 +108,7 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 
 ## Web architecture
 * [web app architecture](https://github.com/parrt/cs601/blob/master/lectures/webapp.md), [old client-server notes](https://github.com/parrt/cs601/blob/master/lectures/client-server.md)
-* [Servlets](https://github.com/parrt/cs601/blob/master/lectures/servlets-pp.md); services/REST
+* [Servlets](https://github.com/parrt/cs601/blob/master/lectures/servlets.md); services/REST
 * [cookies](https://github.com/parrt/cs601/blob/master/lectures/cookies.md)
 * [sessions](https://github.com/parrt/cs601/blob/master/lectures/sessions.md)
 * [web page generation](https://github.com/parrt/cs601/blob/master/lectures/page.generation.md)

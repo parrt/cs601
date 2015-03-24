@@ -10,9 +10,8 @@ public class SimpleResponseServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
-        String user = request.getParameter("user");
-        String password = request.getParameter("password");
-        out.println("You typed "+user+"/"+password);
+        String query = request.getParameter("query");
+        out.println("You searched for "+query);
         out.println("</body></html>");
         out.close();
     }
