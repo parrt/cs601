@@ -77,7 +77,7 @@ cookie=__utma=38625011.418771076.1229726720.1380134178.1410384681.1073; __utmz=3
 
 # How ad companies track you
 
-Notice that the browser will send cookies to the server even for images, not just webpages. Ad companies embed images and websites and therefore can send you a cookie that your browser dutifully stores. For example, here is the cookie ad traffic I got when I *opened an email* from `opentable.com`:
+Notice that the browser will send cookies to the server even for images, not just webpages. Ad companies embed images in websites and therefore can send you a cookie that your browser dutifully stores. For example, here is the cookie ad traffic I got when I *opened an email* from `opentable.com`:
 
 ```
 BROWSER: GET http://oascnx18015.247realmedia.com/RealMedia/ads/adstream_nx.ads/www.opentable.opt/email-reminder/m-4/4234234@x26 HTTP/1.1
@@ -100,7 +100,7 @@ There are a number of things to notice here:
 
 Now, imagine that I go to a random website X that happens to have an ad from `realmedia.com`. My browser will send all cookies associated with `realmedia.com` to their server, effectively notifying them that I am looking at X. They will know about every page I visit that contains there ads.
 
-Recently I was looking at hotels in San Diego and also purchasing some cat food on a different website. Then he went to Facebook and saw ads for the exact rooms and cat food I was looking for. This all works through the magic of cookies. There is a big ad clearinghouse where FB can ask if anybody is interested in serving ads to one of its users with a unique identifier. Hopefully they don't pass along your identity, but your browser still passes along your cookies for that ad server domain. The ad companies can then bid to send you an ad. Because your browser keep sending the same cookies to them regardless of the website, hotel and pet food sites can show you ads for what you were just looking at on a completely unrelated site. wow.
+Recently I was looking at hotels in San Diego and also purchasing some cat food on a different website. Then I went to Facebook and saw ads for the exact rooms and cat food I was looking for. This all works through the magic of cookies. There is a big ad clearinghouse where FB can ask if anybody is interested in serving ads to one of its users with a unique identifier. Hopefully they don't pass along your identity, but your browser still passes along your cookies for that ad server domain. The ad companies can then bid to send you an ad. Because your browser keep sending the same cookies to them regardless of the website, hotel and pet food sites can show you ads for what you were just looking at on a completely unrelated site. wow.
 
 This technology is not all bad. Obviously, Google analytics requires a tiny little image the embedded in your webpages so that it can track things and give you statistics.
 
@@ -199,4 +199,100 @@ private void killCookie(HttpServletResponse response, String name) {
     c.setPath( "/" ); // for all subdirs
     response.addCookie( c );
 }
+```
+
+# Who does CNN page contact?
+
+Using my proxy, I see the following hosts contacted by a visit to the cnn.com home page.
+
+```
+	host=download.cdn.mozilla.net
+	host=facebook.com
+	host=download.cdn.mozilla.net
+	host=download.cdn.mozilla.net
+	host=download.cdn.mozilla.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-43.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-166-77.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-36.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-43.nodes.56m.dmtio.net
+	host=fast.fonts.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-42.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-165-19.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-170-44.nodes.56m.dmtio.net
+	host=z.cdn.turner.com
+	host=cdn.clicktale.net
+	host=cdn.optimizely.com
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-162-176.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-37.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-165-23.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-47.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-36.nodes.56m.dmtio.net
+	host=z.cdn.turner.com
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-45.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-38.nodes.56m.dmtio.net
+	host=cdn.krxd.net
+	host=www.googletagservices.com
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-43.nodes.56m.dmtio.net
+	host=i.cdn.turner.com
+	host=131788053.log.optimizely.com
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-41.nodes.56m.dmtio.net
+	host=hpr.outbrain.com
+	host=i.cdn.turner.com
+	host=i.cdn.turner.com
+	host=i.cdn.turner.com
+	host=131788053.log.optimizely.com
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-37.nodes.56m.dmtio.net
+	host=i2.cdn.turner.com
+	host=a.visualrevenue.com
+	host=i.cdn.turner.com
+	host=i.cdn.turner.com
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-49.nodes.56m.dmtio.net
+	host=hpr.outbrain.com
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-49.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-170-44.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-162-176.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-166-101.nodes.56m.dmtio.net
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-170-40.nodes.56m.dmtio.net
+	host=widgets.outbrain.com
+	host=vrt.outbrain.com
+	host=download.cdn.mozilla.net
+	host=widgets.outbrain.com
+	host=log.outbrain.com
+	host=consent.truste.com
+	host=z.cdn.turner.com
+	host=cdn.livefyre.com
+	host=data.cnn.com
+	host=z.cdn.turner.com
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-168-49.nodes.56m.dmtio.net
+	host=connect.facebook.net
+	host=metrics.cnn.com
+	host=www.cnn.com
+	x-servedbyhost=prd-10-60-170-40.nodes.56m.dmtio.net
+	host=b.scorecardresearch.com
+	host=secure-us.imrworldwide.com
+	host=cdn.gigya.com
 ```
