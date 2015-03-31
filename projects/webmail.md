@@ -1,9 +1,9 @@
 Webmail Project
 ====
 
-*Final release due December 3, 2014.*
+*Final release due at the start of the final day of class*
 
-In this project you will build a website that acts as a web-based email client server like gmail or hotmail.   There will be three releases, v0.1-v0.3, with the last one due December 3rd, the last day of class.
+In this project you will build a website that acts as a web-based email client server like gmail or hotmail.
 
 To give you an idea what a successful project looks like, here are the videos Jean Bovet made of his project from years ago: [main presentation](movies/webmail/presentation.mov), [filter](movies/webmail/filter.mov), [move_delete](movies/webmail/html_move_delete.mov), [search](movies/webmail/search.mov), [smartfolders](movies/webmail/smartfolders.mov), [spellchecker](movies/webmail/spellchecker.mov).
 
@@ -11,9 +11,9 @@ To give you an idea what a successful project looks like, here are the videos Je
 <a href="movies/webmail/presentation.mov"><img align=top src="figures/bovet-inbox.png" width=280></a> <a href="movies/webmail/presentation.mov"><img src="figures/bovet-attach.png" width=280></a>
 </center>
 
-You will make an appointment to demo and do a code review with the instructor at the last release. You will not receive a formal grade for the first two releases, but I will comment on your project to give you an idea of where I think you are and whether you are on track.
+You will make an appointment to demo and do a code review with the instructor at the last release. You will not receive a formal grade for the first "releases," but I will comment on your project to give you an idea of where I think you are and whether you are on track. You'll stand up in class and indicate how much of the project and which features you have completed approximately once a week.
 
-The overall project is scored as 100 points, but it is weighted more heavily than the other projects. *It is worth 30% of your overall grade.* Doing well on this project is critical to achieving a good grade in the class. *Some of the features are required to even pass the class.*
+The overall project is scored as 100 points, but it is weighted more heavily than the other projects. *It is worth 25% of your overall grade.* Doing well on this project is critical to achieving a good grade in the class. *Some of the features are required to even pass the class.*
 
 # Goals
 
@@ -67,12 +67,11 @@ The breakdown is as follows:
 |13|x|2| Support HTTPS connections to your website not just HTTP.|
 |14| |2 | An indication for messages and message lists (mailboxes) whether a message has been read or not. An ability to toggle read/unread.|
 |15| |5| Mailbox view pagination so user can select page of multipage view. |
-|16| |3 | Sent mail goes to hardcoded or user-defined `Sent` folder/tag. |
-|17| |3 | Edit user account to change password etc... |
+|16| |4 | Sent mail goes to hardcoded or user-defined `Sent` folder/tag. |
+|17| |4 | Edit user account to change password etc... |
 |18| |5 | Support user-defined "folders" or "tags" so users can direct incoming email to various folders manually. Users can move mail between folders by changing tags.|
-|19| |3 | Support viewing of in-line email images. |
-|20| |4 | User is able to search all of their mail for keywords; use a simple linear walk of the data via the database or FOR loop (rather than a sophisticed search engine like Lucene). The user should be able to pick the field such as "from" or "subject" to search in. |
-|21| |5 | Sort mail folder display by various fields/columns such as sender's email, subject, ... |
+|19| |5 | User is able to search all of their mail for keywords; use a simple linear walk of the data via the database or FOR loop (rather than a sophisticed search engine like Lucene). The user should be able to pick the field such as "from" or "subject" to search in. |
+|20| |5 | Sort foward/backward mail folder display by various fields/columns such as sender's email, subject, ... |
 
 Choose from *one* the following list of advanced features:
 
@@ -81,7 +80,7 @@ Choose from *one* the following list of advanced features:
 |22|5 | Spell checking that highlights words not found in a large dictionary when the user clicks a button on the compose message page; or, more sophisticated functionality. |
 |23|7 | Use of Lucene to search through email. The user should be able to pick the field such as "from" or "subject" to search in.|
 |24|7 | A contact list feature that allows users to add, delete, and view contacts. It should also allow selection or auto completion or some other mechanism to make it easy to email those contacts.|
-|25|10 | Support attachments (send/receive) |
+|25|10 | Support attachments (send/receive) and viewing of image attachments in the "view message" page.|
 |26|10 | SPAM filtering using something like a Naive Bayes classifier. You can use a library for this feature; i.e., don't build your own classifier.  User should be able to identify which messages are spam and which are not.|
 
 In addition, your project will be evaluated on the following more subjective criteria:
@@ -94,7 +93,7 @@ In addition, your project will be evaluated on the following more subjective cri
 
 Notice that these subjective scores cover 15% of the project. Screwing these up means the most you can achieve is 85% on the entire project.
 
-I have provided a [basic github repository](https://github.com/parrt/cs601-webmail-skeleton) that you can look at to learn more about using that website with releases and someone.
+I have provided a [basic github repository](https://github.com/parrt/cs601-webmail-skeleton) that you can look at to learn more about using that website with releases and someone. Feel free to ignore it and completely design your own if you want.
 
 # Requirements
 
@@ -110,7 +109,7 @@ Among other things that I hope will be obvious or that we discussed in class, pl
 
 * Deploy your server software by putting your jar in the `/opt/webmail` directory.
 
-* **Final submission of your project requires that you send instructor the public URL of your website.**
+* **Final submission of your project requires that you send the instructor the public URL of your website.**
 
 ## External libraries
 
@@ -156,7 +155,7 @@ My first issue is a `task` associated with milestone `v0.1`. As I complete issue
 
 ### Releases
 
-For each release, you will create a formal [github release](https://github.com/parrt/cs601-webmail-skeleton/releases), which involves creating a `git tag` and then creating a release on github itself associated with that tag. Tags are useful because you can reset your software to the state of a previous tag with a simple check out.
+For each "release," you will create a formal [github release](https://github.com/parrt/cs601-webmail-skeleton/releases), which involves creating a `git tag` and then creating a release on github itself associated with that tag. Tags are useful because you can reset your software to the state of a previous tag with a simple check out.
 
 When you have created the release, then mark the milestone as closed. There might be a way to have github do this automatically (not sure).
 
