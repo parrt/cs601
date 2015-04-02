@@ -3,8 +3,8 @@ page(users,phones) ::= <<
 
 parrt's phone is <phones.("parrt")>
 
-<phones,users:{p |
-    <p>: <phones.(p)>
+<phones,users:{p,u |
+    <u.name>: <phones.(p)> <! p is set of keys in phones !>
 }>
 
 <users:{u | <phones.(u.name)>}>

@@ -196,7 +196,7 @@ public class DispatchServlet extends HttpServlet {
 Naturally the if-then sequence in `lookupPage()` method should be coded as a `HashMap` that maps URI (URI is a more general URL) to a `Class` object:
 
 ```java
-public HashMap uriToPageMap = new HashMap();
+public HashMap<String,Class<? extends Page>> uriToPageMap = new HashMap<>();
 ...
 uriToPageMap.put("/hello", HelloPage.class);
 uriToPageMap.put("/article/index", ArticleIndexPage.class);
@@ -226,7 +226,7 @@ public void doGet(HttpServletRequest request,
 }
 ```
 
-You need to set your web server to map all URLs (but images etc...) to your dispatcher so any `/x/y?args` lands you in your single servlet.  Here is how to [configure Jetty to map all non-static page URLs to a single servlet](https://github.com/parrt/cs601-webmail-skeleton/blob/master/src/WebmailServer.java).
+You need to set your web server to map all URLs (but images etc...) to your dispatcher so any `/x/y?args` lands you in your single servlet.
 
 Now, you have totally isolated your project code from the notion of how pages are requested.  You could, for example, build a cmd-line tool that generated pages.
 
