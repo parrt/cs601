@@ -1,3 +1,5 @@
+import org.eclipse.jetty.servlet.ServletContextHandler;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +43,7 @@ public class LoginAndProcess extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		out.println("<html>");
 		out.println("<body>");
-		out.println("<form method=post action=/servlet/LoginAndProcess?event=process>");
+		out.println("<form method=post action=/login?event=process>");
 		out.println("User: <input type=text name=user><br>");
 		out.println("Password: <input type=password name=password><br><br>");
 		out.println("<input type=submit value=login>");
@@ -60,11 +62,24 @@ public class LoginAndProcess extends HttpServlet {
 		String password = request.getParameter("password");
 		if ( user.equals("parrt") && password.equals("foobar") ) {
 			// all is ok, direct to "home page"
-			response.sendRedirect("/servlet/RandomPage");
+			response.sendRedirect("/home");
 		}
 		else {
 			// oops...back to login.
-			response.sendRedirect("/servlet/LoginAndProcess?event=view");
+			response.sendRedirect("/login?event=view");
 		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(8080);
+		// To use sessions, we have to use ServletContextHandler not
+		// ServletHandler
+		ServletContextHandler handler = new
+		            ServletContextHandler(ServletContextHandler.SESSIONS);
+		server.setHandler(handler);
+		// only need to register one page.
+		handler.addServlet(LoginAndProcess.class, "/login");
+		server.start();
+		server.join();
 	}
 }
