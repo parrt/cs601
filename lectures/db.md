@@ -53,7 +53,8 @@ It's just as easy on other platforms I'm sure.
 ## Making a sample database
 
 ```bash
-$ SQLite version 3.7.13 2012-07-17 17:46:21
+$ sqlite3 /tmp/mytest.db
+SQLite version 3.7.13 2012-07-17 17:46:21
 Enter ".help" for instructions
 Enter SQL statements terminated with a ";"
 sqlite>
@@ -467,7 +468,7 @@ INSERT INTO SongTitles VALUES (5, 'The Rolling Stones', 'Flowers', 'Ruby Tuesday
 INSERT INTO SongTitles VALUES (6, 'Paul McCartney', 'Ram', 'Smile Away');
 ```
 
-`DISTINCT`: is always directly after the `select` end indicates that only unique combinations of the columns specified should be returned.
+`DISTINCT`: is always directly after the `select` and indicates that only unique combinations of the columns specified should be returned.
 
 ```sql
 sqlite> .width 20 20 20 20
@@ -616,7 +617,7 @@ With a single group column, you get N rows for N unique values for that column. 
 
 ## Conditions on groups
 
-Does `WHERE` in a select statement with groups applied to the rows or the groups? It applies to the rows. `HAVING` is like a `WHERE` but for groups. For example, here's how to get the list of quiz grades over 70:
+Does `WHERE` in a select statement with groups apply to the rows or the groups? It applies to the rows. `HAVING` is like a `WHERE` but for groups. For example, here's how to get the list of quiz grades over 70:
 
 ```sql
 sqlite> SELECT Student,GradeType,Grade
@@ -772,9 +773,9 @@ Notice how it lists all columns from both tables, even if they have the same nam
 
 Notice also how customer `Adam Petrie` is not represented in the joined table because he does not have a record in the `Orders` table.
 
-The `ON` clause specifies which column values must match for two rows to line up. The column name is fully qualified using the table name as well because they have the same name in both tables: `Customers.CustomerID = Orders.CustomerID`. If the customers table had used simply `ID`, then we could do `Customers.ID = Orders.CustomerID`. That's usually what I do.
+The `ON` clause specifies which column values must match for two rows to line up. The column name is fully qualified using the table name as well because they have the same name in both tables: `Customers.CustomerID = Orders.CustomerID`. If the customers table had used simply `ID`, then we could do `Customers.ID = CustomerID`. That's usually what I do.
 
-`Natalie Lopez` has 2 records in the joined table because she has to orders  in the `Orders` table.
+`Natalie Lopez` has 2 records in the joined table because she has 2 orders  in the `Orders` table.
 
 We can also use table aliases to shorten queries. The above query could be rewritten using aliases:
 
@@ -920,7 +921,7 @@ Brenda      Harper      2009-09-15  20.0
 Adam        Petrie                                                     
 ```
 
-Because we used an outer join, we can see order amounts even for those without refunds. And inner join which owes nothing because there was no matching records.
+Because we used an outer join, we can see order amounts even for those without refunds. An inner join would not show order amounts for those orders w/o refunds.
 
 To get a list of customers that received no refund, we can just add a simple condition:
  
