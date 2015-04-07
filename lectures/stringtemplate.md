@@ -632,25 +632,19 @@ age < 30, you would filter the list in {generateBody()} rather than
 alter your template.  The template only displays information once the
 controller pulls the right data from the model.
 
-Graphically the overall outermost template, {page}, looks like the
-following:
+Using the ST inspector, you can see how the output is generated:
 
-![](page.overall.jpg)
-
-where the blank elements represent whitespace found in the template;
-they need to be separated for reasons too detailed to go into here.
+![](figures/userpage.st.png)
 
 Drilling down into the attributes you can see that the `body`
 attribute is set to another template with the `users` attribute etc...
-
-![](page.treeview.jpg)
 
 Those graphical debugging windows are pretty handy and are
 conveniently generated via:
 
 ```java
-StringTemplateTreeView viz = new StringTemplateTreeView("viz",pageST);
-viz.setVisible(true);
+ST x = ...;
+x.inspect();
 ```
 
 Naturally, you could go one step further and make another component
@@ -668,18 +662,7 @@ then the body template would simply be:
 $table(elements=users)$
 ```
 
-Here is the complete source code:
-
-- [Test.java](ST/Test.java)
-- [Page.java](ST/Page.java)
-- [User.java](ST/User.java)
-- [UserListPage.java](ST/UserListPage.java)
-
-and here are the templates:
-
-- [page.st](ST/templates/page.st)
-- [row.st](ST/templates/row.st)
-- [users_list.st](ST/templates/users_list.st)
+Here is the [complete source code](https://github.com/parrt/cs601/tree/master/lectures/code/stringtemplate).
 
 ### StringTemplateGroup
 
