@@ -5,17 +5,14 @@ import java.awt.*;
 
 public class TestStringTemplate {
 	public static void main(String[] args) {
-		ST query = new ST("SELECT <column; separator={<sep>}> FROM <table>;");
+		ST query = new ST("SELECT <column; separator=\",\"> FROM <table; separator=\",\">;");
 		query.add("column", "subject");
 		query.add("column", "body");
-		query.add("sep", new ST(", "));
+//		query.add("sep", new ST(", "));
 		query.add("table", new String[] {"email","users"});
+//		query.add("table", "email");
 		// now add multiple tables and columns; add separator
 		System.out.println("QUERY: "+query.render());
-		int[] data = {1,2};
-		for (int x : data) {
-
-		}
 	}
 }
 

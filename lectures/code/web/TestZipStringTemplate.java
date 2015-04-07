@@ -8,9 +8,9 @@ public class TestZipStringTemplate {
 		ST array = new ST(
 			"<names,nums:{name,num | name:<name>, id:<num>}; separator=\"\n\">"
 		);
-		array = new ST("<tr>\n" +
+		array = new ST("<table>\n" +
 			"$nums,nums2,names:{n1,n2,n | <tr><td>$n$</td><td>$n1$,$n2$</td></tr>}; separator=\"\n\"$\n" +
-			"</tr>\n",
+			"</table>\n",
 			'$','$');
 		array.add("names", names);
 		array.add("nums", nums);
