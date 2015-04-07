@@ -115,11 +115,8 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 * [StringTemplate](https://github.com/parrt/cs601/blob/master/lectures/stringtemplate.md)
 
 ## Databases
-SQL, schema, sqlite	
-gmail assigned	
-group by	
-joins	
-Java + SQLLite	
+
+[SQL, schema, sqlite, group by, joins, Java + SQLLite](https://github.com/parrt/cs601/blob/master/lectures/db.md)
 
 ## Principles
 
