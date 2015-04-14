@@ -1,10 +1,9 @@
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class TestDB {
     public static void main(String[] args) throws Exception {
-        String dbFile = "/tmp/chinook.db";
+        String dbFile = "/tmp/test.db";
         Connection db = null;
         long start = System.currentTimeMillis();
         try {
