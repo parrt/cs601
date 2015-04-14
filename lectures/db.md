@@ -562,7 +562,7 @@ Number of Fee Types
 
 ## Grouping
 
-Grouping allows us to treat different groups of rows differently according to a column value. For example, you might want to group managers separately and employees together or faculty and students. In the data from Rockoff's book, we could collect grades by homework and separately by quiz.
+Grouping allows us to treat different groups of rows differently according to a column value. For example, you might want to group managers separately from employees or faculty from students. In the data from Rockoff's book, we could collect grades by homework and separately by quiz.
 
 ```sql
 sqlite> SELECT GradeType, AVG(Grade) FROM Grades GROUP BY GradeType;
@@ -571,6 +571,8 @@ GradeType             AVG(Grade)
 Homework              86.0                
 Quiz                  77.0                
 ```
+
+It's like multiple queries at once, one for `Homework` and one for `Quiz`.
 
 You should not include a column in the select statements column list that is not in the `group by` because the group collapses all rows within a group to a single row but there will typically be multiple values per regular column. For example, you can see that such a query gets weird results:
 
@@ -583,7 +585,7 @@ Alec                  Homework
 Alec                  Quiz                
 ```
 
-The student column makes no sense here. Of course, we get a very nice result if we include the student column in the aggregation:
+The student column makes no sense here. Of course, we get a very nice result if we include the student column in the group aggregation. The following query groups rows by student and grade type:
 
 ```sql
 sqlite> SELECT Student,GradeType FROM Grades GROUP BY Student,GradeType;
@@ -609,7 +611,7 @@ Kathy                 Quiz                  71.5
 Alec                  Quiz                  66.0                
 ```
 
-Group is different than sort in that it collapses all elements with the same value into a single row whereas sort merely puts them in order.
+**Group is different than sort in that it collapses all elements with the same value into a single row whereas sort merely puts them in order.**
 
 The order of column names in the group is not meaningful, unlike with sort.
 
@@ -687,15 +689,15 @@ Error: foreign key mismatch - "A" referencing "B"
 
 ## Inner joins
 
-I think of inner joins as lining up the records from both tables that match a predicate, stripping away the other records. Then create the joined table with the union of columns from both. The predicate consists of two things: an `ON` clause and potentially a `WHERE` condition. There must be records with matching columns for the join to produce results.
+I think of inner joins as lining up the records from both tables that match a predicate (e.g., matching column values), stripping away the other records. Then create the joined table with the union of columns from both. The predicate consists of two things: an `ON` clause and potentially a `WHERE` condition. There must be records with matching columns for the join to produce results.
 
-Implicit join notation just lists the table names (don't do this).
+Implicit join notation just references the table names (don't do this because it creates a cross product which is not usually what you want).
 
-Inner join is the intersection of two sets in set theory:
+Inner join is the intersection of two sets (of column values) in set theory:
 
 ![](figures/inner-join.png)
 
-*The goal is to get a list of orders that contains real names not customer numbers.* This is the use case for inner joins.
+**Use case**. Use inner joins when you want to combine columns from two different related tables, such as customers and orders. For example, you might want to get a list of orders that contain real customer names not just their identifiers.
 
 The overlap is where the predicate is true; for the most part this will be when a foreign key in `Orders` matches up with something in `Customers`.
 
@@ -801,16 +803,16 @@ OrderID     CustomerID  Quantity    PricePerItem  CustomerID  FirstName   LastNa
 
 Unlike inner joins, outer joins yield tables with records even when columns of those records don't match up or have `NULL` values. There are three kinds of outer joins: left, right, and full (or just "outer join"). SQLite can only do `left outer join` but let's define them all. From http://www.w3schools.com/sql/sql_join.asp (images by parrt):
 
-* `LEFT JOIN`: Return all rows from the left table, and the matched rows from the right table<br>
+* `LEFT JOIN`: Return all rows from the left table and rows from the right table whose predicates (column values) match.<br>
 ![left join](figures/left-join.png)
 * `RIGHT JOIN`: Return all rows from the right table, and the matched rows from the left table<br>
 ![right join](figures/right-join.png)
-* `FULL JOIN`: Return all rows when there is a match in ONE of the tables<br>
+* `FULL JOIN`: Return all rows from both tables, but line up the rows according to the predicate matching column.<br>
 ![full outer join](figures/outer-join.png)
 
-For comparison to the inner join, let's include that:
+For comparison to the inner join:
 
-* `INNER JOIN`: Returns all rows when there is at least one match in BOTH tables<br>
+* `INNER JOIN`: Returns all rows when their matching column values match.<br>
 ![](figures/inner-join.png)
 
 The only detail missing is that the left and right outer joins fill in `NULL` column values when there is no predicate match.
