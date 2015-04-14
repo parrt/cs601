@@ -29,7 +29,7 @@ Visually, those tables look like this:
 <table border=0>
 <tr valign=top>
 <td valign=top>
-![A](figures/table-A.png)</td><td> ![B](figures/table-B.png)</td>
+<img src=figures/table-A.png></td><td><img src=figures/table-B.png></td>
 </tr>
 </table>
 
