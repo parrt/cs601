@@ -26,20 +26,12 @@ insert into B VALUES (5, '500');
 
 Visually, those tables look like this:
 
-| ID | letter |
-|--------|--------|
-|  1      | a       |
-| 2 | b|
-| 3 | c|
-
-| ID | number |
-|--------|--------|
-| 1 | 100 |
-| 1 | 111 |
-| 2 | 200 |
-| 3 | 300 |
-| 4 | 400 |
-| 5 | 500 |
+<table border=0>
+<tr valign=top>
+<td valign=top>
+![A](figures/table-A.png)</td><td> ![B](figures/table-B.png)</td>
+</tr>
+</table>
 
 Type in the following queries to see what they do:
 
