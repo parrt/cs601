@@ -1034,7 +1034,7 @@ try {
     // DO SOMETHINE WITH db to read/write
 
     long stop = System.currentTimeMillis();
-	System.out.printf("SQL exe time %1.1f minutes\n", (stop-start)/1000.0/60.0);
+	System.out.printf("SQL exe time %1.1f seconds\n", (stop-start)/1000.0);
 }
 finally {
 	if ( db!=null ) {
