@@ -1024,7 +1024,7 @@ I suggest you put the library here:
 and then just add it to your CLASSPATH. Here is my basic framework to open a connection to a database and perform an operation then close it:
 
 ```java
-String dbFile = "/var/data/mydata.db";
+String dbFile = "/tmp/test.db";
 Connection db = null;
 long start = System.currentTimeMillis();
 try {
