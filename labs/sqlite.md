@@ -6,7 +6,7 @@ In this lab, you're going to download the [Chinook data set](https://chinookdata
 
 ## A warm-up exercise
 
-Before we get started though, let's lock in your understanding of joins where they trivial example. Here are two tables `A` and `B` with some data where table `B` has rows without matching `ID`s and also has some repeated `ID`s:
+Before we get started though, let's lock in your understanding of joins with a trivial example. Here are two tables `A` and `B` with some data where table `B` has rows without matching `ID`s and also has some repeated `ID`s:
 
 ```sql
 create table A(ID INTEGER, letter STRING);
