@@ -722,30 +722,24 @@ CREATE TABLE Orders(
 	OrderID INT NOT NULL,
 	CustomerID INT NULL,
 	Quantity INT NULL,
-	PricePerItem DOUBLE NULL
-);
-```
-
-But, let's get fancy and add the foreign key constraints:
-
-```sql
-CREATE TABLE Orders(
-	OrderID INT NOT NULL,
-	CustomerID INT NULL,
-	Quantity INT NULL,
 	PricePerItem DOUBLE NULL,
 	FOREIGN KEY(CustomerID) REFERENCES Customers(CustomerID)
 );
-```
-
-Then let's insert some data:
-
-```sql
 INSERT INTO Orders VALUES (1, 1, 4, 2.50);
 INSERT INTO Orders VALUES (2, 2, 10, 1.25);
 INSERT INTO Orders VALUES (3, 2, 12, 1.50);
 INSERT INTO Orders VALUES (4, 3, 5, 4);
 ```
+
+Visually that data looks like:
+
+<table border=0>
+<tr><th><b>A</b></th><th><b>B</b></th></tr>
+<tr valign=top>
+<td valign=top>
+<img src=figures/table-Customers.png></td><td><img src=figures/table-Orders.png></td>
+</tr>
+</table>
 
 If we add data that violates the constraints of the foreign key specification, we will get an error. Here I am trying to add a customer with ID 99 that does not exist:
 
