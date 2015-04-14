@@ -26,16 +26,12 @@ insert into B VALUES (5, '500');
 
 Visually, those tables look like this:
 
-<table>
-<tr>
-<td>
 | ID | letter |
 |--------|--------|
 |  1      | a       |
 | 2 | b|
 | 3 | c|
-</td>
-<td>
+
 | ID | number |
 |--------|--------|
 | 1 | 100 |
@@ -44,9 +40,6 @@ Visually, those tables look like this:
 | 3 | 300 |
 | 4 | 400 |
 | 5 | 500 |
-</td>
-</tr>
-</table>
 
 Type in the following queries to see what they do:
 
