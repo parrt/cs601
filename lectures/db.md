@@ -736,8 +736,7 @@ Visually that data looks like:
 <table border=0>
 <tr><th><b>A</b></th><th><b>B</b></th></tr>
 <tr valign=top>
-<td valign=top>
-<img src=figures/table-Customers.png></td><td><img src=figures/table-Orders.png></td>
+<td valign=top><img src="figures/table-Customers.png"></td><td><img src="figures/table-Orders.png"></td>
 </tr>
 </table>
 
