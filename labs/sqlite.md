@@ -29,7 +29,7 @@ Visually, those tables look like this:
 <table border=0>
 <tr valign=top>
 <td valign=top>
-<img src=figures/table-A.png></td><td><img src=figures/table-B.png></td>
+<img src=figures/table-A.png width=100></td><td><img src=figures/table-B.png></td>
 </tr>
 </table>
 
