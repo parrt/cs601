@@ -1143,6 +1143,8 @@ finally {
 }
 ```
 
+SQLite uses locks to implement transactions, but we don't have to care about locking ourselves in order to preserve data consistency.
+
 # Developer Topics
 
 ## Transactions
