@@ -731,15 +731,6 @@ INSERT INTO Orders VALUES (3, 2, 12, 1.50);
 INSERT INTO Orders VALUES (4, 3, 5, 4);
 ```
 
-Visually that data looks like:
-
-<table border=0>
-<tr><th><b>Orders</b></th><th><b>Customers</b></th></tr>
-<tr valign=top>
-<td valign=top><img src="figures/table-Customers.png"></td><td><img src="figures/table-Orders.png"></td>
-</tr>
-</table>
-
 If we add data that violates the constraints of the foreign key specification, we will get an error. Here I am trying to add a customer with ID 99 that does not exist:
 
 ```sql
@@ -749,7 +740,16 @@ Error: FOREIGN KEY constraint failed
 sqlite> 
 ```
 
-Now, let's join the customers and orders together, lining up the records based upon the `CustomerID`:
+Visually that data looks like:
+
+<table border=0>
+<tr><th><b>Orders</b></th><th><b>Customers</b></th></tr>
+<tr valign=top>
+<td valign=top><img src="figures/table-Customers.png"></td><td><img src="figures/table-Orders.png"></td>
+</tr>
+</table>
+
+Let's join the customers and orders together, lining up the records based upon the `CustomerID`:
 
 ```sql
 .headers on
@@ -764,13 +764,32 @@ CustomerID  FirstName   LastName    OrderID     CustomerID  Quantity    PricePer
 3           Brenda      Harper      4           3           5           4.0         
 ```
 
-Notice how it lists all columns from both tables, even if they have the same name, such as `CustomerID`.
-
-Notice also how customer `Adam Petrie` is not represented in the joined table because he does not have a record in the `Orders` table.
+Things to notice:
+* The join lists all columns from both tables, even if they have the same name, such as `CustomerID`.
+* Customer `Adam Petrie` is not represented in the joined table because he does not have a record in the `Orders` table.
+* `Natalie Lopez` has 2 records in the joined table because she has 2 orders  in the `Orders` table.
 
 The `ON` clause specifies which column values must match for two rows to line up. The column name is fully qualified using the table name as well because they have the same name in both tables: `Customers.CustomerID = Orders.CustomerID`. If the customers table had used simply `ID`, then we could do `Customers.ID = CustomerID`. That's usually what I do.
 
-`Natalie Lopez` has 2 records in the joined table because she has 2 orders  in the `Orders` table.
+
+
+If you forget to specify the column predicate, you get an out a product:
+
+```sql
+sqlite> SELECT * FROM Customers inner join Orders;
+CustomerID  FirstName   LastName    OrderID     CustomerID  Quantity    PricePerItem
+----------  ----------  ----------  ----------  ----------  ----------  ------------
+1           William     Smith       1           1           4           2.5         
+1           William     Smith       2           2           10          1.25        
+1           William     Smith       3           2           12          1.5         
+1           William     Smith       4           3           5           4.0         
+2           Natalie     Lopez       1           1           4           2.5         
+2           Natalie     Lopez       2           2           10          1.25        
+2           Natalie     Lopez       3           2           12          1.5         
+2           Natalie     Lopez       4           3           5           4.0         
+3           Brenda      Harper      1           1           4           2.5         
+...
+```
 
 We can also use table aliases to shorten queries. The above query could be rewritten using aliases:
 
@@ -877,7 +896,7 @@ That uses a fancy subquery that we will get to later but shows how inner joins a
 
 ### Left outer join
 
-To solve this problem for real, we need to use an outer join, but let's start with a simpler problem. Let's say we want to see a record for all people, even if they've never had an order. This will do the trick:
+To solve this "who didn't get a full refund" problem for real, we need to use an outer join, but let's start with a simpler problem. Let's say we want to see a record for all people, even if they've never had an order. This will do the trick:
 
 ```sql
 select FirstName,LastName,OrderAmount
@@ -958,6 +977,8 @@ First Name  Last Name   Order Date  Order Amt   Refund Date  Refund Amt
 Natalie     Lopez       2009-09-02  12.5                               
 Brenda      Harper      2009-09-15  20.0                               
 ```
+
+Note that we cannot simply `left outer join` the customers with the refunds because the refunds do not have a customer ID as a foreign key. We need to join with the orders table in order to link customers and refunds.
 
 ### Right outer join
 
