@@ -27,9 +27,10 @@ insert into B VALUES (5, '500');
 Visually, those tables look like this:
 
 <table border=0>
+<tr><th><b>A</b></th><th><b>B</b></th></tr>
 <tr valign=top>
 <td valign=top>
-<img src=figures/table-A.png w></td><td><img src=figures/table-B.png></td>
+<img src=figures/table-A.png></td><td><img src=figures/table-B.png></td>
 </tr>
 </table>
 
