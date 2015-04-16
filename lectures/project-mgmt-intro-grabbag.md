@@ -12,6 +12,8 @@ The way managers imagine software development with multiple programmers versus w
 
 <img src=http://i.imgur.com/iDVTstR.jpg width=300>
 
+Here is an interesting article on the [effects of working long hours on productivity](http://lunar.lostgarden.com/Rules%20of%20Productivity.pdf). It also addresses how you should seat your programmers and whether you should put the people with different roles together.
+
 ## Ooops
 
 A modern example, [Software glitches leave Navy Smart Ship dead in the water](http://gcn.com/Articles/1998/07/13/Software-glitches-leave-Navy-Smart-Ship-dead-in-the-water.aspx). *The ship had to be towed into the Naval base at Norfolk, VA, because a database overflow caused its propulsion system to fail* [snicker].<br>
@@ -40,30 +42,40 @@ So, in order of importance to project "difficulty" or probability of failure:
 
 Of course, we can easily start off on the wrong foot and dramatically increase chances of failure:
 
-An article by Zef Hemel, [Pick Your Battles](http://zef.me/4235/pick-your-battles/), on how picking bleeding edge software can really make you bleed. There really is something to be said for proven technology even if it's not cool. The funny thing is that it's hard to hire developers if you're not doing the latest cool thing. I know one company that is starting to use Scalar so they attract developers but still use proven Java technology.
+An article by Zef Hemel, [Pick Your Battles](http://zef.me/4235/pick-your-battles/), on how picking bleeding edge software can really make you bleed. There really is something to be said for proven technology even if it's not cool. The funny thing is that it's hard to hire developers if you're not doing the latest cool thing. I know one company that is starting to use Scalar so they attract developers but still use proven Java technology. Zef says:
+
+<blockquote>
+Go and build amazing applications. Build them with the most boring technology you can find. The stuff that has been in use for years and years.
+</blockquote>
 
 This highlights why I have this critical rule from my [Little Nybbles of Development Wisdom](http://parrt.cs.usfca.edu/doc/devnybbles.html):
 <blockquote>
 Do not rely on anybody else's software for your core application unless you really trust and have tested the library or service. If you have to use other software for a critical component, make sure you get the source.
 </blockquote>
 
+(give epicentric story)
+
 In that same article, I point out:
 
 <blockquote>
-Programmers are curious beasts, which is normally a good thing. However, watch out that they don't find new technology X and demand to use it because "it's so cool." At the same time, don't let management force X on you to make your software buzzword compliant. [give epicentric story.]
+Programmers are curious beasts, which is normally a good thing. However, watch out that they don't find new technology X and demand to use it because "it's so cool." At the same time, don't let management force X on you to make your software buzzword compliant. 
 </blockquote>
 
-Zef's advice: *go and build amazing applications. Build them with the most boring technology you can find. The stuff that has been in use for years and years.*
+(hadoop-for-the-sake-of-hadoop example)
 
 ## Why it's hard to to manage software projects
+
+[Why writing software is not like engineering](http://blog.parr.us/2014/12/29/why-writing-software-is-not-like-engineering/). And a similar article [You're not an engineer](http://nic.ferrier.me.uk/blog/2013_04/you-are-not-an-engineer).
 
 [Why are software development estimates regularly off by a factor of 2-3 times?](http://www.michaelrwolfe.com/2013/10/19/50/)
 
 [Why do dynamic languages make it more difficult to maintain/develop large code bases?](http://programmers.stackexchange.com/questions/221615/why-do-dynamic-languages-make-it-more-difficult-to-maintain-large-codebases/221658#221658)
 
-[Why writing software is not like engineering](http://parrt.cs.usfca.edu/doc/software-not-engineering.html). And a similar article [You're not an engineer](http://nic.ferrier.me.uk/blog/2013_04/you-are-not-an-engineer).
+
 
 ## Software development ideas
+
+Good advice: <img src="https://pbs.twimg.com/media/BtA3Cr0CAAAVkck.jpg:large" width=300>
 
 [We've tried to fix it](http://en.wikipedia.org/wiki/List_of_software_development_philosophies), which obviously didn't and doesn't work or we wouldn't be having this conversation.
 
@@ -141,10 +153,12 @@ I am not trying to encourage the level 5 means never having to say you're sorry 
 
 From Joel Spolsky, [Why is it that some of the biggest IT consulting companies in the world do the worst work?](http://www.joelonsoftware.com/articles/fog0000000024.html):
 <blockquote>
+The secret of Big Macs is that they're not very good, but every one is not very good in exactly the same way.
+...
 Beware of Methodologies. They are a great way to bring everyone up to a dismal, but passable, level of performance, but at the same time, they are aggravating to more talented people who chafe at the restrictions that are placed on them. 
 </blockquote>
 
-Joel says that the higher you go up the levels and developerland, the lower the value of methodologies/rigid-rules.
+Joel says that the higher you go up the levels in developerland, the lower the value of methodologies/rigid-rules.
 
 How not to be outsourced/downsized?  Don't be in a job that is governed by rules, because those are the easiest kinds of jobs to give to the lowest, i.e. cheapest, programmers.
 
@@ -166,7 +180,7 @@ In [Mort, Elvis, Einstein, and You](http://blog.codinghorror.com/mort-elvis-eins
 
 Many programmers I see are obsessed with learning "best practices", memorizing the gang of four patterns book, closely following development strategies. *All this comes down to reading a bunch of bullshit instead of doing your job.* It reminds me of a friend that I had in college. He would spend all of his time getting pencils and paper and other things together in order so that he could start the homework, but he never started the homework.
 
-If you're not thinking about the process by which you develop software, the subject of this course, your part of the 80% not 20%. Don't just write software. Think about how you write software or even write software to help you write software.
+If you're not thinking about the process by which you develop software, the subject of this course, you're part of the 80% not 20%. Don't just write software. Think about how you write software or even write software to help you write software.
 
 ## Trying to control software development
 

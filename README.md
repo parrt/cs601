@@ -123,7 +123,6 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 * [Why writing software is not like engineering](http://blog.parr.us/2014/12/29/why-writing-software-is-not-like-engineering/)
 * [Project management](lectures/project-mgmt-intro-grabbag.md)
 * [Agile development](lectures/agile.md)
-* [UML and design artifacts	](lectures/)
 * [Design patterns](lectures/patterns.md)
 * OO concepts, [OO Worksheet](lectures/oo-worksheet.md)
 * [Top-down-design](lectures/top.down.design.md)
@@ -135,3 +134,6 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 * [Little Nybbles of Development Wisdom](http://parrt.cs.usfca.edu/doc/devnybbles.html)
 * [Software licensing](lectures/software-licensing.md)
 * Maintenance and dynamically typed languages, language adoption
+	* http://sns.cs.princeton.edu/docs/asr-oopsla13.pdf
+	* http://www.slideshare.net/lmeyerov/oopsla-talk2
+	* http://programmers.stackexchange.com/questions/221615/why-do-dynamic-languages-make-it-more-difficult-to-maintain-large-codebases/221658#221658
