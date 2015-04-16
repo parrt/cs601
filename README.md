@@ -120,16 +120,18 @@ Official text from USF: ``As a Jesuit institution committed to *cura personalis*
 
 ## Principles
 
-Project management
-A taste of agile	
-Agile development	
-UML and design artifacts	
-Design patterns	
-OO concepts	
-Top-down-design	
-jGuru case study	
-Debugging	
-Maintenance and dynamically typed languages, language adoption	
-Refactoring	
-Software testing	
-Mythical Man month
+* [Why writing software is not like engineering](http://blog.parr.us/2014/12/29/why-writing-software-is-not-like-engineering/)
+* [Project management](lectures/project-mgmt-intro-grabbag.md)
+* [Agile development](lectures/agile.md)
+* [UML and design artifacts	](lectures/)
+* [Design patterns](lectures/patterns.md)
+* OO concepts, [OO Worksheet](lectures/oo-worksheet.md)
+* [Top-down-design](lectures/top.down.design.md)
+* [jGuru case study](lectures/jguru.md)
+* [The Essentials of Debugging](http://blog.parr.us/2014/11/17/the-essentials-of-debugging/)
+* [Refactoring](lectures/refactoring.md)
+* [Software testing](lectures/testing.md)
+* [Mythical Man month](lectures/mythical-man-month.md)
+* [Little Nybbles of Development Wisdom](http://parrt.cs.usfca.edu/doc/devnybbles.html)
+* [Software licensing](lectures/software-licensing.md)
+* Maintenance and dynamically typed languages, language adoption

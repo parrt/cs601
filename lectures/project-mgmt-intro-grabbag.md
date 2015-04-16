@@ -1,5 +1,4 @@
-Project management introduction and grab bag of goodies
-====
+# Project management introduction and grab bag of goodies
 
 Let me start out by giving a nod to [Jeff Atwood](http://blog.codinghorror.com/) and Joel Spolsky for working tirelessly to help programmers get better and build better software. You'll note that many of the links on this page come from or are linked to from their blogs. Note: these are the guys that bring us [stack overflow](the Stack Exchange network of Q&A sites).
 
@@ -7,7 +6,13 @@ This page is an attempt to grab a few important links for my students in a semi-
 
 For a bit of advice, you can also check out my [Little Nybbles of Development Wisdom](http://parrt.cs.usfca.edu/doc/devnybbles.html).
 
-# Ooops
+## Theory and practice
+
+The way managers imagine software development with multiple programmers versus what happens in practice:
+
+<img src=http://i.imgur.com/iDVTstR.jpg width=300>
+
+## Ooops
 
 A modern example, [Software glitches leave Navy Smart Ship dead in the water](http://gcn.com/Articles/1998/07/13/Software-glitches-leave-Navy-Smart-Ship-dead-in-the-water.aspx). *The ship had to be towed into the Naval base at Norfolk, VA, because a database overflow caused its propulsion system to fail* [snicker].<br>
 <img src="http://upload.wikimedia.org/wikipedia/commons/a/a1/USS_Yorktown_%28CG-48%29%3B04014806.jpg" width=220>.
@@ -17,7 +22,7 @@ And [How an ancient shipbuilding project failed](http://vimeo.com/95284690).<br>
 
 For more examples of roadkill, see [The Long, Dismal History of Software Project Failure](http://blog.codinghorror.com/the-long-dismal-history-of-software-project-failure/)
 
-## High-level risk factors
+### High-level risk factors
 
  Steve McConnell, author of the famous [Code Complete](http://www.amazon.com/Code-Complete-Practical-Handbook-Construction/dp/0735619670/ref=la_B000APETRK_1_1?s=books&ie=UTF8&qid=1414613811&sr=1-1), wrote in [Software Estimation: Demystifying the Black Art](http://www.amazon.com/exec/obidos/ASIN/0735605351/codihorr-20):
 
@@ -31,7 +36,7 @@ So, in order of importance to project "difficulty" or probability of failure:
 2. **type of software** (xray machine? space probe? crappy website you and your little buddies make?)
 3. **personnel factors** (can't hire the right developers? Half the developers won't talk to the other half? many are working remotely?)
 
-## Starting off on the wrong foot
+### Starting off on the wrong foot
 
 Of course, we can easily start off on the wrong foot and dramatically increase chances of failure:
 
@@ -50,7 +55,7 @@ Programmers are curious beasts, which is normally a good thing. However, watch o
 
 Zef's advice: *go and build amazing applications. Build them with the most boring technology you can find. The stuff that has been in use for years and years.*
 
-# Why it's hard to to manage software projects
+## Why it's hard to to manage software projects
 
 [Why are software development estimates regularly off by a factor of 2-3 times?](http://www.michaelrwolfe.com/2013/10/19/50/)
 
@@ -58,7 +63,7 @@ Zef's advice: *go and build amazing applications. Build them with the most borin
 
 [Why writing software is not like engineering](http://parrt.cs.usfca.edu/doc/software-not-engineering.html). And a similar article [You're not an engineer](http://nic.ferrier.me.uk/blog/2013_04/you-are-not-an-engineer).
 
-# Software development ideas
+## Software development ideas
 
 [We've tried to fix it](http://en.wikipedia.org/wiki/List_of_software_development_philosophies), which obviously didn't and doesn't work or we wouldn't be having this conversation.
 
@@ -85,9 +90,9 @@ I'd also add: **Use as few machines and system components as possible.**
 
 But that's not enough structure for most developers; why? Let's begin by looking at what kind of developers there are.
 
-# Categorizing developers
+## Categorizing developers
 
-## Developer skill spectrum
+### Developer skill spectrum
 
 Developers go through some fairly well-defined "development" as they acquire skill and experience. Slides taken from [Developing Expertise: Herding Racehorses, Racing Sheep](http://www.infoq.com/presentations/Developing-Expertise-Dave-Thomas):
 
@@ -143,7 +148,7 @@ Joel says that the higher you go up the levels and developerland, the lower the 
 
 How not to be outsourced/downsized?  Don't be in a job that is governed by rules, because those are the easiest kinds of jobs to give to the lowest, i.e. cheapest, programmers.
 
-## Us versus them
+### Us versus them
 
 Or, are there only [Two Types of Programmers](http://blog.red-bean.com/sussman/?p=79)?
 
@@ -163,7 +168,7 @@ Many programmers I see are obsessed with learning "best practices", memorizing t
 
 If you're not thinking about the process by which you develop software, the subject of this course, your part of the 80% not 20%. Don't just write software. Think about how you write software or even write software to help you write software.
 
-# Trying to control software development
+## Trying to control software development
 
 [Parrt's control theory](http://parrt.cs.usfca.edu/doc/devnybbles.html): *You cannot control anybody or anything. You can only nudge or influence.*
 
@@ -175,7 +180,7 @@ Also remember: **Precision does not equal accuracy!**
 
 Tom DeMarco in [Software Engineering: An Idea Whose Time Has Come and Gone?](http://www2.computer.org/cms/Computer.org/ComputingNow/homepage/2009/0709/rW_SO_Viewpoints.pdf) makes the analogy between controlling software development and controlling a teenager. Just because you can measure their height, grades, how many friends they have and so on doesn't mean that you can control them. Coming up with a rule that says: my child will have 10 good friends and get good grades is meaningless towards controlling that child.
 
-## Rules? We don't need no stinkin' rules!
+### Rules? We don't need no stinkin' rules!
 
 In [Software Engineering: Dead?](http://blog.codinghorror.com/software-engineering-dead/), Jeff Atwood says "*control is ultimately illusory on software development projects.*"
 
@@ -195,15 +200,15 @@ and
 Rules, guidelines, and principles are gems of distilled experience that should be studied and respected. But they're never a substute for thinking critically about your work.
 </blockquote>
 
-# Software development artifacts / tools
+## Software development artifacts / tools
 
-Bill de hÓra' [3 pillars](http://www.dehora.net/journal/2007/01/3_pillars.html):
+Bill de hora' [3 pillars](http://www.dehora.net/journal/2007/01/3_pillars.html):
 
 <blockquote>
 ...the **version control system** is a first order effect on software, along with two others--the **build system** and the **bugtracker**. Those choices impact absolutely everything else. Things like IDEs, by comparison, don't matter at all. Even choice of methodology might matter less. Although I'm betting there are plenty of software and management teams out there that see version control, build systems and bugtrackers as being incidental to the work, not mission critical tools.
 </blockquote>
 
-## My thoughts on UML
+### My thoughts on UML
 
 I certainly create lots of diagrams and write copious notes when designing software, but they are super informal. Why? Well, what is the difference between writing something out by hand and using a word processor? Speed vs precision. Precision at the UML diagram level provides a false sense of control over reality. **Precision does not imply accuracy.** It usually just means you are more precisely wrong. Ha! Besides we already have precision: it's called code.
 
@@ -222,35 +227,35 @@ One of the reasons I get away with not using lots of formal diagrams is that I g
 
 In summary, diagrams should be as high level as possible given their intended use. Precision should be relegated to the code level. This isolates the design more from implementation detail changes. A semi-formal diagram is often useful, however, for communication with fellow programmers or dumbing things down for management. You can get totally caught up building pretty pictures rather than actually building something.
 
-## Some useful diagrams
+### Some useful diagrams
 
-### Class Hierarchy
+#### Class Hierarchy
 
 <img src=http://finalizedotcom.files.wordpress.com/2012/12/uikit_classes.jpg width=400>
 
-### Package Grouping
+#### Package Grouping
 
 StoreItems: {Book, Map, Paper, Pen, Stapler}
 
 <img src=http://pic.dhe.ibm.com/infocenter/rsarthlp/v9/topic/com.ibm.xtools.modeler.doc/images/package.gif width=80>
 
-### Association
+#### Association
 
 Book ->\* Chapter or Person ->+ address or Person->Employer
 
 <img src=http://bpi.erikdebruijn.nl/img/big-picture-big.png width=400>
 
-### Data flow
+#### Data flow
 
 <img src=http://agilemodeling.com/images/models/dataFlowDiagram.JPG width=400>
 
-### State diagrams
+#### State diagrams
 
 Really great example is a state diagram for HTML web pages:
 
 <img src=figures/webmail.png width=400>
 
-### Data structure diagrams
+#### Data structure diagrams
 
 Similar to assocation diagrams, but specifically designed to show a formal data structure like List of List or Hashtable of Hashtable (useful for example, to do insertion sort; can alter a value and place in new location in constant time; kinda like radix sort).
 
