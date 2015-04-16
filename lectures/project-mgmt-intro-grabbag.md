@@ -12,8 +12,6 @@ The way managers imagine software development with multiple programmers versus w
 
 <img src=http://i.imgur.com/iDVTstR.jpg width=300>
 
-Here is an interesting article on the [effects of working long hours on productivity](http://lunar.lostgarden.com/Rules%20of%20Productivity.pdf). It also addresses how you should seat your programmers and whether you should put the people with different roles together.
-
 ## Ooops
 
 A modern example, [Software glitches leave Navy Smart Ship dead in the water](http://gcn.com/Articles/1998/07/13/Software-glitches-leave-Navy-Smart-Ship-dead-in-the-water.aspx). *The ship had to be towed into the Naval base at Norfolk, VA, because a database overflow caused its propulsion system to fail* [snicker].<br>
@@ -71,7 +69,7 @@ Programmers are curious beasts, which is normally a good thing. However, watch o
 
 [Why do dynamic languages make it more difficult to maintain/develop large code bases?](http://programmers.stackexchange.com/questions/221615/why-do-dynamic-languages-make-it-more-difficult-to-maintain-large-codebases/221658#221658)
 
-
+Here is an interesting article on the [effects of working long hours on productivity](http://lunar.lostgarden.com/Rules%20of%20Productivity.pdf). It also addresses how you should seat your programmers and whether you should put the people with different roles together.
 
 ## Software development ideas
 
@@ -103,6 +101,8 @@ I'd also add: **Use as few machines and system components as possible.**
 But that's not enough structure for most developers; why? Let's begin by looking at what kind of developers there are.
 
 ## Categorizing developers
+
+(draw groups of developers for testing, architecture, coding, technical writing VS a group of developers that each do testing, architecture, coding, documentation. What kind of people to the various techniques work with? What kind of applications?)
 
 ### Developer skill spectrum
 
