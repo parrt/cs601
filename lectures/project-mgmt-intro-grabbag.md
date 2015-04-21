@@ -24,7 +24,7 @@ For more examples of roadkill, see [The Long, Dismal History of Software Project
 
 ### High-level risk factors
 
- Steve McConnell, author of the famous [Code Complete](http://www.amazon.com/Code-Complete-Practical-Handbook-Construction/dp/0735619670/ref=la_B000APETRK_1_1?s=books&ie=UTF8&qid=1414613811&sr=1-1), wrote in [Software Estimation: Demystifying the Black Art](http://www.amazon.com/exec/obidos/ASIN/0735605351/codihorr-20):
+Steve McConnell, author of the famous [Code Complete](http://www.amazon.com/Code-Complete-Practical-Handbook-Construction/dp/0735619670/ref=la_B000APETRK_1_1?s=books&ie=UTF8&qid=1414613811&sr=1-1), wrote in [Software Estimation: Demystifying the Black Art](http://www.amazon.com/exec/obidos/ASIN/0735605351/codihorr-20):
 
 <blockquote>
 size is easily the most significant determinant of effort, cost, and schedule. The kind of software you're developing comes in second, and personnel factors are a close third. The programming language and environment you use are not first-tier influences on project outcome, but they are a first-tier influence on the estimate.
@@ -35,6 +35,27 @@ So, in order of importance to project "difficulty" or probability of failure:
 1. **size** (smaller is better obviously)
 2. **type of software** (xray machine? space probe? crappy website you and your little buddies make?)
 3. **personnel factors** (can't hire the right developers? Half the developers won't talk to the other half? many are working remotely?)
+
+[Why Software Fails](http://spectrum.ieee.org/computing/software/why-software-fails) is a great read and lists these as common reasons for failure:
+
+* Unrealistic or unarticulated project goals
+* Inaccurate estimates of needed resources
+* Badly defined system requirements
+* Poor reporting of the project's status
+* Unmanaged risks
+* Poor communication among customers, developers, and users
+* Use of immature technology
+* Inability to handle the project's complexity
+* Sloppy development practices
+* Poor project management
+* Stakeholder politics
+* Commercial pressures
+
+Article quote:
+
+<blockquote>
+All IT systems are intrinsically fragile. In a large brick building, you'd have to remove hundreds of strategically placed bricks to make a wall collapse. But in a 100,000-line software program, it takes only one or two bad lines to produce major problems. In 1991, a portion of AT&amp;T's telephone network went out, leaving 12 million subscribers without service, all because of a single mistyped character in one line of code.
+</blockquote>
 
 ### Starting off on the wrong foot
 
@@ -49,6 +70,8 @@ Go and build amazing applications. Build them with the most boring technology yo
 This highlights why I have this critical rule from my [Little Nybbles of Development Wisdom](http://parrt.cs.usfca.edu/doc/devnybbles.html):
 <blockquote>
 Do not rely on anybody else's software for your core application unless you really trust and have tested the library or service. If you have to use other software for a critical component, make sure you get the source.
+<br><br>
+<i>Bad decisions by project managers are probably the single greatest cause of software failures today.</i>.
 </blockquote>
 
 (give epicentric story)
