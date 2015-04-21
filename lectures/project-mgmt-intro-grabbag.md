@@ -72,6 +72,8 @@ This highlights why I have this critical rule from my [Little Nybbles of Develop
 Do not rely on anybody else's software for your core application unless you really trust and have tested the library or service. If you have to use other software for a critical component, make sure you get the source.
 <br><br>
 <i>Bad decisions by project managers are probably the single greatest cause of software failures today.</i>
+<br><br>
+<i>If there's a theme that runs through the tortured history of bad software, it's a failure to confront reality.</i>
 </blockquote>
 
 (give epicentric story)
