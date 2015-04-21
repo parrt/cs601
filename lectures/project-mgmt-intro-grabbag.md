@@ -55,6 +55,10 @@ Article quote:
 
 <blockquote>
 All IT systems are intrinsically fragile. In a large brick building, you'd have to remove hundreds of strategically placed bricks to make a wall collapse. But in a 100,000-line software program, it takes only one or two bad lines to produce major problems. In 1991, a portion of AT&amp;T's telephone network went out, leaving 12 million subscribers without service, all because of a single mistyped character in one line of code.
+<br><br>
+<i>Bad decisions by project managers are probably the single greatest cause of software failures today.</i>
+<br><br>
+<i>If there's a theme that runs through the tortured history of bad software, it's a failure to confront reality.</i>
 </blockquote>
 
 ### Starting off on the wrong foot
@@ -70,10 +74,6 @@ Go and build amazing applications. Build them with the most boring technology yo
 This highlights why I have this critical rule from my [Little Nybbles of Development Wisdom](http://parrt.cs.usfca.edu/doc/devnybbles.html):
 <blockquote>
 Do not rely on anybody else's software for your core application unless you really trust and have tested the library or service. If you have to use other software for a critical component, make sure you get the source.
-<br><br>
-<i>Bad decisions by project managers are probably the single greatest cause of software failures today.</i>
-<br><br>
-<i>If there's a theme that runs through the tortured history of bad software, it's a failure to confront reality.</i>
 </blockquote>
 
 (give epicentric story)
