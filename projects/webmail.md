@@ -73,7 +73,7 @@ The breakdown is as follows:
 |19| |5 | User is able to search all of their mail for keywords; use a simple linear walk of the data via the database or FOR loop (rather than a sophisticed search engine like Lucene). The user should be able to pick the field such as "from" or "subject" to search in. |
 |20| |5 | Sort foward/backward mail folder display by various fields/columns such as sender's email, subject, ... |
 
-Choose from *one* the following list of advanced features:
+Choose from up to 15 points from the following list of advanced features:
 
 | # | Points | Feature |
 |---|--------|--------|
@@ -107,13 +107,15 @@ Among other things that I hope will be obvious or that we discussed in class, pl
 
 * You must run your server as `root` and have it listen at Port 80.
 
+* You must build your own POP and SMTP clients that connect via sockets to servers; you cannot use Java mail or any other libraries.
+
 * Deploy your server software by putting your jar in the `/opt/webmail` directory.
 
 * **Final submission of your project requires that you send the instructor the public URL of your website.**
 
 ## External libraries
 
-Bootstrap and UIKit and jquery are all okay for the webmail project.
+Bootstrap and UIKit and jquery are all okay for the webmail project. Use java mail to parse your email and extract attachments but be careful not to use it for pulling pop and sending mail.
 
 Please stay away from angularjs, emberjs or any other full frameworks. Your JavaScript should only be for UI purposes and asynchronous pulling of data from the server.
 
