@@ -14,7 +14,7 @@ My primary goal is to prepare you for a productive programming and research life
 
 **ROOM.** Lo Schiavo Science 307.
 
-**TIME.** MWF 12:45pm - 2:30pm,  Jan 27 (Tue) - May 13 (Tue).
+**TIME.** MWF 12:45pm - 2:30pm,  Jan 27 (Tue) - May 14 (Thur).
 
 **EXAMS.** There will be 2 exams but no final exam as your final project will count as the final exam.
 
@@ -39,10 +39,10 @@ There is no textbook for this class.
 |Graph| 5%| Feb 15|
 |Proxy| 10%| Mar 10 |
 |RingBuffer | 5%| Mar 26 |
-|Webmail | 25%| May 13 (last day of class) |
+|Webmail | 25%| May 14 (last day of class) |
 |Quizzes | 5%| sporadic |
 |Exam 1| 25%| Mar 31 |
-|Exam 2| 25%| May 13 |
+|Exam 2| 25%| May 14 |
 
 *No final exam, gmail project counts as the final but we do have a second exam on the last day of class.*
 
