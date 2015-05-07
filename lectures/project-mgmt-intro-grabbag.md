@@ -65,7 +65,7 @@ All IT systems are intrinsically fragile. In a large brick building, you'd have 
 
 Of course, we can easily start off on the wrong foot and dramatically increase chances of failure:
 
-An article by Zef Hemel, [Pick Your Battles](http://zef.me/4235/pick-your-battles/), on how picking bleeding edge software can really make you bleed. There really is something to be said for proven technology even if it's not cool. The funny thing is that it's hard to hire developers if you're not doing the latest cool thing. I know one company that is starting to use Scalar so they attract developers but still use proven Java technology. Zef says:
+An article by Zef Hemel, [Pick Your Battles](http://zef.me/4235/pick-your-battles/), on how picking bleeding edge software can really make you bleed. There really is something to be said for proven technology even if it's not cool. The funny thing is that it's hard to hire developers if you're not doing the latest cool thing. I know one company that is starting to use Scala so they attract developers but still use proven Java technology. Zef says:
 
 <blockquote>
 Go and build amazing applications. Build them with the most boring technology you can find. The stuff that has been in use for years and years.
@@ -84,7 +84,7 @@ In that same article, I point out:
 Programmers are curious beasts, which is normally a good thing. However, watch out that they don't find new technology X and demand to use it because "it's so cool." At the same time, don't let management force X on you to make your software buzzword compliant. 
 </blockquote>
 
-(hadoop-for-the-sake-of-hadoop example)
+(hadoop-for-the-sake-of-hadoop, EJB example)
 
 ## Why it's hard to to manage software projects
 
