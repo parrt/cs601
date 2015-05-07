@@ -2,7 +2,7 @@ Object-Oriented Principles Worksheet
 ====
 This worksheet explores your understanding of the fundamental principles behind object-oriented programming including dynamic binding, polymorphism, data hiding, and inheritance. Express your answers using Java syntax.
 
-1. **Can I make an instance of an Animal?**
+**1. Can I make an instance of an Animal?**
 ```java
 abstract class Animal {
   ...
@@ -17,15 +17,15 @@ class Tiger extends Animal {
 }
 ```
 
-2. **Considering Tiger and the Animal class, which class is the subclass and which is the superclass?**
+**2. Considering Tiger and the Animal class, which class is the subclass and which is the superclass?**
 
-3. **What is the difference between an instance of Tiger and the class Tiger? Does the following makes sense and compile properly?**
+**3. What is the difference between an instance of Tiger and the class Tiger? Does the following makes sense and compile properly?**
 
 ```java
   String n = Tiger.getName();
 ```
 
-4. **Can I redefine Tiger to make the speak() method private like the following? Why or why not?**
+**4. Can I redefine Tiger to make the speak() method private like the following? Why or why not?**
 ```java
 class Tiger extends Animal {
   ...
@@ -35,7 +35,7 @@ class Tiger extends Animal {
 }
 ```
 
-5. **Assume Dog and Cat are subclasses of Animal. Which of the following assignments will result in compile-time warnings?**
+**5. Assume Dog and Cat are subclasses of Animal. Which of the following assignments will result in compile-time warnings?**
 ```java
   Animal a = ... ;
   Dog d = ... ;
@@ -49,7 +49,7 @@ class Tiger extends Animal {
   d = c;
 ```
 
-6. **Which method is called in each of the following:**
+**6. Which method is called in each of the following:**
 ```java
 Bag b = ...;
 b.insert("some string");
@@ -64,7 +64,7 @@ class Bag {
 }
 ```
 
-7. **Consider the following class definitions:**
+**7. Consider the following class definitions:**
 ```java
 class Human {
 	String name;
@@ -95,7 +95,7 @@ Human h = s;
 
  * What does h.getInfo() return?
 
-8. **Which of the following assignments result in compile-time errors? Will any assignments compile properly, but eventually lead to run-time errors (ClassCastException)?**
+**8. Which of the following assignments result in compile-time errors? Will any assignments compile properly, but eventually lead to run-time errors (ClassCastException)?**
 
 ```java
 Airplane a = ...;
@@ -130,9 +130,9 @@ class FlyingSquirrel {
 }
 ```
 
-9. **Can a method of an interface be private? **
+**9. Can a method of an interface be private? **
 
-10. **In method reset(), what is "x = 0" shorthand for? I.e., what is the fully qualified name for "x"?**
+**10. In method reset(), what is "x = 0" shorthand for? I.e., what is the fully qualified name for "x"?**
 
 ```java
 class Point {
@@ -144,7 +144,7 @@ class Point {
 }
 ```
 
-11. **Can two individual employee objects refer to two different company names given the following class? Can they each have a different ID?**
+**11. Can two individual employee objects refer to two different company names given the following class? Can they each have a different ID?**
 
 ```java
 class Employee {
@@ -163,7 +163,7 @@ class Employee {
  * Could getID() refer to method setCompanyName()?
  * Could setCompanyName() refer to getID()? 
 
-12. **Is the following class method definition equivalent/valid to the above definition?**
+**12. Is the following class method definition equivalent/valid to the above definition?**
 
 ```java
   static public void setCompanyName(String n) {
