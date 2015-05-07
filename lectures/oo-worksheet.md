@@ -110,6 +110,7 @@ f = s;
 f = (CanFly)s;
 a = b;
 ```
+
 Assume the following definitions:
 
 ```java
@@ -130,7 +131,7 @@ class FlyingSquirrel {
 }
 ```
 
-**9. Can a method of an interface be private? **
+**9. Can a method of an interface be private?**
 
 **10. In method reset(), what is "x = 0" shorthand for? I.e., what is the fully qualified name for "x"?**
 
