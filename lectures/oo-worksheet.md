@@ -2,7 +2,7 @@ Object-Oriented Principles Worksheet
 ====
 This worksheet explores your understanding of the fundamental principles behind object-oriented programming including dynamic binding, polymorphism, data hiding, and inheritance. Express your answers using Java syntax.
 
-**Can I make an instance of an Animal?**
+1. **Can I make an instance of an Animal?**
 ```java
 abstract class Animal {
   ...
@@ -17,15 +17,15 @@ class Tiger extends Animal {
 }
 ```
 
-**Considering Tiger and the Animal class, which class is the subclass and which is the superclass?**
+1. **Considering Tiger and the Animal class, which class is the subclass and which is the superclass?**
 
-**What is the difference between an instance of Tiger and the class Tiger? Does the following makes sense and compile properly?**
+1. **What is the difference between an instance of Tiger and the class Tiger? Does the following makes sense and compile properly?**
 
 ```java
   String n = Tiger.getName();
 ```
 
-**Can I redefine Tiger to make the speak() method private like the following? Why or why not?**
+1. **Can I redefine Tiger to make the speak() method private like the following? Why or why not?**
 ```java
 class Tiger extends Animal {
   ...
@@ -35,7 +35,7 @@ class Tiger extends Animal {
 }
 ```
 
-**Assume Dog and Cat are subclasses of Animal. Which of the following assignments will result in compile-time warnings?**
+1. **Assume Dog and Cat are subclasses of Animal. Which of the following assignments will result in compile-time warnings?**
 ```java
   Animal a = ... ;
   Dog d = ... ;
@@ -49,7 +49,7 @@ class Tiger extends Animal {
   d = c;
 ```
 
-**Which method is called in each of the following:**
+1. **Which method is called in each of the following:**
 ```java
 Bag b = ...;
 b.insert("some string");
@@ -64,7 +64,7 @@ class Bag {
 }
 ```
 
-**Consider the following class definitions:**
+1. **Consider the following class definitions:**
 ```java
 class Human {
 	String name;
@@ -87,15 +87,16 @@ class Student extends Human {
 Student s = new Student("Madonna","111-22-3333");
 Human h = s;
 ```
-What does s.getName() return?
+ * What does s.getName() return?
 
-What does h.getName() return?
+ * What does h.getName() return?
 
-What does s.getInfo() return?
+ * What does s.getInfo() return?
 
-What does h.getInfo() return?
+ * What does h.getInfo() return?
 
-**Which of the following assignments result in compile-time errors? Will any assignments compile properly, but eventually lead to run-time errors (ClassCastException)?**
+1. **Which of the following assignments result in compile-time errors? Will any assignments compile properly, but eventually lead to run-time errors (ClassCastException)?**
+
 ```java
 Airplane a = ...;
 Bird b = ...;
@@ -109,7 +110,6 @@ f = s;
 f = (CanFly)s;
 a = b;
 ```
-
 Assume the following definitions:
 
 ```java
@@ -130,9 +130,9 @@ class FlyingSquirrel {
 }
 ```
 
-**Can a method of an interface be private? **
+1. **Can a method of an interface be private? **
 
-*In method reset(), what is "x = 0" shorthand for? I.e., what is the fully qualified name for "x"?**
+1. **In method reset(), what is "x = 0" shorthand for? I.e., what is the fully qualified name for "x"?**
 
 ```java
 class Point {
@@ -144,7 +144,7 @@ class Point {
 }
 ```
 
-**Can two individual employee objects refer to two different company names given the following class? Can they each have a different ID?**
+1. **Can two individual employee objects refer to two different company names given the following class? Can they each have a different ID?**
 
 ```java
 class Employee {
@@ -160,7 +160,10 @@ class Employee {
 }
 ```
 
-Could getID() refer to method setCompanyName()? Could setCompanyName() refer to getID()? Is the following class method definition equivalent/valid to the above definition?
+ * Could getID() refer to method setCompanyName()?
+ * Could setCompanyName() refer to getID()? 
+
+1. **Is the following class method definition equivalent/valid to the above definition?**
 
 ```java
   static public void setCompanyName(String n) {
